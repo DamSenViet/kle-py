@@ -1,1 +1,1 @@
-import Keyboard
+from Keyboard import KLE
