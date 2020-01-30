@@ -91,23 +91,44 @@ class KLE:
             "keys": []
         })
 
+        current_rotation = 0.0
+        current_rotation_x = 0.0
+        current_rotation_y = 0.0
         for r in range(len(rows)):
             if type(rows[r]) == list:
                 for k in range(len(rows[r])):
                     item = rows[r][k]
                     if type(item) == str:
                         newKey = dict.copy(current)
+                        newKey["label"] = item
                         kbd["keys"].append(newKey)
                         current["x"] += current["width"]
-                        current["width"] = current["height"] = 1
+                        current["width"] = 1
+                        current["height"] = 1
                         current["x2"] = current["y2"] = current["width2"] = current["height2"] = 0
                         current["nub"] = current["stepped"] = current["decal"] = False
 
                     else:
-                        if k != 0 and (item.get("r") or item.get("rx") or item.get("ry")): pass
+                        if k != 0 and (item.get("r") or item.get("rx") or item.get("ry")):
+                            pass # throw exception here
+
                         if item.get("r"): current["rotation_angle"] = item["r"]
                         if item.get("rx"): current["rotation_x"] = item["rx"]
                         if item.get("ry"): current["rotation_y"] = item["ry"]
+
+                        if current_rotation != current["rotation_angle"] or \
+                            current_rotation_x != current["rotation_x"] or \
+                            current_rotation_y != current["rotation_y"]:
+
+                            if current_rotation_x != current["rotation_x"] or \
+                                current_rotation_y != current["rotation_y"]:
+                                current["y"] = current["rotation_y"]
+
+                            current_rotation = current["rotation_angle"]
+                            current_rotation_x = current["rotation_x"]
+                            current_rotation_y = current["rotation_y"]
+                            current["x"] = current["rotation_x"]
+
                         if item.get("a"): pass
                         if item.get("f"): pass
                         if item.get("f2"): pass
@@ -142,6 +163,3 @@ class KLE:
     @staticmethod
     def parse(f: TextIO) -> Keyboard:
         return KLE.deserialize(json.load(f))
-
-# keyboard = KLE.parse(open("test.json"))
-# print(keyboard["keys"])
