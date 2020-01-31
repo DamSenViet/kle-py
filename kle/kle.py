@@ -1,114 +1,15 @@
 from typing import List, Dict, Optional, TextIO
 from collections import defaultdict
-from copy import copy, deepcopy
+from copy import deepcopy
 import json
 
+from .key import Key
+from .metadata import Metadata, Background
+from .keyboard import Keyboard
 
 class DeserializeException(Exception):
     def __init__(self, message: str, payload: dict = None) -> None:
         super().__init__(message + (json.dumps(payload) if payload else ""))
-
-class Key:
-    def __init__(
-        self,
-        color: str = "#cccccc",
-        labels: list = list(),
-        textColor: str = "#000000",
-        textSize: float = 3.0,
-        x: float = 0.0,
-        y: float = 0.0,
-        width: float = 1.0,
-        height: float = 1.0,
-        x2: float  = 0.0,
-        y2: float = 0.0,
-        width2: float = 1.0,
-        height2: float = 1.0,
-        rotation_x: float = 0.0,
-        rotation_y: float = 0.0,
-        rotation_angle: float = 0.0,
-        decal: bool = False,
-        ghost: bool = False,
-        stepped: bool = False,
-        nub: bool = False,
-        profile: str = None,
-        sm: str = None,
-        sb: str = None,
-        st: str = None
-    ) -> None:
-        self.color = color
-        self.labels = labels
-        self.textColor = textColor
-        self.textSize = textSize
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.x2 = x2
-        self.y2 = y2
-        self.width2 = width2
-        self.height2 = height2
-        self.rotation_x = rotation_x
-        self.rotation_y = rotation_y
-        self.rotation_angle = rotation_angle
-        self.decal = decal
-        self.ghost = ghost
-        self.stepped = stepped
-        self.nub = nub
-        self.profile = profile
-        self.sm = sm
-        self.sb = sb
-        self.st = st
-
-    def __deepcopy__(self, memo):
-        newKey = type(self)()
-        memo[id(self)] = newKey
-        newKey.__dict__.update(self.__dict__)
-        newKey.labels = deepcopy(self.labels, memo)
-        return newKey
-
-
-class Background:
-    def __init__(
-        self,
-        name: str = None,
-        style: str = None
-    ):
-        self.name = name
-        self.style = style
-
-class Metadata:
-    def __init__(
-        self,
-        author: str = None,
-        backcolor: str = "#eeeeee",
-        background: Background =  None,
-        name: str = None,
-        notes: str = None,
-        radii: str = None,
-        switchBrand: str = None,
-        switchMount: str = None,
-        switchType: str = None
-    ):
-        self.author = author
-        self.backcolor = backcolor
-        self.background = background
-        self.name = None
-        self.notes = None
-        self.radii = None
-        self.switchBrand = switchBrand
-        self.switchMount = switchMount
-        self.switchMount = switchType
-
-
-class Keyboard:
-    def __init__(
-        self,
-        metadata: Metadata = Metadata(),
-        keys: list = list()
-    ):
-        self.metadata = metadata
-        self.keys = keys
-
 
 class KLE:
     @staticmethod

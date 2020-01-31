@@ -2,6 +2,9 @@
 # python3 tests.py <path_to.json>
 
 import matplotlib.pyplot as plt
+import matplotlib.markers as markers
+from matplotlib.lines import Line2D
+
 from sys import argv
 from os import path, getcwd
 from kle import KLE
@@ -34,10 +37,11 @@ chosen_format = FORMATS[chosen_format]
 fig = plt.figure()
 ax = plt.gca()
 keyboard = KLE.parse(open(json_path))
-max_x = 0.0
+max_x = -inf
 min_x = inf
-max_y = 0.0
+max_y = -inf
 min_y = inf
+arrows = list()
 is_labeled = {
   "rotated": False,
   "nonrotated": False,
@@ -80,10 +84,10 @@ for key in keyboard.keys:
     low_x, low_y = rotate(x + adj_x, y + adj_y + 0.5, origin_x, origin_y, angle)
     dir_x, dir_y = (low_x - new_x, low_y - new_y)
 
-    max_x = max(max_x, new_x)
-    min_x = min(min_x, new_x)
-    max_y = max(max_y, new_y)
-    min_y = min(min_y, new_y)
+    max_x = max(max_x, low_x, new_x)
+    min_x = min(min_x, low_x, new_x)
+    max_y = max(max_y, low_y, new_y)
+    min_y = min(min_y, low_y, new_y)
 
     plt.arrow(
       low_x,
@@ -98,13 +102,13 @@ for key in keyboard.keys:
     )
     is_labeled["rotated"] = True
   else:
-    max_x = max(max_x, x)
+    max_x = max(max_x, x + width)
     min_x = min(min_x, x)
-    max_y = max(max_y, y)
+    max_y = max(max_y, y + height)
     min_y = min(min_y, y)
 
     # 0.5 to get base coordinates for arrows
-    plt.arrow(
+    arrow = plt.arrow(
       x + adj_x,
       y + adj_y + 0.5,
       0,
@@ -117,8 +121,22 @@ for key in keyboard.keys:
     )
     is_labeled["nonrotated"] = True
 
-plt.xlim(min_x - 1, max_x + 2)
-plt.ylim(max_y + 3, min_y - 1)
-plt.legend(fontsize = 12, loc = "lower right")
+plt.xlim(min_x - 1, max_x + 1)
+plt.ylim(max_y + 2, min_y - 1)
+custom_lines = [
+  Line2D([0], [0], color = "w", marker = "o", markerfacecolor = "g", label = 'origin'),
+  Line2D([0], [0], color = "b", lw = 1, label = 'non-rotated'),
+  Line2D([0], [0], color = "r", lw = 1, label = 'rotated')
+]
+plt.legend(
+  custom_lines,
+  [
+    "origin",
+    "non-rotated",
+    "rotated",
+  ],
+  fontsize = 9,
+  loc = "lower right"
+)
 plt.title(f"Keys (aligned {chosen_format})", loc = "center")
 plt.show()

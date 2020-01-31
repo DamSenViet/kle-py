@@ -6,14 +6,14 @@ Ported over from [kle-serial/index.ts](https://github.com/ijprest/kle-serial/blo
 
 ## Installation
 
-Inside the kle directory, run the following commands to install the package with pip3:
+Run the following commands to install the package or update it with pip3:
 ```sh
 pip3 install -U git+https://github.com/DamSenViet/kle-serial-python.git
 ```
 
 ## Uninstallation
 
-Inside the kle directory, run the following commands to uninstall the package with pip3:
+Run the following commands to uninstall the package with pip3:
 ```sh
 pip3 uninstall kle
 ```
@@ -39,7 +39,7 @@ pip3 install -r tests/requirements.txt
 pip3 install -U -e .
 ```
 
-To verify coordinates and orientation, run test.py with a file as an argument.
+To verify coordinates and orientation, run test.py with a file as an argument:
 ```sh
 python3 tests/test.py <path_to.json>
 ```
