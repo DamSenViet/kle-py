@@ -6,10 +6,9 @@ Ported over from [kle-serial/index.ts](https://github.com/ijprest/kle-serial/blo
 
 ## Installation
 
-Inside the directory, run the following commands:
+Inside the kle directory, run the following commands:
 ```sh
-pip3 install -r requirements.txt
-pip3 setup -e .
+pip3 install -U -e .
 ```
 It installs the package in editable mode so that changes are updated dynamically.
 
@@ -25,3 +24,10 @@ for key in keyboard["keys"]:
 ```
 
 Refer to [kle-serial/index.ts](https://github.com/ijprest/kle-serial/blob/master/index.ts) for attribute access.
+
+## Contributing
+
+Inside the kle directory, run the following commands:
+```sh
+pip3 install -U -e .
+```
