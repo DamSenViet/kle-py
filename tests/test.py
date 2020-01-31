@@ -1,5 +1,5 @@
 # file takes command line argument of a path
-# python3 tests.py <path to json>
+# python3 tests.py <path_to.json>
 
 import matplotlib.pyplot as plt
 from sys import argv
