@@ -5,8 +5,12 @@ class Key:
         self,
         color: str = "#cccccc",
         labels: list = list(),
-        textColor: str = "#000000",
-        textSize: float = 3.0,
+        textColor: list = [None for i in range(12)],
+        textSize: list = [None for i in range(12)],
+        default: dict = {
+            "textColor": "#000000",
+            "textSize": 3
+        },
         x: float = 0.0,
         y: float = 0.0,
         width: float = 1.0,
@@ -31,6 +35,7 @@ class Key:
         self.labels = labels
         self.textColor = textColor
         self.textSize = textSize
+        self.default = default
         self.x = x
         self.y = y
         self.width = width
@@ -56,4 +61,6 @@ class Key:
         memo[id(self)] = newKey
         newKey.__dict__.update(self.__dict__)
         newKey.labels = deepcopy(self.labels, memo)
+        newKey.textColor = deepcopy(self.textColor, memo)
+        newKey.textSize = deepcopy(self.textSize, memo)
         return newKey
