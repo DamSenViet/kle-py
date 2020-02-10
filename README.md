@@ -31,6 +31,57 @@ for key in keyboard.keys:
 
 Refer to [kle-serial/index.ts](https://github.com/ijprest/kle-serial/blob/master/index.ts) for attribute access.
 
+## Flexibility for Personal Use
+
+The classes have been designed such that anybody can customize the parsing of the KLE file by simply extending the KLE and Key classes. Here's an example:
+
+```python
+class CustomKey(Key):
+  # your implementation here
+
+class CustomKLE(KLE):
+    key_class = CustomKey
+
+    @classmethod
+    def handle_item(
+        cls,
+        key: Key,
+        align: int,
+        current_rotation: float,
+        current_rotation_x: float,
+        current_rotation_y: float,
+        item: dict
+    ) -> (
+        Key,
+        int,
+        float,
+        float,
+        float,
+    ):
+        (
+            key,
+            align,
+            current_rotation,
+            current_rotation_x,
+            current_rotation_y
+        ) = super().handle_item(
+            cls,
+            key,
+            align,
+            current_rotation,
+            current_rotation_x,
+            current_rotation_y
+        )
+        # custom handle_item here
+        return (
+            key,
+            align,
+            current_rotation,
+            current_rotation_x,
+            current_rotation_y
+        )
+```
+
 ## Contributing and Testing
 
 Inside the kle directory, run the following commands:

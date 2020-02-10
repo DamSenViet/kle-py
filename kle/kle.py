@@ -12,6 +12,9 @@ class DeserializeException(Exception):
         super().__init__(message + ("\n" + json.dumps(payload) if payload else ""))
 
 class KLE:
+    # default Key, allow for extensions
+    key_class = Key
+
     labelMap =  [
         [ 0, 6, 2, 8, 9,11, 3, 5, 1, 4, 7,10], # 0 = no centering
         [ 1, 7,-1,-1, 9,11, 4,-1,-1,-1,-1,10], # 1 = center x
@@ -21,23 +24,99 @@ class KLE:
         [ 1, 7,-1,-1,10,-1, 4,-1,-1,-1,-1,-1], # 5 = center front & x
         [ 3,-1, 5,-1,10,-1,-1,-1, 4,-1,-1,-1], # 6 = center front & y
         [ 4,-1,-1,-1,10,-1,-1,-1,-1,-1,-1,-1], # 7 = center front & x & y
-    ]    # helper
+    ]
 
-    @staticmethod
-    def reorderLabelsIn(labels: list, align: int):
+    @classmethod
+    def reorderLabelsIn(cls, labels: list, align: int):
         ret = [None for i in range(12)]
         for i, label in enumerate(labels):
-            if label: ret[KLE.labelMap[align][i]] = label
+            if label: ret[cls.labelMap[align][i]] = label
         return ret
 
-    @staticmethod
-    def deserialize(rows: list) -> Keyboard:
+    @classmethod
+    def handle_item(
+        cls,
+        key: Key,
+        align: int,
+        current_rotation: float,
+        current_rotation_x: float,
+        current_rotation_y: float,
+        item: dict,
+    # needs to return everything in same order
+    ) -> (
+        Key,
+        int,
+        float,
+        float,
+        float,
+    ):
+        # rotation changes can only be speicfied at beginning of row
+        if item.get("r"): key.rotation_angle = item["r"]
+        if item.get("rx"): key.rotation_x = item["rx"]
+        if item.get("ry"): key.rotation_y = item["ry"]
+        # check for resets against rotation rows
+        if current_rotation != key.rotation_angle or \
+            current_rotation_x != key.rotation_x or \
+            current_rotation_y != key.rotation_y:
+
+            if current_rotation_x != key.rotation_x or \
+                current_rotation_y != key.rotation_y:
+                key.y = key.rotation_y
+
+            current_rotation = key.rotation_angle
+            current_rotation_x = key.rotation_x
+            current_rotation_y = key.rotation_y
+            key.x = key.rotation_x
+
+        if item.get("a"): algin = item["a"]
+        if item.get("f"):
+            key.textSize = [None for i in range(12)]
+            key.textColor = [None for i in range(12)]
+        if item.get("f2"):
+            for i in range(12):
+                key.textSize[i] = item["f2"]
+        if item.get("fa"): key.textSize = item["fa"]
+        if item.get("p"): key.profile = item["p"]
+        if item.get("c"): key.color = item["c"]
+        if item.get("t"):
+            split = item["t"].split("\n")
+            if len(split[0]) == 0: key.default["textColor"] = split[0]
+            key.textColor = cls.reorderLabelsIn(split, align)
+        if item.get("x"): key.x += item["x"]
+        if item.get("y"): key.y += item["y"]
+        if item.get("w"):
+            key.width = item["w"]
+            key.width2 = item["w"]
+        if item.get("h"):
+            key.height = item["h"]
+            key.height2 = item["h"]
+        if item.get("x2"): key.x2 = item["x2"]
+        if item.get("y2"): key.y2 = item["y2"]
+        if item.get("w2"): key.width2 = item["width2"]
+        if item.get("h2"): key.height2 = item["height2"]
+        if item.get("n"): key.nub = item["n"]
+        if item.get("l"): key.stepped = item["l"]
+        if item.get("d"): key.decal = item["d"]
+        if item.get("g"): key.ghost = item["g"]
+        if item.get("sm"): key.sm = item["sm"]
+        if item.get("sb"): key.sb = item["sb"]
+        if item.get("st"): key.st = item["st"]
+        return (
+            key,
+            align,
+            current_rotation,
+            current_rotation_x,
+            current_rotation_y
+        )
+
+    @classmethod
+    def deserialize(cls, rows: list) -> Keyboard:
         if type(rows) != list:
             raise DeserializeException("Expected an array of objects:", rows)
 
         # track rotation info for reset x/y positions
         # if rotation_angle != 0, it is always specified LAST
-        key = Key() # readies the next key data when str encountered
+        key = cls.key_class() # readies the next key data when str encountered
         keyboard = Keyboard()
         align = 4
 
@@ -56,8 +135,8 @@ class KLE:
                         # calculate generated values
                         newKey.width2 = key.width if newKey.width2 == 0 else key.width
                         newKey.height2 = key.width if newKey.height2 == 0 else key.height
-                        newKey.labels = KLE.reorderLabelsIn(item.split("\n"), align)
-                        newKey.textSize = KLE.reorderLabelsIn(newKey.textSize, align)
+                        newKey.labels = cls.reorderLabelsIn(item.split("\n"), align)
+                        newKey.textSize = cls.reorderLabelsIn(newKey.textSize, align)
 
 
                         # clean up generated data
@@ -86,61 +165,29 @@ class KLE:
                         key.decal = False
 
                     else:
-                        # rotation changes can only be speicfied at beginning of row
                         if k != 0 and (item.get("r") or
                             item.get("rx") or
                             item.get("ry")):
-                            raise DeserializeException("")
-                        if item.get("r"): key.rotation_angle = item["r"]
-                        if item.get("rx"): key.rotation_x = item["rx"]
-                        if item.get("ry"): key.rotation_y = item["ry"]
-                        # check for resets against rotation rows
-                        if current_rotation != key.rotation_angle or \
-                            current_rotation_x != key.rotation_x or \
-                            current_rotation_y != key.rotation_y:
+                            raise DeserializeException(
+                                "Rotation changes can only be made at the \
+                                 beginning of the row:",
+                                rows[r]
+                            )
+                        (
+                            key,
+                            align,
+                            current_rotation,
+                            current_rotation_x,
+                            current_rotation_y
+                        ) = cls.handle_item(
+                            deepcopy(key, {}),
+                            align,
+                            current_rotation,
+                            current_rotation_x,
+                            current_rotation_y,
+                            item
+                        )
 
-                            if current_rotation_x != key.rotation_x or \
-                                current_rotation_y != key.rotation_y:
-                                key.y = key.rotation_y
-
-                            current_rotation = key.rotation_angle
-                            current_rotation_x = key.rotation_x
-                            current_rotation_y = key.rotation_y
-                            key.x = key.rotation_x
-
-                        if item.get("a"): algin = item["a"]
-                        if item.get("f"):
-                            key.textSize = [None for i in range(12)]
-                            key.textColor = [None for i in range(12)]
-                        if item.get("f2"):
-                            for i in range(12):
-                                key.textSize[i] = item["f2"]
-                        if item.get("fa"): key.textSize = item["fa"]
-                        if item.get("p"): key.profile = item["p"]
-                        if item.get("c"): key.color = item["c"]
-                        if item.get("t"):
-                            split = item["t"].split("\n")
-                            if len(split[0]) == 0: key.default["textColor"] = split[0]
-                            key.textColor = KLE.reorderLabelsIn(split, align)
-                        if item.get("x"): key.x += item["x"]
-                        if item.get("y"): key.y += item["y"]
-                        if item.get("w"):
-                            key.width = item["w"]
-                            key.width2 = item["w"]
-                        if item.get("h"):
-                            key.height = item["h"]
-                            key.height2 = item["h"]
-                        if item.get("x2"): key.x2 = item["x2"]
-                        if item.get("y2"): key.y2 = item["y2"]
-                        if item.get("w2"): key.width2 = item["width2"]
-                        if item.get("h2"): key.height2 = item["height2"]
-                        if item.get("n"): key.nub = item["n"]
-                        if item.get("l"): key.stepped = item["l"]
-                        if item.get("d"): key.decal = item["d"]
-                        if item.get("g"): key.ghost = item["g"]
-                        if item.get("sm"): key.sm = item["sm"]
-                        if item.get("sb"): key.sb = item["sb"]
-                        if item.get("st"): key.st = item["st"]
                 key.y += 1
                 key.x = key.rotation_x
             elif type(rows[r]) == dict:
@@ -172,6 +219,6 @@ class KLE:
         return keyboard
 
     # parse from file
-    @staticmethod
-    def parse(f: TextIO) -> Keyboard:
-        return KLE.deserialize(json.load(f))
+    @classmethod
+    def parse(cls, f: TextIO) -> Keyboard:
+        return cls.deserialize(json.load(f))
