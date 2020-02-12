@@ -1,8 +1,12 @@
 # kle-serial-python
 
-This is a [MIT-licensed](LICENSE) javascript library for parsing the serialized format used on [keyboard-layout-editor.com](keyboard-layout-editor.com) (KLE) and converting it into something that is easier to undertsand and use in third-party applications.
+This is a [MIT-licensed](LICENSE) javascript library for parsing the serialized
+format used on [keyboard-layout-editor.com](keyboard-layout-editor.com) (KLE)
+and converting it into something that is easier to undertsand and use in
+third-party applications.
 
-Ported over from [kle-serial/index.ts](https://github.com/ijprest/kle-serial/blob/master/index.ts) with working rotations.
+Ported over from [kle-serial/index.ts](https://github.com/ijprest/kle-serial/blob/master/index.ts)
+with working rotations.
 
 ## Installation
 
@@ -18,33 +22,36 @@ Run the following commands to uninstall the package with pip3:
 pip3 uninstall kle
 ```
 
-## Usage
+## Example
 
 ```python
 from kle import KLE
 
-keyboard = KLE.parse(open(file_path))
+keyboard = KLE.load(open(file_path))
 for key in keyboard.keys:
   # do your thing here
   pass
 ```
 
-Refer to [kle-serial/index.ts](https://github.com/ijprest/kle-serial/blob/master/index.ts) for attribute access.
+Refer to [kle-serial/index.ts](https://github.com/ijprest/kle-serial/blob/master/index.ts)
+for attribute access. Note that variable and attribute names use python naming
+conventions instead of javascript.
 
-## Flexibility for Personal Use
+## Extending Classes
 
-The classes have been designed such that anybody can customize the parsing of the KLE file by simply extending the KLE and Key classes. Here's an example:
+The classes have been designed such that anybody can customize the parsing of
+the KLE file by simply extending the KLE and Key classes. Here's an example:
 
 ```python
 class CustomKey(Key):
   # your implementation here
 
 class CustomKLE(KLE):
-    key_class = CustomKey
+    key_class = CustomKey # set this to use your custom key
 
     @classmethod
-    def handle_item(
-        cls,
+    def deserialize_adjustment(
+        cls, # class, like self but for @classmethod
         key: Key,
         align: int,
         current_rotation: float,
@@ -72,7 +79,8 @@ class CustomKLE(KLE):
             current_rotation_x,
             current_rotation_y
         )
-        # custom handle_item here
+        # your additional implementation or fields here
+        # return they get updated in the parsing loop
         return (
             key,
             align,
@@ -84,7 +92,9 @@ class CustomKLE(KLE):
 
 ## Contributing and Testing
 
-Inside the kle directory, run the following commands:
+Inside the kle directory, run the following commands to prepare your
+dependencies for testing:
+
 ```sh
 pip3 install -r tests/requirements.txt
 pip3 install -U -e .

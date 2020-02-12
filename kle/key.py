@@ -57,10 +57,10 @@ class Key:
         self.st = st
 
     def __deepcopy__(self, memo):
-        newKey = type(self)()
-        memo[id(self)] = newKey
-        newKey.__dict__.update(self.__dict__)
-        newKey.labels = deepcopy(self.labels, memo)
-        newKey.textColor = deepcopy(self.textColor, memo)
-        newKey.textSize = deepcopy(self.textSize, memo)
-        return newKey
+        new_key = type(self)()
+        memo[id(self)] = new_key
+        new_key.__dict__.update(self.__dict__)
+        new_key.labels = deepcopy(self.labels, memo)
+        new_key.textColor = deepcopy(self.textColor, memo)
+        new_key.textSize = deepcopy(self.textSize, memo)
+        return new_key
