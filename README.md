@@ -30,12 +30,12 @@ from kle import KLE
 keyboard = KLE.load(open(file_path))
 for key in keyboard.keys:
   # do your thing here
-  pass
 ```
 
 Refer to [kle-serial/index.ts](https://github.com/ijprest/kle-serial/blob/master/index.ts)
 for attribute access. Note that variable and attribute names use python naming
-conventions instead of javascript.
+conventions instead of javascript naming conventions. Docstrings are available
+for all classes and methods in the module.
 
 ## Extending Classes
 
@@ -43,6 +43,8 @@ The classes have been designed such that anybody can customize the parsing of
 the KLE file by simply extending the KLE and Key classes. Here's an example:
 
 ```python
+from kle import Key, KLE
+
 class CustomKey(Key):
   # your implementation here
 
@@ -71,16 +73,17 @@ class CustomKLE(KLE):
             current_rotation,
             current_rotation_x,
             current_rotation_y
-        ) = super().handle_item(
+        ) = super().deserialize_adjustment(
             cls,
             key,
             align,
             current_rotation,
             current_rotation_x,
-            current_rotation_y
+            current_rotation_y,
+            item
         )
         # your additional implementation or fields here
-        # return they get updated in the parsing loop
+        # return critical arguments so they get updated in the parsing loop
         return (
             key,
             align,
@@ -97,10 +100,12 @@ dependencies for testing:
 
 ```sh
 pip3 install -r tests/requirements.txt
-pip3 install -U -e .
+pip3 install -U -e . # update existing kle, install as editable module
 ```
 
-To verify coordinates and orientation, run test.py with a file as an argument:
+To view and verify coordinates and orientation, run test.py with a file as an
+argument:
+
 ```sh
-python3 tests/test.py <path_to.json>
+python3 tests/orientation.py <path_to.json>
 ```

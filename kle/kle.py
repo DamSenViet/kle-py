@@ -1,6 +1,7 @@
-from typing import TextIO
+from typing import TextIO, Union
 from collections import OrderedDict
 from copy import deepcopy
+from decimal import Decimal
 import json
 
 from .key import Key
@@ -8,15 +9,40 @@ from .metadata import Metadata, Background
 from .keyboard import Keyboard
 
 class DeserializeException(Exception):
-    def __init__(self, message: str, payload: dict = None) -> None:
-        super().__init__(message + ("\n" + json.dumps(payload) if payload else ""))
+    """Class for all exceptions encountered during deserialization."""
+
+    def __init__(self, message: str, payload: Union[dict, list] = None) -> None:
+        """Construct a `DeserializeException`.
+
+        Arguments:
+            message {str} -- A message indicating a processing error during
+                             deserialization of the KLE file.
+
+        Keyword Arguments:
+            payload {some primitive} -- The offending payload during deserialization.
+                              (default: {`None`})
+        """
+        super().__init__(message +
+            ("\n" + json.dumps(payload) if payload else ""))
+
+class SerializeException(Exception):
+    """Class for all exceptions encountered during serialization."""
+
+    def __init__(self, message: str) -> None:
+        """Construct a 'SerializeException`.
+
+        Arguments:
+            message {str} -- A message indicating a processing error during
+                             serialization of the keyboard.
+        """
+        super().__init__(message)
 
 class KLE:
-    """A class for serializing and deserializing a KLE formatted json."""
+    """Class for serializing and deserializing a KLE formatted json."""
     # default Key, use this variable to allow for easy extensions
     key_class = Key
 
-    labelMap = [
+    label_map = [
         [ 0, 6, 2, 8, 9,11, 3, 5, 1, 4, 7,10], # 0 = no centering
         [ 1, 7,-1,-1, 9,11, 4,-1,-1,-1,-1,10], # 1 = center x
         [ 3,-1, 5,-1, 9,11,-1,-1, 4,-1,-1,10], # 2 = center y
@@ -28,19 +54,31 @@ class KLE:
     ]
 
     @classmethod
-    def reorderLabelsIn(cls, labels: list, align: int) -> list:
+    def serialize(cls, keyboard: Keyboard) -> str:
+        """Serializes a keyboard into a KLE json `str`.
+
+        Arguments:
+            keyboard {Keyboard} -- The keyboard to serialize.
+
+        Returns:
+            str -- The KLE json.
+        """
+        pass
+
+    @classmethod
+    def reorder_labels(cls, items: list, align: int) -> list:
         """Reorders the items in the labels to properly match.
 
         Arguments:
-            labels {list} -- Labels to be reordered.
+            items {list} -- items to be reordered.
             align {int} -- The alignment option.
 
         Returns:
             list -- The reordered labels.
         """
         ret = [None for i in range(12)]
-        for i, label in enumerate(labels):
-            if label: ret[cls.labelMap[align][i]] = label
+        for i, item in enumerate(items):
+            if item: ret[cls.label_map[align][i]] = item
         return ret
 
     @classmethod
@@ -48,17 +86,17 @@ class KLE:
         cls,
         key: Key,
         align: int,
-        current_rotation: float,
-        current_rotation_x: float,
-        current_rotation_y: float,
+        current_rotation: Decimal,
+        current_rotation_x: Decimal,
+        current_rotation_y: Decimal,
         item: dict,
     # needs to return everything in same order
     ) -> (
         Key,
         int,
-        float,
-        float,
-        float,
+        Decimal,
+        Decimal,
+        Decimal,
     ):
         """Interprets the adjustments (formatted as a `dict`) specified by the
         `dict` keys and returns the appropriate data to the parsing loop.
@@ -66,10 +104,10 @@ class KLE:
         Arguments:
             key {Key} -- The copy of the key data tracked in the parsing loop.
             align {int} -- The alignment option.
-            current_rotation {float} -- The current rotation angle.
-            current_rotation_x {float} -- The current rotation point on the x
+            current_rotation {Decimal} -- The current rotation angle.
+            current_rotation_x {Decimal} -- The current rotation point on the x
                                           axis.
-            current_rotation_y {float} -- The current rotation point on the y
+            current_rotation_y {Decimal} -- The current rotation point on the y
                                           axis.
 
         Returns:
@@ -78,9 +116,9 @@ class KLE:
                      tracked in the parsing loop.
         """
         # rotation changes can only be speicfied at beginning of row
-        if item.get("r"): key.rotation_angle = item["r"]
-        if item.get("rx"): key.rotation_x = item["rx"]
-        if item.get("ry"): key.rotation_y = item["ry"]
+        if item.get("r"): key.rotation_angle = Decimal(item["r"])
+        if item.get("rx"): key.rotation_x = Decimal(item["rx"])
+        if item.get("ry"): key.rotation_y = Decimal(item["ry"])
         # check for resets against rotation rows
         if current_rotation != key.rotation_angle or \
             current_rotation_x != key.rotation_x or \
@@ -97,30 +135,30 @@ class KLE:
 
         if item.get("a"): algin = item["a"]
         if item.get("f"):
-            key.textSize = [None for i in range(12)]
-            key.textColor = [None for i in range(12)]
+            key.text_size = [None for i in range(12)]
+            key.text_color = [None for i in range(12)]
         if item.get("f2"):
             for i in range(12):
-                key.textSize[i] = item["f2"]
-        if item.get("fa"): key.textSize = item["fa"]
+                key.text_size[i] = item["f2"]
+        if item.get("fa"): key.text_size = item["fa"]
         if item.get("p"): key.profile = item["p"]
         if item.get("c"): key.color = item["c"]
         if item.get("t"):
             split = item["t"].split("\n")
-            if len(split[0]) == 0: key.default["textColor"] = split[0]
-            key.textColor = cls.reorderLabelsIn(split, align)
-        if item.get("x"): key.x += item["x"]
-        if item.get("y"): key.y += item["y"]
+            if len(split[0]) == 0: key.default["text_color"] = split[0]
+            key.text_color = cls.reorder_labels(split, align)
+        if item.get("x"): key.x += Decimal(item["x"])
+        if item.get("y"): key.y += Decimal(item["y"])
         if item.get("w"):
-            key.width = item["w"]
-            key.width2 = item["w"]
+            key.width = Decimal(item["w"])
+            key.width2 = Decimal(item["w"])
         if item.get("h"):
-            key.height = item["h"]
-            key.height2 = item["h"]
-        if item.get("x2"): key.x2 = item["x2"]
-        if item.get("y2"): key.y2 = item["y2"]
-        if item.get("w2"): key.width2 = item["width2"]
-        if item.get("h2"): key.height2 = item["height2"]
+            key.height = Decimal(item["h"])
+            key.height2 = Decimal(item["h"])
+        if item.get("x2"): key.x2 = Decimal(item["x2"])
+        if item.get("y2"): key.y2 = Decimal(item["y2"])
+        if item.get("w2"): key.width2 = Decimal(item["width2"])
+        if item.get("h2"): key.height2 = Decimal(item["height2"])
         if item.get("n"): key.nub = item["n"]
         if item.get("l"): key.stepped = item["l"]
         if item.get("d"): key.decal = item["d"]
@@ -166,9 +204,9 @@ class KLE:
         keyboard = Keyboard()
         align = 4
 
-        current_rotation = 0.0
-        current_rotation_x = 0.0
-        current_rotation_y = 0.0
+        current_rotation = Decimal(0.0)
+        current_rotation_x = Decimal(0.0)
+        current_rotation_y = Decimal(0.0)
 
         for r in range(len(rows)):
             if type(rows[r]) == list:
@@ -181,24 +219,24 @@ class KLE:
                         # calculate generated values
                         new_key.width2 = key.width if new_key.width2 == 0 else key.width
                         new_key.height2 = key.width if new_key.height2 == 0 else key.height
-                        new_key.labels = cls.reorderLabelsIn(item.split("\n"), align)
-                        new_key.textSize = cls.reorderLabelsIn(new_key.textSize, align)
+                        new_key.labels = cls.reorder_labels(item.split("\n"), align)
+                        new_key.text_size = cls.reorder_labels(new_key.text_size, align)
 
                         # clean up generated data
                         for i in range(12):
                             if not new_key.labels[i]:
-                                new_key.textSize[i] = None
-                                new_key.textColor[i] = None
-                            if new_key.textSize[i] == new_key.default["textSize"]:
-                                new_key.textSize[i] = None
-                            if new_key.textColor[i] == new_key.default["textColor"]:
-                                new_key.textColor = None
+                                new_key.text_size[i] = None
+                                new_key.text_color[i] = None
+                            if new_key.text_size[i] == new_key.default["text_size"]:
+                                new_key.text_size[i] = None
+                            if new_key.text_color[i] == new_key.default["text_color"]:
+                                new_key.text_color = None
 
                         # add key
                         keyboard.keys.append(new_key)
 
                         # adjustments for next key gen
-                        key.x += key.width
+                        key.x += Decimal(key.width)
                         key.width = 1
                         key.height = 1
                         key.x2 = 0
@@ -233,12 +271,12 @@ class KLE:
                             item
                         )
 
-                key.y += 1
-                key.x = key.rotation_x
+                key.y += Decimal(1.0)
+                key.x = Decimal(key.rotation_x)
             elif type(rows[r]) == dict:
                 if r != 0:
                     raise DeserializeException(
-                        "Keyboard metadata must be the first element:",
+                        f"Keyboard metadata can only be at index 0, is index {r}:",
                         rows[r]
                     )
                 # unpack metadata into keyboard metadata
@@ -253,9 +291,9 @@ class KLE:
                 keyboard.metadata.name = metadata.get("name")
                 keyboard.metadata.notes = metadata.get("notes")
                 keyboard.metadata.radii = metadata.get("radii")
-                keyboard.metadata.switchBrand = metadata.get("switchBrand")
-                keyboard.metadata.switchMount = metadata.get("switchMount")
-                keyboard.metadata.switchType = metadata.get("switchType")
+                keyboard.metadata.switch_brand = metadata.get("switchBrand")
+                keyboard.metadata.switch_mount = metadata.get("switchMount")
+                keyboard.metadata.switch_type = metadata.get("switchType")
             else:
                 raise DeserializeException(
                     f"Unexpected row type: {type(rows[r])}",
@@ -269,7 +307,7 @@ class KLE:
         """Converts a KLE formatted json of type `str` into a `Keyboard`.
 
         Arguments:
-            s {str} -- The KLE formmatted json string.
+            s {str} -- The KLE formmatted json `str`.
 
         Returns:
             Keyboard -- Resulting instance of `Keyboard` from the string.
@@ -304,7 +342,7 @@ class KLE:
 
     @classmethod
     def dump(cls, keyboard: Keyboard, file: TextIO):
-        """Converts a `Keyboard` into a KLE formatted json `str` and dumps the
+        """Converts a `Keyboard` into a KLE formatted json `str` and writes the
         string into a open file. NOTE: Does not close the file.
 
         Arguments:

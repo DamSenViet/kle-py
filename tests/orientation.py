@@ -46,13 +46,13 @@ is_labeled = {
   "origin": False
 }
 for key in keyboard.keys:
-  x = key.x
-  y = key.y
-  width = key.width
-  height = key.height
-  angle = key.rotation_angle
-  origin_x = key.rotation_x
-  origin_y = key.rotation_y
+  x = float(key.x)
+  y = float(key.y)
+  width = float(key.width)
+  height = float(key.height)
+  angle = float(key.rotation_angle)
+  origin_x = float(key.rotation_x)
+  origin_y = float(key.rotation_y)
 
   adj_x = None # adjustments
   adj_y = None
