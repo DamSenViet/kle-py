@@ -1,25 +1,21 @@
 from .key import Key
-from typing import List
+import typing as typ
 from .metadata import Metadata
 
 class Keyboard:
-    """Class that holds data of a `Keyboard` for KLE formatted json data.
-
-    Attributes:
-        metadata {Metadata} -- Metadata (like name, author).
-        keys {List[Key]} -- List of keys.
-    """
+    """Class that holds data of a `Keyboard` for KLE formatted json data."""
 
     def __init__(
         self,
         metadata: Metadata = Metadata(),
-        keys: List[Key] = list()
+        keys: typ.List[Key] = list()
     ):
         """Construct a new `Keyboard`. Default arguments provided.
 
-        Keyword Arguments:
-            metadata {Metadata} -- A metadata instance. (default: {Metadata()})
-            keys {List[Key]} -- A `list` of `Key` (default: {list()})
+        :param metadata: A metadata instance, defaults to Metadata().
+        :type metadata: Metadata
+        :param keys: A `list` of `Key`, defaults to list().
+        :type keys: typ.List[Key]
         """
         self.metadata = metadata
         self.keys = keys

@@ -1,57 +1,30 @@
-from copy import deepcopy
-from decimal import Decimal
+import copy
+import decimal as dec
 
 class Key:
-    """Class that holds data of a `Key` instance for a `Keyboard`.
-
-    Attributes:
-        color {str} -- Background color of the key in hex.
-        labels {list} -- The list of legends.
-        text_color {list} -- The text color for the legends.
-        text_size {list} -- The text size for the legends.
-        default {dict} -- The defaults used when label in default position.
-        x {Decimal} -- The x coordinate of the key before rotation.
-        y {Decimal} -- The y coordinate of the key before rotation.
-        width {Decimal} -- Width of the key.
-        height {Decimal} -- Height of the key.
-        x2 {Decimal} -- Duplicate x coordinate of the key???
-        y2 {Decimal} -- Duplicate y coordinate of the key???
-        width2 {Decimal} -- Duplicate width of the key???
-        height2 {Decimal} -- Duplicate height of the key???
-        rotation_x {Decimal} -- X coordinate of the rotation origin.
-        rotation_y {Decimal} -- Y coordinate of the rotation origin
-        rotation_angle {Decimal} -- Rotation angle about the rotation origin
-        decal {bool} -- Specifies whether key is treated as a decoration.
-        ghost {bool} -- Specifies whether key should be rendered transparently.
-        stepped {bool} -- Specifies whether part of key is lower than rest.
-        nub {bool} -- Specifies whether key is a homing key.
-        profile {str} -- Specifies the profile of the key.
-        sm {str} -- Switch mount.
-        sb {str} -- Switch brand.
-        st {str} -- Switch type.
-    """
+    """Class that holds data of a `Key` instance for a `Keyboard`."""
 
     def __init__(
         self,
         color: str = "#cccccc",
-        labels: list = list(),
+        labels: list = [None for i in range(12)],
         text_color: list = [None for i in range(12)],
         text_size: list = [None for i in range(12)],
         default: dict = {
             "text_color": "#000000",
             "text_size": 3
         },
-        x: Decimal = Decimal(0.0),
-        y: Decimal = Decimal(0.0),
-        width: Decimal = Decimal(1.0),
-        height: Decimal = Decimal(1.0),
-        x2: Decimal  = Decimal(0.0),
-        y2: Decimal = Decimal(0.0),
-        width2: Decimal = Decimal(1.0),
-        height2: Decimal = Decimal(1.0),
-        rotation_x: Decimal = Decimal(0.0),
-        rotation_y: Decimal = Decimal(0.0),
-        rotation_angle: Decimal = Decimal(0.0),
+        x: dec.Decimal = dec.Decimal(0.0),
+        y: dec.Decimal = dec.Decimal(0.0),
+        width: dec.Decimal = dec.Decimal(1.0),
+        height: dec.Decimal = dec.Decimal(1.0),
+        x2: dec.Decimal  = dec.Decimal(0.0),
+        y2: dec.Decimal = dec.Decimal(0.0),
+        width2: dec.Decimal = dec.Decimal(1.0),
+        height2: dec.Decimal = dec.Decimal(1.0),
+        rotation_x: dec.Decimal = dec.Decimal(0.0),
+        rotation_y: dec.Decimal = dec.Decimal(0.0),
+        rotation_angle: dec.Decimal = dec.Decimal(0.0),
         decal: bool = False,
         ghost: bool = False,
         stepped: bool = False,
@@ -60,53 +33,62 @@ class Key:
         sm: str = None,
         sb: str = None,
         st: str = None
-    ) -> None:
+    ):
         """Construct a new `Key`. Default arguments provided.
 
-        Keyword Arguments:
-            color {str} -- Background color of the key in hex.
-                           (default: {`"#cccccc"`})
-            labels {list} -- The list of legends.
-                             (default: {`list()`})
-            text_color {list} -- The text color for the legends.
-                                (default: {`[None for i in range(12)]`})
-            text_size {list} -- The text size for the legends.
-                               (default: {`[None for i in range(12)]`})
-            default {dict} -- The defaults used when label in default position.
-                              (default: {`{"text_color": "#000000","text_size": 3}`})
-            x {Decimal} -- The x coordinate of the key before rotation.
-                           (default: {`Decimal(0.0)`})
-            y {Decimal} -- The y coordinate of the key before rotation.
-                           (default: {`Decimal(0.0)`})
-            width {Decimal} -- Width of the key. (default: {`Decimal(1.0)`})
-            height {Decimal} -- Height of the key. (default: {`Decimal(1.0)`})
-            x2 {Decimal} -- Duplicate x coordinate of the key???
-                            (default: {`Decimal(0.0)`})
-            y2 {Decimal} -- Duplicate y coordinate of the key???
-                            (default: {`Decimal(0.0)`})
-            width2 {Decimal} -- Duplicate width of the key???
-                                (default: {`Decimal(1.0)`})
-            height2 {Decimal} -- Duplicate height of the key???
-                                 (default: {`Decimal(1.0)`})
-            rotation_x {Decimal} -- X coordinate of the rotation origin.
-                                    (default: {`Decimal(0.0)`})
-            rotation_y {Decimal} -- Y coordinate of the rotation origin
-                                    (default: {`Decimal(0.0)`})
-            rotation_angle {Decimal} -- Rotation angle about the rotation origin
-                                        (default: {`Decimal(0.0)`})
-            decal {bool} -- Specifies whether key is treated as a decoration.
-                            (default: {`False`})
-            ghost {bool} -- Specifies whether key should be rendered transparently.
-                            (default: {`False`})
-            stepped {bool} -- Specifies whether part of key is lower than rest.
-                              (default: {`False`})
-            nub {bool} -- Specifies whether key is a homing key.
-                          (default: {`False`})
-            profile {str} -- Specifies the profile of the key.
-                             (default: {`None`})
-            sm {str} -- Switch mount. (default: {`None`})
-            sb {str} -- Switch brand. (default: {`None`})
-            st {str} -- Switch type. (default: {`None`})
+        :param color: The background color (hex code) of the key, defaults to
+            "#cccccc".
+        :type color: str
+        :param labels: The list of legends, defaults to
+            [None for i in range(12)].
+        :type labels: list
+        :param text_color: The text color (hex code) for the legends, defaults
+            to [None for i in range(12)].
+        :type text_color: list
+        :param text_size: The text size for the legends, defaults to
+            [None for i in range(12)].
+        :type text_size: list
+        :param default: The defaults used when label in default position,
+            defaults to {"text_color": "#000000", "text_size": 3}.
+        :type default: dict
+        :param x: The x coordinate of the key before rotation.
+        :type x: dec.Decimal
+        :param y: The y coordinate of the key before rotation.
+        :type y: dec.Decimal
+        :param width: Width of the key.
+        :type width: dec.Decimal
+        :param height: Height of the key.
+        :type height: dec.Decimal
+        :param x2: Duplicate x coordinate of the key???
+        :type x2: dec.Decimal
+        :param y2: Duplicate y coordinate of the key???
+        :type y2: dec.Decimal
+        :param width2: Duplicate width of the key???
+        :type width2: dec.Decimal
+        :param height2: Duplicate height of the key???
+        :type height2: dec.Decimal
+        :param rotation_x: X coordinate of the rotation origin.
+        :type rotation_x: dec.Decimal
+        :param rotation_y: Y coordinate of the rotation origin.
+        :type rotation_y: dec.Decimal
+        :param rotation_angle: Rotation angle about the rotation origin.
+        :type rotation_angle: dec.Decimal
+        :param decal: Specifies whether key is treated as a decoration.
+        :type decal: bool
+        :param ghost: Specifies whether key should be rendered transparently.
+        :type ghost: bool
+        :param stepped: Specifies whether part of key is lower than rest.
+        :type stepped: bool
+        :param nub: Specifies whether key is a homing key.
+        :type nub: bool
+        :param profile: The profile/sculpt of the key.
+        :type profile: str
+        :param sm: The switch mount of the key.
+        :type sm: str
+        :param sb: The switch brand of the key.
+        :type sb: str
+        :param st: The switch mount of the key.
+        :type st: str
         """
         self.color = color
         self.labels = labels
@@ -134,19 +116,15 @@ class Key:
         self.st = st
 
     def __deepcopy__(self, memo: dict = None) -> "Key":
-        """Creates a deepcopy of the key.
+        """Creates a deep copy of the key.
 
-        Arguments:
-            memo {dict} -- A dict of references for deep copy process.
-                           (default: {`None`})
-
-        Returns:
-            Key -- A duplicate of the key.
+        :return: A duplicate of the key.
+        :rtype: Key
         """
         new_key = type(self)()
         memo[id(self)] = new_key
         new_key.__dict__.update(self.__dict__)
-        new_key.labels = deepcopy(self.labels, memo)
-        new_key.text_color = deepcopy(self.text_color, memo)
-        new_key.text_size = deepcopy(self.text_size, memo)
+        new_key.labels = copy.deepcopy(self.labels, memo)
+        new_key.text_color = copy.deepcopy(self.text_color, memo)
+        new_key.text_size = copy.deepcopy(self.text_size, memo)
         return new_key

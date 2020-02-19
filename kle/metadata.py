@@ -1,10 +1,6 @@
 class Background:
-    """Class for storing Metadata background info.
+    """Class for storing Metadata background info."""
 
-    Attributes:
-        name {str} -- Name of the background style.
-        style {str} -- CSS rule for background resource.
-    """
     def __init__(
         self,
         name: str = None,
@@ -12,27 +8,17 @@ class Background:
     ):
         """Construct a new `Background`. Default arguments provided.
 
-        Keyword Arguments:\n
-            name {str} -- Name of the background style. (default: {None})
-            style {str} -- CSS rule for background resource. (default: {None})
+        :param name: Name of the background style, defaults to None.
+        :type name: str
+        :param style: CSS rule for background resources, defaults to None.
+        :type style: str
         """
         self.name = name
         self.style = style
 
 class Metadata:
-    """Class for storing Metadata
+    """Class for storing Metadata."""
 
-    Attributes:
-        author {str} -- Name/Username of the author.
-        backcolor {str} -- Background color.
-        background {Background} -- Background style.
-        name {str} -- Name of the keyboard.
-        notes {str} -- Additional notes.
-        radii {str} -- Keyboard corner radii.
-        switch_brand {str} -- Switch brand.
-        switch_mount {str} -- Switch mount.
-        switch_type {str} -- Switch type.
-    """
     def __init__(
         self,
         author: str = None,
@@ -47,16 +33,24 @@ class Metadata:
     ):
         """Construct a a new `Metadata`. Default arguments provided.
 
-        Keyword Arguments:
-            author {str} -- Name/Username of the author. (default: {None})
-            backcolor {str} -- Background color. (default: {"#eeeeee"})
-            background {Background} -- Background style. (default: {None})
-            name {str} -- Name of the keyboard. (default: {None})
-            notes {str} -- Additional notes. (default: {None})
-            radii {str} -- Keyboard corner radii. (default: {None})
-            switch_brand {str} -- Switch brand. (default: {None})
-            switch_mount {str} -- Switch mount. (default: {None})
-            switch_type {str} -- Switch type. (default: {None})
+        :param author: Name/Username of the author, defaults to None.
+        :type author: str
+        :param backcolor: Background color, defaults to None.
+        :type backcolor: str
+        :param background: Background style, defaults to None.
+        :type background: Background
+        :param name: Name of the keyboard, defaults to None.
+        :type name: str
+        :param notes: Additional notes, defaults to None.
+        :type notes: str
+        :param radii: Keyboard corner radii, defaults to None.
+        :type radii: str
+        :param switch_brand: Name of the switch brand.
+        :type switch_brand: str
+        :param switch_mount: Name of the switch mount.
+        :type switch_mount: str
+        :param switch_type: Name of the switch type.
+        :type switch_type: str
         """
         self.author = author
         self.backcolor = backcolor

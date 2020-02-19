@@ -1,8 +1,8 @@
-from typing import TextIO, Union
-from collections import OrderedDict
-from copy import deepcopy
-from decimal import Decimal
+import decimal as dec
+import collections as col
+import copy
 import json
+import typing as typ
 
 from .key import Key
 from .metadata import Metadata, Background
@@ -11,33 +11,35 @@ from .keyboard import Keyboard
 class DeserializeException(Exception):
     """Class for all exceptions encountered during deserialization."""
 
-    def __init__(self, message: str, payload: Union[dict, list] = None) -> None:
+    def __init__(self, message: str = None,
+        payload: typ.Union[dict, list] = None):
         """Construct a `DeserializeException`.
 
-        Arguments:
-            message {str} -- A message indicating a processing error during
-                             deserialization of the KLE file.
-
-        Keyword Arguments:
-            payload {some primitive} -- The offending payload during deserialization.
-                              (default: {`None`})
+        :param message: A message indicating a processing error during
+            deserialization of the KLE file.
+        :type message: str
+        :param payload: The offending payload during deserialization, defaults
+            to `None`.
+        :type payload: typ.Union[dict, list, None], optional
         """
-        super().__init__(message +
-            ("\n" + json.dumps(payload) if payload else ""))
+        super().__init__(
+            message + ("\n" + json.dumps(payload) if payload else "")
+            if message else None
+        )
 
 class SerializeException(Exception):
     """Class for all exceptions encountered during serialization."""
 
-    def __init__(self, message: str) -> None:
+    def __init__(self, message: str = None):
         """Construct a 'SerializeException`.
 
-        Arguments:
-            message {str} -- A message indicating a processing error during
-                             serialization of the keyboard.
+        :param message: A message indicating a processing error during
+            serialization of the keyboard, defaults to `None`.
+        :type message: str, optional
         """
-        super().__init__(message)
+        super().__init__(message if message else None)
 
-class KLE:
+class Kle:
     """Class for serializing and deserializing a KLE formatted json."""
     # default Key, use this variable to allow for easy extensions
     key_class = Key
@@ -55,13 +57,12 @@ class KLE:
 
     @classmethod
     def serialize(cls, keyboard: Keyboard) -> str:
-        """Serializes a keyboard into a KLE json `str`.
+        """Serializes a keyboard into a KLE json formatted `str`.
 
-        Arguments:
-            keyboard {Keyboard} -- The keyboard to serialize.
-
-        Returns:
-            str -- The KLE json.
+        :param keyboard: The keyboard to serialize.
+        :type keyboard: Keyboard
+        :return: The KLE json `str`.
+        :rtype: str
         """
         pass
 
@@ -69,12 +70,12 @@ class KLE:
     def reorder_labels(cls, items: list, align: int) -> list:
         """Reorders the items in the labels to properly match.
 
-        Arguments:
-            items {list} -- items to be reordered.
-            align {int} -- The alignment option.
-
-        Returns:
-            list -- The reordered labels.
+        :param items: The items to be reordered.
+        :type items: list
+        :param align: The alignment option. 0-7
+        :type align: int
+        :return: The reordered items.
+        :rtype: list
         """
         ret = [None for i in range(12)]
         for i, item in enumerate(items):
@@ -86,39 +87,40 @@ class KLE:
         cls,
         key: Key,
         align: int,
-        current_rotation: Decimal,
-        current_rotation_x: Decimal,
-        current_rotation_y: Decimal,
+        current_rotation: dec.Decimal,
+        current_rotation_x: dec.Decimal,
+        current_rotation_y: dec.Decimal,
         item: dict,
     # needs to return everything in same order
     ) -> (
         Key,
         int,
-        Decimal,
-        Decimal,
-        Decimal,
+        dec.Decimal,
+        dec.Decimal,
+        dec.Decimal,
     ):
         """Interprets the adjustments (formatted as a `dict`) specified by the
         `dict` keys and returns the appropriate data to the parsing loop.
 
-        Arguments:
-            key {Key} -- The copy of the key data tracked in the parsing loop.
-            align {int} -- The alignment option.
-            current_rotation {Decimal} -- The current rotation angle.
-            current_rotation_x {Decimal} -- The current rotation point on the x
-                                          axis.
-            current_rotation_y {Decimal} -- The current rotation point on the y
-                                          axis.
-
-        Returns:
-            tuple -- A tuple of all arguments in the same order without the
-                     adjustment item. This is used to overwrite the data
-                     tracked in the parsing loop.
+        :param key: The copy of the key data tracked in the parsing loop.
+        :type key: Key
+        :param align:
+        :type align: int
+        :param current_rotation: The current rotation angle.
+        :type current_rotation: dec.Decimal
+        :param current_rotation_x: The current rotation point on the x axis.
+        :type current_rotation_x: dec.Decimal
+        :param current_rotation_y: The current rotation point on the y axis.
+        :type current_rotation_y: dec.Decimal
+        :return: A tuple of all arguments in the same order without the
+            adjustment item. Used to overwrite tracked data in parsing
+            loop.
+        :rtype: tuple
         """
-        # rotation changes can only be speicfied at beginning of row
-        if item.get("r"): key.rotation_angle = Decimal(item["r"])
-        if item.get("rx"): key.rotation_x = Decimal(item["rx"])
-        if item.get("ry"): key.rotation_y = Decimal(item["ry"])
+        # rotation changes can only be specified at beginning of row
+        if item.get("r"): key.rotation_angle = dec.Decimal(item["r"])
+        if item.get("rx"): key.rotation_x = dec.Decimal(item["rx"])
+        if item.get("ry"): key.rotation_y = dec.Decimal(item["ry"])
         # check for resets against rotation rows
         if current_rotation != key.rotation_angle or \
             current_rotation_x != key.rotation_x or \
@@ -147,18 +149,18 @@ class KLE:
             split = item["t"].split("\n")
             if len(split[0]) == 0: key.default["text_color"] = split[0]
             key.text_color = cls.reorder_labels(split, align)
-        if item.get("x"): key.x += Decimal(item["x"])
-        if item.get("y"): key.y += Decimal(item["y"])
+        if item.get("x"): key.x += dec.Decimal(item["x"])
+        if item.get("y"): key.y += dec.Decimal(item["y"])
         if item.get("w"):
-            key.width = Decimal(item["w"])
-            key.width2 = Decimal(item["w"])
+            key.width = dec.Decimal(item["w"])
+            key.width2 = dec.Decimal(item["w"])
         if item.get("h"):
-            key.height = Decimal(item["h"])
-            key.height2 = Decimal(item["h"])
-        if item.get("x2"): key.x2 = Decimal(item["x2"])
-        if item.get("y2"): key.y2 = Decimal(item["y2"])
-        if item.get("w2"): key.width2 = Decimal(item["width2"])
-        if item.get("h2"): key.height2 = Decimal(item["height2"])
+            key.height = dec.Decimal(item["h"])
+            key.height2 = dec.Decimal(item["h"])
+        if item.get("x2"): key.x2 = dec.Decimal(item["x2"])
+        if item.get("y2"): key.y2 = dec.Decimal(item["y2"])
+        if item.get("w2"): key.width2 = dec.Decimal(item["width2"])
+        if item.get("h2"): key.height2 = dec.Decimal(item["height2"])
         if item.get("n"): key.nub = item["n"]
         if item.get("l"): key.stepped = item["l"]
         if item.get("d"): key.decal = item["d"]
@@ -176,24 +178,21 @@ class KLE:
 
     @classmethod
     def deserialize(cls, rows: list) -> Keyboard:
-        """Reformats the rows of a KLE json to an object of `Keyboard` class
+        """Reformats the rows of the KLE json to an object of `Keyboard` class
         suitable for simple third-party api usage.
 
-        Arguments:
-            rows {list} -- The `list` of `list` or `dict` generated by loading
-                           the json.
-
-        Raises:
-            DeserializeException: Rows should be a `list`.
-            DeserializeException: Rotation changes can only be made at the
-                                  beginning of each row.
-            DeserializeException: An unexpected item in row (not `dict` or
-                                  `list`).
-            DeserializeException: Keyboard metadata, a `dict`, can only be
-                                  the first element in row.
-
-        Returns:
-            Keyboard -- The json data parsed into a object of class `Keyboard`.
+        :param rows: The `list` of `list` or `dict` generated by loading the
+            json.
+        :type rows: list
+        :raises DeserializeException: Rows should be of type `list`.
+        :raises DeserializeException: Rotation changes can only be made at the
+            beginning of each row.
+        :raises DeserializeException: An unexpected item in the row (not of
+            type `dict` or `list`).
+        :raises DeserializeException: Keyboard metadata, a `dict`, can only be
+            specified as the first element in the row.
+        :return: The json data parsed into an object of class `Keyboard`.
+        :rtype: Keyboard
         """
         if type(rows) != list:
             raise DeserializeException("Expected an array of objects:", rows)
@@ -204,9 +203,9 @@ class KLE:
         keyboard = Keyboard()
         align = 4
 
-        current_rotation = Decimal(0.0)
-        current_rotation_x = Decimal(0.0)
-        current_rotation_y = Decimal(0.0)
+        current_rotation = dec.Decimal(0.0)
+        current_rotation_x = dec.Decimal(0.0)
+        current_rotation_y = dec.Decimal(0.0)
 
         for r in range(len(rows)):
             if type(rows[r]) == list:
@@ -214,7 +213,7 @@ class KLE:
                     item = rows[r][k]
                     if type(item) == str:
                         # create copy of key data
-                        new_key = deepcopy(key, {})
+                        new_key = copy.deepcopy(key)
 
                         # calculate generated values
                         new_key.width2 = key.width if new_key.width2 == 0 else key.width
@@ -236,7 +235,7 @@ class KLE:
                         keyboard.keys.append(new_key)
 
                         # adjustments for next key gen
-                        key.x += Decimal(key.width)
+                        key.x += dec.Decimal(key.width)
                         key.width = 1
                         key.height = 1
                         key.x2 = 0
@@ -263,7 +262,7 @@ class KLE:
                             current_rotation_x,
                             current_rotation_y
                         ) = cls.deserialize_adjustment(
-                            deepcopy(key, {}),
+                            copy.deepcopy(key, {}),
                             align,
                             current_rotation,
                             current_rotation_x,
@@ -271,8 +270,8 @@ class KLE:
                             item
                         )
 
-                key.y += Decimal(1.0)
-                key.x = Decimal(key.rotation_x)
+                key.y += dec.Decimal(1.0)
+                key.x = dec.Decimal(key.rotation_x)
             elif type(rows[r]) == dict:
                 if r != 0:
                     raise DeserializeException(
@@ -306,25 +305,23 @@ class KLE:
     def loads(cls, s: str) -> Keyboard:
         """Converts a KLE formatted json of type `str` into a `Keyboard`.
 
-        Arguments:
-            s {str} -- The KLE formmatted json `str`.
-
-        Returns:
-            Keyboard -- Resulting instance of `Keyboard` from the string.
+        :param s: The KLE formatted json `str`.
+        :type s: str
+        :return: Resulting instance of `Keyboard` from the string.
+        :rtype: Keyboard
         """
         return cls.deserialize(json.loads(s))
 
     # parse from file
     @classmethod
-    def load(cls, f: TextIO) -> Keyboard:
+    def load(cls, f: typ.TextIO) -> Keyboard:
         """Converts a KLE formatted json file into a `Keyboard`. NOTE: does not
         close the file.
 
-        Arguments:
-            file {TextIO} -- An open `file` with read permissions.
-
-        Returns:
-            Keyboard -- Resulting instance of `Keyboard` from the file.
+        :param f: An open `file` with read permissions.
+        :type f: typ.TextIO
+        :return: Resulting instance of `Keyboard` from the file.
+        :rtype: Keyboard
         """
         return cls.deserialize(json.load(f))
 
@@ -332,21 +329,27 @@ class KLE:
     def dumps(cls, keyboard: Keyboard) -> str:
         """Converts a `Keyboard` into a KLE formatted json `str`.
 
-        Arguments:
-            keyboard {Keyboard} -- An instance of `Keyboard` to convert.
-
-        Returns:
-            str -- The resulting string from the `Keyboard`.
+        :param keyboard: An instance of `Keyboard` to convert.
+        :type keyboard: Keyboard
+        :return: The resulting string from the `Keyboard`.
+        :rtype: str
         """
         pass
 
     @classmethod
-    def dump(cls, keyboard: Keyboard, file: TextIO):
+    def dump(cls, keyboard: Keyboard, file: typ.TextIO):
         """Converts a `Keyboard` into a KLE formatted json `str` and writes the
         string into a open file. NOTE: Does not close the file.
 
-        Arguments:
-            keyboard {Keyboard} -- An instance of `Keyboard` to dump.
-            file {TextIO} -- An open `file` with write permissions.
+        :param keyboard: An instance of `Keyboard` to dump.
+        :type keyboard: Keyboard
+        :param file: An open `file` with write permissions.
+        :type file: typ.TextIO
         """
         file.write(cls.dumps(keyboard))
+
+# aliases for class methods
+load = Kle.load
+loads = Kle.loads
+dump = Kle.dump
+dumps = Kle.dumps

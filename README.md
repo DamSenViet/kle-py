@@ -1,11 +1,11 @@
-# kle-serial-python
+# kle-cereal-python
 
-This is a [MIT-licensed](LICENSE) javascript library for parsing the serialized
-format used on [keyboard-layout-editor.com](keyboard-layout-editor.com) (KLE)
-and converting it into something that is easier to undertsand and use in
+This is a [MIT-licensed](LICENSE) third-party python library for parsing the
+serialized format used on [keyboard-layout-editor.com](keyboard-layout-editor.com)
+(KLE) and converting it into something that is easier to undertsand and use in
 third-party applications.
 
-Ported over from [kle-serial/index.ts](https://github.com/ijprest/kle-serial/blob/master/index.ts)
+Ported over from [keyboard-layout-editor/serial.js](https://github.com/ijprest/keyboard-layout-editor/blob/master/serial.js)
 with working rotations.
 
 ## Installation
@@ -25,9 +25,9 @@ pip3 uninstall kle
 ## Example
 
 ```python
-from kle import KLE
+import kle
 
-keyboard = KLE.load(open(file_path))
+keyboard = kle.load(open(file_path))
 for key in keyboard.keys:
   # do your thing here
 ```
@@ -43,29 +43,32 @@ The classes have been designed such that anybody can customize the parsing of
 the KLE file by simply extending the KLE and Key classes. Here's an example:
 
 ```python
-from kle import Key, KLE
+import decimal as dec
+import kle
 
-class CustomKey(Key):
+class CustomKey(kle.Key):
   # your implementation here
 
-class CustomKLE(KLE):
+# Don't need CustomKeyboard b/c kle.Keyboard is already generic
+
+class CustomKle(kle.Kle):
     key_class = CustomKey # set this to use your custom key
 
     @classmethod
     def deserialize_adjustment(
         cls, # class, like self but for @classmethod
-        key: Key,
+        key: kle.Key,
         align: int,
-        current_rotation: float,
-        current_rotation_x: float,
-        current_rotation_y: float,
+        current_rotation: dec.Decimal,
+        current_rotation_x: dec.Decimal,
+        current_rotation_y: dec.Decimal,
         item: dict
     ) -> (
-        Key,
+        kle.Key,
         int,
-        float,
-        float,
-        float,
+        dec.Decimal,
+        dec.Decimal,
+        dec.Decimal
     ):
         (
             key,
@@ -91,6 +94,8 @@ class CustomKLE(KLE):
             current_rotation_x,
             current_rotation_y
         )
+
+CustomKle.load(open("file-path"))
 ```
 
 ## Contributing and Testing

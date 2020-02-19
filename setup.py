@@ -1,8 +1,17 @@
-import setuptools
+import setuptools as st
 
-setuptools.setup(
-    name = "kle",
+st.setup(
     version = "0.0.1",
-    packages = setuptools.find_packages(),
-    python_requires = '>=3.4',
+    # package name will be kle-cereal
+    # but imported via 'kle' namespace
+    name = "kle-cereal",
+    description = "",
+    keywords = "",
+    classifiers = [],
+    url = "",
+    author = "DamSenViet",
+    license = "MIT",
+    packages = st.find_packages(exclude=["tests"]),
+    install_requires = [],
+    python_requires = '>=3.3',
 )

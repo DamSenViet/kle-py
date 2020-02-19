@@ -1,26 +1,33 @@
-# file takes command line argument of a path
+# this file takes command line argument of a path (from anywhere)
 # python3 tests.py <path_to.json>
-
 import matplotlib.pyplot as plt
-import matplotlib.markers as markers
-from matplotlib.lines import Line2D
-
-from sys import argv
-from os import path, getcwd
-from kle import KLE
-from math import radians, sin, cos, inf
-
-if len(argv) != 2: exit(1)
-json_path = path.join(getcwd(), path.expanduser(argv[1]))
+import matplotlib.lines as lines
+import math
+import os
+import sys
+import kle
 
 FORMATS = ["Middle Center", "Top Left", "Top Center"]
 
 def rotate(x, y, origin_x, origin_y, degrees):
   rel_x = x - origin_x
   rel_y = y - origin_y
-  new_x = origin_x + (rel_x * cos(radians(angle))) - (rel_y * sin(radians(angle)))
-  new_y = origin_y + (rel_y * cos(radians(angle))) + (rel_x * sin(radians(angle)))
+  new_x = (
+    origin_x +
+    (rel_x * math.cos(math.radians(angle))) -
+    (rel_y * math.sin(math.radians(angle)))
+  )
+  new_y = (
+    origin_y +
+    (rel_y * math.cos(math.radians(angle))) +
+    (rel_x * math.sin(math.radians(angle)))
+  )
   return (new_x, new_y)
+
+# check for command line arguments, print path argument
+if len(sys.argv) != 2: exit(1)
+json_path = os.path.join(os.getcwd(), os.path.expanduser(sys.argv[1]))
+print(f"Examining KLE: {json_path}")
 
 # select format
 chosen_format = None
@@ -33,11 +40,12 @@ while(chosen_format not in range(len(FORMATS))):
     print(f"Invalid Format: \"{chosen_format}.\"")
 chosen_format = FORMATS[chosen_format]
 
-keyboard = KLE.load(open(json_path))
-max_x = -inf
-min_x = inf
-max_y = -inf
-min_y = inf
+# collect and calculate key positions
+keyboard = kle.load(open(json_path))
+max_x = - math.inf
+min_x = math.inf
+max_y = - math.inf
+min_y = math.inf
 arrows = list()
 origins = list()
 is_labeled = {
@@ -112,9 +120,8 @@ for key in keyboard.keys:
     })
     is_labeled["nonrotated"] = True
 
-# print test
-aspect_ratio = (max_x - min_x)/(max_y - min_y)
 # initiate figure to aspect ratio
+aspect_ratio = (max_x - min_x)/(max_y - min_y)
 figsize = ((max_y - min_y) * aspect_ratio/2, (max_y - min_y)/1)
 plt.figure(figsize=figsize)
 
@@ -142,10 +149,10 @@ for arrow in arrows:
 
 # make lines for legends
 custom_lines = [
-  Line2D([0], [0], color = "w", marker = "o", markerfacecolor = "g",
+  lines.Line2D([0], [0], color = "w", marker = "o", markerfacecolor = "g",
     label = "origin points"),
-  Line2D([0], [0], color = "b", lw = 1, label = "non-rotated"),
-  Line2D([0], [0], color = "r", lw = 1, label = "rotated")
+  lines.Line2D([0], [0], color = "b", lw = 1, label = "non-rotated"),
+  lines.Line2D([0], [0], color = "r", lw = 1, label = "rotated")
 ]
 # label the lines for the legends
 plt.legend(
@@ -164,4 +171,5 @@ plt.xlim(min_x - 1, max_x + 1)
 plt.ylim(max_y + 2, min_y - 1) # turn y axis upside down
 plt.title(f"Keys (Aligned {chosen_format})", loc = "center")
 plt.show()
-plt.close()
+
+# verify manually that orientations are correct
