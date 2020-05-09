@@ -5,7 +5,7 @@ import matplotlib.lines as lines
 import math
 import os
 import sys
-import kle
+import kle.cereal as cereal
 
 FORMATS = ["Middle Center", "Top Left", "Top Center"]
 
@@ -41,7 +41,7 @@ while(chosen_format not in range(len(FORMATS))):
 chosen_format = FORMATS[chosen_format]
 
 # collect and calculate key positions
-keyboard = kle.load(open(json_path))
+keyboard = cereal.load(open(json_path))
 max_x = - math.inf
 min_x = math.inf
 max_y = - math.inf
@@ -169,6 +169,8 @@ plt.legend(
 # configure x and y axis for proper viewing
 plt.xlim(min_x - 1, max_x + 1)
 plt.ylim(max_y + 2, min_y - 1) # turn y axis upside down
+plt.xlabel("X Coordinates")
+plt.ylabel("Y Coordinates")
 plt.title(f"Keys (Aligned {chosen_format})", loc = "center")
 plt.show()
 

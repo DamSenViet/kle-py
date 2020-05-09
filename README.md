@@ -3,7 +3,9 @@
 This is a [MIT-licensed](LICENSE) third-party python library for parsing the
 serialized format used on [keyboard-layout-editor.com](keyboard-layout-editor.com)
 (KLE) and converting it into something that is easier to undertsand and use in
-third-party applications.
+third-party applications. 'Cereal' is intentionally spelled incorrectly to
+indicate that this repository is not developed or maintained by the same
+maintainers of the [official keboard-layout-editor repository](https://github.com/ijprest/keyboard-layout-editor).
 
 Ported over from [keyboard-layout-editor/serial.js](https://github.com/ijprest/keyboard-layout-editor/blob/master/serial.js)
 with working rotations.
@@ -12,22 +14,22 @@ with working rotations.
 
 Run the following commands to install the package or update it with pip3:
 ```sh
-pip3 install -U git+https://github.com/DamSenViet/kle-serial-python.git
+pip3 install -U git+https://github.com/DamSenViet/kle-cereal-python.git
 ```
 
 ## Uninstallation
 
 Run the following commands to uninstall the package with pip3:
 ```sh
-pip3 uninstall kle
+pip3 uninstall kle-cereal
 ```
 
 ## Example
 
 ```python
-import kle
+import kle.cereal as cereal
 
-keyboard = kle.load(open(file_path))
+keyboard = cereal.load(open(file_path))
 for key in keyboard.keys:
   # do your thing here
 ```
@@ -44,14 +46,14 @@ the KLE file by simply extending the KLE and Key classes. Here's an example:
 
 ```python
 import decimal as dec
-import kle
+import kle.cereal as cereal
 
-class CustomKey(kle.Key):
+class CustomKey(cereal.Key):
   # your implementation here
 
 # Don't need CustomKeyboard b/c kle.Keyboard is already generic
 
-class CustomKle(kle.Kle):
+class CustomCereal(cereal.Cereal):
     key_class = CustomKey # set this to use your custom key
 
     @classmethod
@@ -59,9 +61,9 @@ class CustomKle(kle.Kle):
         cls, # class, like self but for @classmethod
         key: kle.Key,
         align: int,
-        current_rotation: dec.Decimal,
-        current_rotation_x: dec.Decimal,
-        current_rotation_y: dec.Decimal,
+        cluster_rotation: dec.Decimal,
+        cluster_rotation_x: dec.Decimal,
+        cluster_rotation_y: dec.Decimal,
         item: dict
     ) -> (
         kle.Key,
@@ -73,16 +75,16 @@ class CustomKle(kle.Kle):
         (
             key,
             align,
-            current_rotation,
-            current_rotation_x,
-            current_rotation_y
+            cluster_rotation,
+            cluster_rotation_x,
+            cluster_rotation_y
         ) = super().deserialize_adjustment(
             cls,
             key,
             align,
-            current_rotation,
-            current_rotation_x,
-            current_rotation_y,
+            cluster_rotation,
+            cluster_rotation_x,
+            cluster_rotation_y,
             item
         )
         # your additional implementation or fields here
@@ -90,9 +92,9 @@ class CustomKle(kle.Kle):
         return (
             key,
             align,
-            current_rotation,
-            current_rotation_x,
-            current_rotation_y
+            cluster_rotation,
+            cluster_rotation_x,
+            cluster_rotation_y
         )
 
 CustomKle.load(open("file-path"))

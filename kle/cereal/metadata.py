@@ -1,3 +1,7 @@
+import collections as col
+
+from .util import serialize_prop
+
 class Background:
     """Class for storing Metadata background info."""
 
@@ -29,7 +33,9 @@ class Metadata:
         radii: str = None,
         switch_brand: str = None,
         switch_mount: str = None,
-        switch_type: str = None
+        switch_type: str = None,
+        pcb: bool = False,
+        plate: bool = False
     ):
         """Construct a a new `Metadata`. Default arguments provided.
 
@@ -61,3 +67,5 @@ class Metadata:
         self.switch_brand = switch_brand
         self.switch_mount = switch_mount
         self.switch_type = switch_type
+        self.pcb = pcb
+        self.plate = plate

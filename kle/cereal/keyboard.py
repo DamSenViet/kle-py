@@ -7,7 +7,7 @@ class Keyboard:
 
     def __init__(
         self,
-        metadata: Metadata = Metadata(),
+        metadata: Metadata = None,
         keys: typ.List[Key] = list()
     ):
         """Construct a new `Keyboard`. Default arguments provided.
