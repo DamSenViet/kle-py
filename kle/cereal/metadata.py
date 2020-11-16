@@ -27,7 +27,7 @@ class Metadata:
         self,
         author: str = None,
         backcolor: str = "#eeeeee",
-        background: Background =  None,
+        background: Background =  Background(),
         name: str = None,
         notes: str = None,
         radii: str = None,

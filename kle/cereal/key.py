@@ -1,5 +1,6 @@
 import copy
-import decimal as dec
+from decimal import Decimal
+import json
 
 class Key:
     """Class that holds data of a `Key` instance for a `Keyboard`."""
@@ -14,25 +15,25 @@ class Key:
             "text_color": "#000000",
             "text_size": 3
         },
-        x: dec.Decimal = dec.Decimal(0.0),
-        y: dec.Decimal = dec.Decimal(0.0),
-        width: dec.Decimal = dec.Decimal(1.0),
-        height: dec.Decimal = dec.Decimal(1.0),
-        x2: dec.Decimal  = dec.Decimal(0.0),
-        y2: dec.Decimal = dec.Decimal(0.0),
-        width2: dec.Decimal = dec.Decimal(1.0),
-        height2: dec.Decimal = dec.Decimal(1.0),
-        rotation_x: dec.Decimal = dec.Decimal(0.0),
-        rotation_y: dec.Decimal = dec.Decimal(0.0),
-        rotation_angle: dec.Decimal = dec.Decimal(0.0),
+        x: Decimal = Decimal(0.0),
+        y: Decimal = Decimal(0.0),
+        width: Decimal = Decimal(1.0),
+        height: Decimal = Decimal(1.0),
+        x2: Decimal  = Decimal(0.0),
+        y2: Decimal = Decimal(0.0),
+        width2: Decimal = Decimal(1.0),
+        height2: Decimal = Decimal(1.0),
+        rotation_x: Decimal = Decimal(0.0),
+        rotation_y: Decimal = Decimal(0.0),
+        rotation_angle: Decimal = Decimal(0.0),
         decal: bool = False,
         ghost: bool = False,
         stepped: bool = False,
         nub: bool = False,
-        profile: str = None,
-        sm: str = None,
-        sb: str = None,
-        st: str = None
+        profile: str = "",
+        sm: str = "",
+        sb: str = "",
+        st: str = ""
     ):
         """Construct a new `Key`. Default arguments provided.
 
@@ -52,27 +53,27 @@ class Key:
             defaults to {"text_color": "#000000", "text_size": 3}.
         :type default: dict
         :param x: The x coordinate of the key before rotation.
-        :type x: dec.Decimal
+        :type x: Decimal
         :param y: The y coordinate of the key before rotation.
-        :type y: dec.Decimal
+        :type y: Decimal
         :param width: Width of the key.
-        :type width: dec.Decimal
+        :type width: Decimal
         :param height: Height of the key.
-        :type height: dec.Decimal
+        :type height: Decimal
         :param x2: Duplicate x coordinate of the key???
-        :type x2: dec.Decimal
+        :type x2: Decimal
         :param y2: Duplicate y coordinate of the key???
-        :type y2: dec.Decimal
+        :type y2: Decimal
         :param width2: Duplicate width of the key???
-        :type width2: dec.Decimal
+        :type width2: Decimal
         :param height2: Duplicate height of the key???
-        :type height2: dec.Decimal
+        :type height2: Decimal
         :param rotation_x: X coordinate of the rotation origin.
-        :type rotation_x: dec.Decimal
+        :type rotation_x: Decimal
         :param rotation_y: Y coordinate of the rotation origin.
-        :type rotation_y: dec.Decimal
+        :type rotation_y: Decimal
         :param rotation_angle: Rotation angle about the rotation origin.
-        :type rotation_angle: dec.Decimal
+        :type rotation_angle: Decimal
         :param decal: Specifies whether key is treated as a decoration.
         :type decal: bool
         :param ghost: Specifies whether key should be rendered transparently.
@@ -127,4 +128,33 @@ class Key:
         new_key.labels = copy.deepcopy(self.labels, memo)
         new_key.text_color = copy.deepcopy(self.text_color, memo)
         new_key.text_size = copy.deepcopy(self.text_size, memo)
+        new_key.default = copy.deepcopy(self.default, memo)
         return new_key
+
+    def __str__(self) -> str:
+        d = dict()
+        d["x"] = float(self.x)
+        d["y"] = float(self.y)
+        d["x2"] = float(self.x2)
+        d["y2"] = float(self.y2)
+        d["width"] = float(self.width)
+        d["height"] = float(self.height)
+        d["width2"] = float(self.width2)
+        d["height2"] = float(self.height2)
+        d["rotation_angle"] = float(self.rotation_angle)
+        d["rotation_x"] = float(self.rotation_x)
+        d["rotation_y"] = float(self.rotation_y)
+        d["labels"] = self.labels
+        d["text_color"] = self.text_color
+        d["text_size"] = self.text_size
+        d["default"] = self.default
+        d["color"] = self.color
+        d["profile"] = self.profile
+        d["nub"] = self.nub
+        d["ghost"] = self.ghost
+        d["stepped"] = self.stepped
+        d["decal"] = self.decal
+        d["sm"] = self.sm
+        d["sb"] = self.sb
+        d["st"] = self.st
+        return json.dumps(d, indent=4)
