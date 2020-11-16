@@ -15,7 +15,7 @@ from .metadata import Metadata, Background
 from .keyboard import Keyboard
 from .util import serialize_prop
 
-# getcontext().prec = 15
+getcontext().prec = 15
 
 
 class DeserializeException(Exception):
@@ -129,7 +129,7 @@ class Cereal:
 
         is_new_row = True
         current.y -= Decimal(1)  # will be incremented on first row
-
+        
         # serialize meta
         def key_sort_criteria(key: Key) -> Tuple[
             Decimal,
@@ -145,11 +145,9 @@ class Cereal:
             key.x,
         )
         sorted_keys = list(sorted(keyboard.keys, key=key_sort_criteria))
-        print(str(sorted_keys[18]))
         for index, key in enumerate(sorted_keys):
             props = OrderedDict()
             ordered = cls.reorder_labels(key, current)
-            
             
             # start a new row when necessary
             is_cluster_changed = (
@@ -174,12 +172,6 @@ class Cereal:
                     key.rotation_x != cluster_rotation_x
                 ):
                     current.y = key.rotation_y
-                # if index == 18:
-                #     # print(json.dumps(row, indent="  "))
-                #     # print(cluster_rotation_angle, cluster_rotation_x, cluster_rotation_y)
-                #     print(current.y)
-                #     print(key.y)
-                #     print(json.dumps(props, indent="  "))
                 # always reset x to rx (which defaults to zero)
                 current.x = key.rotation_x
 
@@ -254,7 +246,6 @@ class Cereal:
             serialize_prop(props, "l", key.stepped or False, False)
             serialize_prop(props, "d", key.decal or False, False)
             if len(props) > 0:
-                # print(json.dumps(props))
                 row.append(props)
             current.labels = ordered["labels"]
             row.append("\n".join(ordered["labels"]).rstrip())
@@ -270,9 +261,8 @@ class Cereal:
             if (
                 labels[i] is not None and
                 (
-                    # shitty code ported from original shitty source
-                    (bool(current[i]) != bool(key[i])) or
-                    (current[i] != key[i])
+                    ((not not current[i]) != (not not key[i])) or
+                    (current[i] and current[i] != key[i])
                 )
             ):
                 return False
@@ -284,7 +274,7 @@ class Cereal:
 
         # remove impossible flag combinations
         for i in range(len(key.labels)):
-            if key.labels[i] is not None:
+            if bool(key.labels[i]):
                 align = list(
                     filter(lambda n: n not in cls.disallowed_alignnment_for_labels[i], align))
 
@@ -375,13 +365,20 @@ class Cereal:
                         new_key = copy.deepcopy(current, {})
 
                         # calculate generated values
-                        new_key.width2 = current.width if new_key.width2 == 0 else current.width2
-                        new_key.height2 = current.height if new_key.height2 == 0 else current.height2
+                        new_key.width2 = (
+                            current.width
+                            if new_key.width2 == 0
+                            else current.width2
+                        )
+                        new_key.height2 = (
+                            current.height
+                            if new_key.height2 == 0
+                            else current.height2
+                        )
                         new_key.labels = cls.reorder_labels_in(
                             key.split("\n"), align)
                         new_key.text_size = cls.reorder_labels_in(
                             new_key.text_size, align)
-
                         # clean up generated data
                         for i in range(12):
                             if not new_key.labels[i]:

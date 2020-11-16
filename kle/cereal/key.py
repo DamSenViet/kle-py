@@ -1,6 +1,7 @@
 import copy
 from decimal import Decimal
 import json
+from typing import List, Dict
 
 class Key:
     """Class that holds data of a `Key` instance for a `Keyboard`."""
@@ -8,13 +9,10 @@ class Key:
     def __init__(
         self,
         color: str = "#cccccc",
-        labels: list = [None for i in range(12)],
-        text_color: list = [None for i in range(12)],
-        text_size: list = [None for i in range(12)],
-        default: dict = {
-            "text_color": "#000000",
-            "text_size": 3
-        },
+        labels: List = None,
+        text_color: List = None,
+        text_size: List = None,
+        default: Dict = None,
         x: Decimal = Decimal(0.0),
         y: Decimal = Decimal(0.0),
         width: Decimal = Decimal(1.0),
@@ -92,10 +90,21 @@ class Key:
         :type st: str
         """
         self.color = color
-        self.labels = labels
-        self.text_color = text_color
-        self.text_size = text_size
-        self.default = default
+        self.labels = [None for i in range(12)]
+        if labels is not None:
+            self.labels = labels
+        self.text_color = [None for i in range(12)]
+        if text_color is not None:
+            self.text_color = text_color
+        self.text_size = [None for i in range(12)]
+        if text_size is not None:
+            self.text_size = text_size
+        self.default = {
+            "text_color": "#000000",
+            "text_size": 3
+        }
+        if default is not None:
+            self.default = default
         self.x = x
         self.y = y
         self.width = width
