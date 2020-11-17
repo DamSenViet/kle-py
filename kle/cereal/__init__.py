@@ -1,33 +1,32 @@
 __all__ = [
-  "Key",
-  "Metadata",
-  "Background",
-  "Keyboard",
-  "DeserializeException",
-  "SerializeException",
-  "Cereal",
-  "load",
-  "loads",
-  "dump",
-  "dumps"
+    "Key",
+    "Metadata",
+    "Background",
+    "Keyboard",
+    "DeserializeException",
+    "SerializeException",
+    "Cereal",
+    "load",
+    "loads",
+    "dump",
+    "dumps"
 ]
 
 from .key import (
-  Key
+    Key
 )
 from .metadata import (
-  Metadata,
-  Background
+    Metadata,
+    Background
 )
 from .keyboard import (
-  Keyboard
+    Keyboard
 )
 from .cereal import (
-  DeserializeException,
-  SerializeException,
-  Cereal,
-  loads,
-  load,
-  dumps,
-  dump
+    DeserializeException,
+    SerializeException,
+    loads,
+    load,
+    dumps,
+    dump
 )

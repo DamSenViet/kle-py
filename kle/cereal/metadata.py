@@ -1,14 +1,15 @@
-import collections as col
+from typing import (
+    Union
+)
 
-from .util import serialize_prop
 
 class Background:
     """Class for storing Metadata background info."""
 
     def __init__(
         self,
-        name: str = None,
-        style: str = None
+        name: Union[str, None] = None,
+        style: Union[str, None] = None
     ):
         """Construct a new `Background`. Default arguments provided.
 
@@ -20,20 +21,21 @@ class Background:
         self.name = name
         self.style = style
 
+
 class Metadata:
     """Class for storing Metadata."""
 
     def __init__(
         self,
-        author: str = None,
+        author: Union[str, None] = None,
         backcolor: str = "#eeeeee",
-        background: Background =  Background(),
-        name: str = None,
-        notes: str = None,
-        radii: str = None,
-        switch_brand: str = None,
-        switch_mount: str = None,
-        switch_type: str = None,
+        background: Background = Background(),
+        name: Union[str, None] = None,
+        notes: Union[str, None] = None,
+        radii: Union[str, None] = None,
+        switch_brand: Union[str, None] = None,
+        switch_mount: Union[str, None] = None,
+        switch_type: Union[str, None] = None,
         pcb: bool = False,
         plate: bool = False
     ):
