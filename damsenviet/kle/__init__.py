@@ -5,7 +5,6 @@ __all__ = [
     "Keyboard",
     "DeserializeException",
     "SerializeException",
-    "Cereal",
     "load",
     "loads",
     "dump",
@@ -22,7 +21,7 @@ from .metadata import (
 from .keyboard import (
     Keyboard
 )
-from .cereal import (
+from .serial import (
     DeserializeException,
     SerializeException,
     loads,
