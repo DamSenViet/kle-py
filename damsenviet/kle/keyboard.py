@@ -1,4 +1,7 @@
-from typing import List
+from typing import (
+    Union,
+)
+
 from .key import Key
 from .metadata import Metadata
 

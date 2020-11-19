@@ -10,8 +10,8 @@ class Metadata:
 
     :ivar author: author, defaults to ""
     :vartype author: str
-    :ivar backcolor: background color, defaults to "#eeeeee"
-    :vartype backcolor: str
+    :ivar background_color: background color, defaults to "#eeeeee"
+    :vartype background_color: str
     :ivar background: the background, defaults to Background()
     :vartype background: Background
     :ivar name: the Keyboard name, defaults to ""
@@ -19,7 +19,7 @@ class Metadata:
     :ivar notes: notes, defaults to ""
     :vartype notes: str
     :ivar radii: a CSS size value, defaults to ""
-    :vartype radii: Union[str, None]
+    :vartype radii: str
     :ivar switch_mount: the switch mount, defaults to ""
     :vartype switch_mount: str
     :ivar switch_brand: the switch brand, defaults to ""
@@ -34,11 +34,11 @@ class Metadata:
 
     def __init__(self):
         self.author = ""
-        self.backcolor = "#eeeeee"
+        self.background_color = "#eeeeee"
         self.background = Background()
         self.name = ""
         self.notes = ""
-        self.radii = None
+        self.radii = ""
         self.switch_mount = ""
         self.switch_brand = ""
         self.switch_type = ""

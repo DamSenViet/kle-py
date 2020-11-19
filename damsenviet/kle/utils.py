@@ -105,8 +105,8 @@ def reorder_labels(key: Key, current: Key) -> Dict:
     align = [7, 5, 6, 4, 3, 1, 2, 0]
 
     # remove impossible flag combinations
-    for i in range(len(key.labels)):
-        if bool(key.labels[i]):
+    for i in range(len(key.text_labels)):
+        if bool(key.text_labels[i]):
             align = list(
                 filter(lambda n: n not in disallowed_alignnment_for_labels[i], align))
 
@@ -122,8 +122,8 @@ def reorder_labels(key: Key, current: Key) -> Dict:
             continue
         ndx = label_map[ret["align"]].index(i)
         if ndx >= 0:
-            if bool(key.labels[i]):
-                ret["labels"][ndx] = key.labels[i]
+            if bool(key.text_labels[i]):
+                ret["labels"][ndx] = key.text_labels[i]
             if bool(key.text_color[i]):
                 ret["text_color"][ndx] = key.text_color[i]
             if bool(key.text_size[i]):

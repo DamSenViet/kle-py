@@ -8,7 +8,7 @@ class Background:
 
     :ivar name: name of the background style, defaults to None.
     :vartype name: Union[str, None]
-    :ivar style: a CSS rule for background resources, defaults to None.
+    :ivar style: a CSS rule for background, defaults to None.
     :vartype style: Union[str, None]
     """
 

@@ -11,18 +11,6 @@ from typing import (
 class Key:
     """Class for storing a KLE Key.
 
-    :ivar color: fill color, defaults to "#cccccc"
-    :vartype color: str
-    :ivar labels: text labels , defaults to ["" for i in range(12)]
-    :vartype labels: List[Union[str]]
-    :ivar text_color: text colors of the labels, defaults to ["" for i in range(12)]
-    :vartype text_color: List[Union[str, None]]
-    :ivar text_size: text sizes of the labels, defaults to [None for i in range(12)]
-    :vartype text_size: List[Union[int, float, None]]
-    :ivar default_text_color: default text color, defaults to "#000000"
-    :vartype default_text_color: str
-    :ivar default_text_size: default text size, defaults to 3
-    :vartype default_text_size: Union[int, float]
     :ivar x: x position of the main shape, defaults to Decimal(0.0)
     :vartype x: Decimal
     :ivar y: y position of the main shape, defaults to Decimal(0.0)
@@ -45,6 +33,18 @@ class Key:
     :vartype rotation_y: Decimal
     :ivar rotation_angle: rotation angle about the origin in degrees, defaults to Decimal(0.0)
     :vartype rotation_angle: Decimal
+    :ivar color: fill color, defaults to "#cccccc"
+    :vartype color: str
+    :ivar text_labels: text labels , defaults to ["" for i in range(12)]
+    :vartype text_labels: List[Union[str]]
+    :ivar text_color: text colors of the labels, defaults to ["" for i in range(12)]
+    :vartype text_color: List[Union[str, None]]
+    :ivar text_size: text sizes of the labels, defaults to [None for i in range(12)]
+    :vartype text_size: List[Union[int, float, None]]
+    :ivar default_text_color: default text color, defaults to "#000000"
+    :vartype default_text_color: str
+    :ivar default_text_size: default text size, defaults to 3
+    :vartype default_text_size: Union[int, float]
     :ivar decal: whether the key is decorative, defaults to False
     :vartype decal: bool
     :ivar ghost: whether the key is invisible, defaults to False
@@ -53,19 +53,19 @@ class Key:
     :vartype stepped: bool
     :ivar nub: whether the key is nubbed, defaults to False
     :vartype nub: bool
-    :ivar profile: the profile of the key, defaults to None
+    :ivar profile: the profile of the key, defaults to ""
     :vartype profile: str
-    :ivar sm: switch mount, defaults to None
-    :vartype sm: str
-    :ivar sb: switch brand, defaults to None
-    :vartype sb: str
-    :ivar st: switch type, defaults to None
-    :vartype st: str
+    :ivar switch_mount: switch mount, defaults to ""
+    :vartype switch_mount: str
+    :ivar switch_brand: switch brand, defaults to ""
+    :vartype switch_brand: str
+    :ivar switch_type: switch type, defaults to ""
+    :vartype switch_type: str
     """
 
     def __init__(self):
         self.color = "#cccccc"
-        self.labels = ["" for i in range(12)]
+        self.text_labels = ["" for i in range(12)]
         self.text_color = ["" for i in range(12)]
         self.text_size = [None for i in range(12)]
         self.default_text_color = "#000000"
@@ -86,9 +86,9 @@ class Key:
         self.stepped = False
         self.nub = False
         self.profile = ""
-        self.sm = ""
-        self.sb = ""
-        self.st = ""
+        self.switch_mount = ""
+        self.switch_brand = ""
+        self.switch_type = ""
 
     def __deepcopy__(self, memo: Dict = None) -> "Key":
         """Creates a deep copy of the key.
@@ -99,13 +99,19 @@ class Key:
         new_key = type(self)()
         memo[id(self)] = new_key
         new_key.__dict__.update(self.__dict__)
-        new_key.labels = copy.deepcopy(self.labels, memo)
+        new_key.text_labels = copy.deepcopy(self.text_labels, memo)
         new_key.text_color = copy.deepcopy(self.text_color, memo)
         new_key.text_size = copy.deepcopy(self.text_size, memo)
         return new_key
 
     def __str__(self) -> str:
         d = dict()
+        d["color"] = self.color
+        d["text_labels"] = self.text_labels
+        d["text_color"] = self.text_color
+        d["text_size"] = self.text_size
+        d["default_text_color"] = self.default_text_color
+        d["default_text_size"] = self.default_text_size
         d["x"] = float(self.x)
         d["y"] = float(self.y)
         d["x2"] = float(self.x2)
@@ -117,16 +123,12 @@ class Key:
         d["rotation_angle"] = float(self.rotation_angle)
         d["rotation_x"] = float(self.rotation_x)
         d["rotation_y"] = float(self.rotation_y)
-        d["labels"] = self.labels
-        d["text_color"] = self.text_color
-        d["text_size"] = self.text_size
-        d["color"] = self.color
         d["profile"] = self.profile
         d["nub"] = self.nub
         d["ghost"] = self.ghost
         d["stepped"] = self.stepped
         d["decal"] = self.decal
-        d["sm"] = self.sm
-        d["sb"] = self.sb
-        d["st"] = self.st
-        return json.dumps(d, indent=4)
+        d["switch_mount"] = self.switch_mount
+        d["switch_brand"] = self.switch_brand
+        d["switch_type"] = self.switch_type
+        return json.dumps(d)

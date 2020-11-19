@@ -1,5 +1,12 @@
-from decimal import Decimal, getcontext
-from collections import OrderedDict
+import copy
+import json
+from decimal import (
+    Decimal,
+    getcontext
+)
+from collections import (
+    OrderedDict,
+)
 from typing import (
     Dict,
     List,
@@ -7,11 +14,10 @@ from typing import (
     TextIO,
     Union,
 )
-import copy
-import json
 
 from .key import Key
-from .metadata import Metadata, Background
+from .metadata import Metadata
+from .background import Background
 from .keyboard import Keyboard
 from .exceptions import (
     DeserializeException,
@@ -49,7 +55,7 @@ def serialize(keyboard: Keyboard) -> List[Union[Dict, List[Union[str, Dict]]]]:
     def_meta = Metadata()
     metadata = keyboard.metadata  # alias
     serialize_prop(meta_props, "backcolor",
-                   metadata.backcolor, def_meta.backcolor)
+                   metadata.background_color, def_meta.background_color)
     serialize_prop(meta_props, "name", metadata.name, def_meta.name)
     serialize_prop(meta_props, "author", metadata.author, def_meta.author)
     serialize_prop(meta_props, "notes", metadata.notes, def_meta.notes)
@@ -130,7 +136,10 @@ def serialize(keyboard: Keyboard) -> List[Union[Dict, List[Union[str, Dict]]]]:
             ordered["text_color"][0] = key.default_text_color
         else:
             for i in range(2, 12):
-                if ordered["text_color"] is None and ordered["text_color"][i] != ordered["text_color"][0]:
+                if (
+                    ordered["text_color"] is None and
+                    ordered["text_color"][i] != ordered["text_color"][0]
+                ):
                     # maybe an error in the original referenced source code here
                     ordered["text_color"][i] = key.default["text_color"]
         current.text_color = serialize_prop(props, "t", "\n".join(
@@ -139,9 +148,12 @@ def serialize(keyboard: Keyboard) -> List[Union[Dict, List[Union[str, Dict]]]]:
             props, "g", key.ghost, current.ghost)
         current.profile = serialize_prop(
             props, "p", key.profile, current.profile)
-        current.sm = serialize_prop(props, "sm", key.sm, current.sm)
-        current.sb = serialize_prop(props, "sb", key.sb, current.sb)
-        current.st = serialize_prop(props, "st", key.st, current.st)
+        current.sm = serialize_prop(
+            props, "sm", key.switch_mount, current.switch_mount)
+        current.sb = serialize_prop(
+            props, "sb", key.switch_brand, current.switch_brand)
+        current.st = serialize_prop(
+            props, "st", key.switch_type, current.switch_type)
         current.align = serialize_prop(
             props, "a", ordered["align"], current.align)
         current.default_text_size = serialize_prop(
@@ -177,7 +189,7 @@ def serialize(keyboard: Keyboard) -> List[Union[Dict, List[Union[str, Dict]]]]:
         serialize_prop(props, "d", key.decal or False, False)
         if len(props) > 0:
             row.append(props)
-        current.labels = ordered["labels"]
+        current.text_labels = ordered["labels"]
         row.append("\n".join(ordered["labels"]).rstrip())
     if len(row) > 0:
         rows.append(row)
@@ -231,13 +243,13 @@ def deserialize(rows: List[Union[Dict, List[Union[str, Dict]]]]) -> Keyboard:
                         if new_key.height2 == 0
                         else current.height2
                     )
-                    new_key.labels = reorder_labels_in(
+                    new_key.text_labels = reorder_labels_in(
                         label.split("\n"), align)
                     new_key.text_size = reorder_labels_in(
                         new_key.text_size, align)
                     # clean up generated data
                     for i in range(12):
-                        if not new_key.labels[i]:
+                        if not new_key.text_labels[i]:
                             new_key.text_size[i] = None
                             new_key.text_color[i] = None
                         if new_key.text_size[i] == new_key.default_text_size:
@@ -320,7 +332,7 @@ def record_metadata_changes(metadata: Metadata, metadata_changes: Dict) -> None:
     if "author" in metadata_changes:
         metadata.author = metadata_changes["author"]
     if "backcolor" in metadata_changes:
-        metadata.backcolor = metadata_changes["backcolor"]
+        metadata.background_color = metadata_changes["backcolor"]
     if "background" in metadata_changes:
         if "name" in metadata_changes["background"]:
             metadata.background.name = metadata_changes["background"]["name"]
@@ -423,11 +435,11 @@ def record_key_changes(
     if "g" in key_changes:
         key.ghost = key_changes["g"]
     if "sm" in key_changes:
-        key.sm = key_changes["sm"]
+        key.switch_mount = key_changes["sm"]
     if "sb" in key_changes:
-        key.sb = key_changes["sb"]
+        key.switch_brand = key_changes["sb"]
     if "st" in key_changes:
-        key.st = key_changes["st"]
+        key.switch_type = key_changes["st"]
     return (
         align,
         cluster_rotation_x,
