@@ -1,31 +1,32 @@
 __all__ = [
-    "Key",
+    "Keyboard",
     "Metadata",
     "Background",
-    "Keyboard",
-    "DeserializeException",
-    "SerializeException",
+    "Key",
     "load",
     "loads",
     "dump",
-    "dumps"
+    "dumps",
+    "DeserializeException",
 ]
-
-from .key import (
-    Key
+from .keyboard import (
+    Keyboard,
 )
 from .metadata import (
     Metadata,
-    Background
 )
-from .keyboard import (
-    Keyboard
+from .background import (
+    Background,
+)
+from .key import (
+    Key,
 )
 from .serial import (
-    DeserializeException,
-    SerializeException,
     loads,
     load,
+    dump,
     dumps,
-    dump
+)
+from .exceptions import (
+    DeserializeException,
 )

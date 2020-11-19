@@ -24,16 +24,3 @@ class DeserializeException(Exception):
             message + ("\n" + json.dumps(payload) if payload else "")
             if message else None
         )
-
-
-class SerializeException(Exception):
-    """Class for all exceptions encountered during serialization."""
-
-    def __init__(self, message: str = None):
-        """Construct a 'SerializeException`.
-
-        :param message: A message indicating a processing error during
-            serialization of the keyboard, defaults to `None`.
-        :type message: str, optional
-        """
-        super().__init__(message if message else None)
