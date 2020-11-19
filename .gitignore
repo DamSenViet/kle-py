@@ -1,6 +1,11 @@
+# project files
 **/__pycache__
-**/*.egg-info
+/*.egg-info
+/docs/_build
+/docs/api
 
+# OS metadata files
 **/.DS_Store
 
-**/.vscode
+# workspace files
+/.vscode
