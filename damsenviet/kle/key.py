@@ -36,9 +36,9 @@ class Key:
     :ivar color: fill color, defaults to "#cccccc"
     :vartype color: str
     :ivar text_labels: text labels , defaults to ["" for i in range(12)]
-    :vartype text_labels: List[Union[str]]
-    :ivar text_color: text colors of the labels, defaults to ["" for i in range(12)]
-    :vartype text_color: List[Union[str, None]]
+    :vartype text_labels: List[str]
+    :ivar text_colors: text colors of the labels, defaults to [None for i in range(12)]
+    :vartype text_colors: List[Union[str, None]]
     :ivar text_size: text sizes of the labels, defaults to [None for i in range(12)]
     :vartype text_size: List[Union[int, float, None]]
     :ivar default_text_color: default text color, defaults to "#000000"
@@ -66,8 +66,9 @@ class Key:
     def __init__(self):
         self.color = "#cccccc"
         self.text_labels = ["" for i in range(12)]
-        self.text_color = ["" for i in range(12)]
-        self.text_size = [None for i in range(12)]
+        self.text_colors = [None for i in range(12)]
+        # cannot be 0, either None or positive
+        self.text_sizes = [None for i in range(12)]
         self.default_text_color = "#000000"
         self.default_text_size = 3
         self.x = Decimal(0.0)
@@ -100,16 +101,16 @@ class Key:
         memo[id(self)] = new_key
         new_key.__dict__.update(self.__dict__)
         new_key.text_labels = copy.deepcopy(self.text_labels, memo)
-        new_key.text_color = copy.deepcopy(self.text_color, memo)
-        new_key.text_size = copy.deepcopy(self.text_size, memo)
+        new_key.text_colors = copy.deepcopy(self.text_colors, memo)
+        new_key.text_sizes = copy.deepcopy(self.text_sizes, memo)
         return new_key
 
     def __str__(self) -> str:
         d = dict()
         d["color"] = self.color
         d["text_labels"] = self.text_labels
-        d["text_color"] = self.text_color
-        d["text_size"] = self.text_size
+        d["text_colors"] = self.text_colors
+        d["text_sizes"] = self.text_sizes
         d["default_text_color"] = self.default_text_color
         d["default_text_size"] = self.default_text_size
         d["x"] = float(self.x)

@@ -18,6 +18,8 @@ class Metadata:
     :vartype name: str
     :ivar notes: notes, defaults to ""
     :vartype notes: str
+    :ivar css: custom css rules
+    :vartype css: str
     :ivar radii: a CSS size value, defaults to ""
     :vartype radii: str
     :ivar switch_mount: the switch mount, defaults to ""
@@ -39,6 +41,7 @@ class Metadata:
         self.name = ""
         self.notes = ""
         self.radii = ""
+        self.css = ""
         self.switch_mount = ""
         self.switch_brand = ""
         self.switch_type = ""

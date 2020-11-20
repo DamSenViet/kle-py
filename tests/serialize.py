@@ -3,7 +3,8 @@
 
 import os
 import sys
-import damsenviet.kle as kle
+import json
+from damsenviet.kle import Keyboard
 
 
 def resolve(p):
@@ -17,14 +18,20 @@ input_path = resolve(sys.argv[1])
 print(f"Examining KLE: {input_path}")
 
 input_file = open(input_path)
-keyboard = kle.load(input_file)
+keyboard = Keyboard.from_json(json.load(input_file))
 input_file.close()
 
 if (len(sys.argv) >= 3):
     output_path = resolve(sys.argv[2])
     output_file = open(f"{output_path}", "w")
-    kle.dump(keyboard, output_file)
+    json.dump(
+        keyboard.to_json(),
+        output_file,
+        sort_keys=False,
+        indent=2,
+        ensure_ascii=False
+    )
     output_file.close()
 else:
-    kle_str = kle.dumps(keyboard)
+    kle_str = json.dumps(keyboard.to_json())
     print(kle_str)

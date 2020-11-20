@@ -1,11 +1,12 @@
 # this file takes command line argument of a path (from anywhere)
 # python3 tests.py <path_to.json>
-import matplotlib.pyplot as plt
-import matplotlib.lines as lines
-import math
 import os
 import sys
-import damsenviet.kle as kle
+import math
+import json
+import matplotlib.pyplot as plt
+import matplotlib.lines as lines
+from damsenviet.kle import Keyboard
 
 FORMATS = ["Middle Center", "Top Left", "Top Center"]
 
@@ -45,7 +46,9 @@ while(chosen_format not in range(len(FORMATS))):
 chosen_format = FORMATS[chosen_format]
 
 # collect and calculate key positions
-keyboard = kle.load(open(json_path))
+input_file = open(json_path, "r")
+keyboard = Keyboard.from_json(json.load(input_file))
+input_file.close()
 max_x = - math.inf
 min_x = math.inf
 max_y = - math.inf
@@ -154,8 +157,14 @@ for arrow in arrows:
 
 # make lines for legends
 custom_lines = [
-    lines.Line2D([0], [0], color="w", marker="o", markerfacecolor="g",
-                 label="origin points"),
+    lines.Line2D(
+        [0],
+        [0],
+        color="w",
+        marker="o",
+        markerfacecolor="g",
+        label="origin points"
+    ),
     lines.Line2D([0], [0], color="b", lw=1, label="non-rotated"),
     lines.Line2D([0], [0], color="r", lw=1, label="rotated")
 ]

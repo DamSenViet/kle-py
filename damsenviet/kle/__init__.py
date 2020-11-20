@@ -3,10 +3,6 @@ __all__ = [
     "Metadata",
     "Background",
     "Key",
-    "load",
-    "loads",
-    "dump",
-    "dumps",
     "DeserializeException",
 ]
 from .keyboard import (
@@ -20,12 +16,6 @@ from .background import (
 )
 from .key import (
     Key,
-)
-from .serial import (
-    loads,
-    load,
-    dump,
-    dumps,
 )
 from .exceptions import (
     DeserializeException,
