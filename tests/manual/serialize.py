@@ -4,7 +4,7 @@
 import os
 import sys
 import json
-from damsenviet.kle import Keyboard
+import damsenviet.kle as kle
 
 
 def resolve(p):
@@ -18,7 +18,7 @@ input_path = resolve(sys.argv[1])
 print(f"Examining KLE: {input_path}")
 
 input_file = open(input_path)
-keyboard = Keyboard.from_json(json.load(input_file))
+keyboard = kle.Keyboard.from_json(json.load(input_file))
 input_file.close()
 
 if (len(sys.argv) >= 3):

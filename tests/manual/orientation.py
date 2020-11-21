@@ -6,7 +6,7 @@ import math
 import json
 import matplotlib.pyplot as plt
 import matplotlib.lines as lines
-from damsenviet.kle import Keyboard
+import damsenviet.kle as kle
 
 FORMATS = ["Middle Center", "Top Left", "Top Center"]
 
@@ -47,7 +47,7 @@ chosen_format = FORMATS[chosen_format]
 
 # collect and calculate key positions
 input_file = open(json_path, "r")
-keyboard = Keyboard.from_json(json.load(input_file))
+keyboard = kle.Keyboard.from_json(json.load(input_file))
 input_file.close()
 max_x = - math.inf
 min_x = math.inf

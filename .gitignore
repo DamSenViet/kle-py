@@ -3,6 +3,7 @@
 /*.egg-info
 /docs/_build
 /docs/api
+/tests/outputs
 
 # OS metadata files
 **/.DS_Store
