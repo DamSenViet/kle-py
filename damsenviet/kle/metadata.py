@@ -45,5 +45,5 @@ class Metadata:
         self.switch_mount = ""
         self.switch_brand = ""
         self.switch_type = ""
-        self.pcb = False
-        self.plate = False
+        self.pcb = None
+        self.plate = None

@@ -1,8 +1,13 @@
+from copy import (
+    deepcopy,
+)
 from decimal import (
     Decimal,
     getcontext
 )
-from collections import OrderedDict
+from collections import (
+    OrderedDict,
+)
 from typing import (
     Any,
     Union,
@@ -182,15 +187,18 @@ def playback_key_changes(
         key.text_sizes = [None for i in range(12)]
     if "f2" in key_changes:
         for i in range(1, 12):
-            key.text_sizes[i] = key_changes["f2"]
+            if i < len(key.text_sizes):
+                key.text_sizes[i] = key_changes["f2"]
+            else:
+                key.text_sizes.append(key_changes["f2"])
     if "fa" in key_changes:
-        key.text_sizes = key_changes["fa"]
+        key.text_sizes = deepcopy(key_changes["fa"])
     if "p" in key_changes:
         key.profile = key_changes["p"]
     if "c" in key_changes:
         key.color = key_changes["c"]
     if "t" in key_changes:
-        text_colors = key_changes["t"].split("\n")
+        text_colors = deepcopy(key_changes["t"]).split("\n")
         if text_colors[0] != "":
             key.default_text_color = text_colors[0]
         key.text_colors = undo_align(text_colors, align, None)

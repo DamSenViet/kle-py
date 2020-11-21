@@ -274,15 +274,15 @@ class Keyboard:
         )
         record_change(
             metadata_changes,
-            "pcb",
-            self.metadata.pcb,
-            default_metadata.pcb,
-        )
-        record_change(
-            metadata_changes,
             "plate",
             self.metadata.plate,
             default_metadata.plate,
+        )
+        record_change(
+            metadata_changes,
+            "pcb",
+            self.metadata.pcb,
+            default_metadata.pcb,
         )
         if len(metadata_changes) > 0:
             keyboard_json.append(metadata_changes)
