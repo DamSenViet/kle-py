@@ -1,0 +1,16 @@
+name: "deploy-docs"
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          ref: 'master'
+runs:
+    using: 'docker'
+    image: 'Dockerfile'
