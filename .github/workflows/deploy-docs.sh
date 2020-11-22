@@ -4,44 +4,33 @@ set -e
 
 cd "${GITHUB_WORKSPACE}"
 
-echo "install dependencies"
-
+echo "DEPENDENCIES: INSTALLING..."
 pip install .[test,docs]
+echo "DEPENDENCIES: COMPLETE"
 
-echo "installed dependencies"
-
-echo "testing"
-
+echo "TESTS: TESTING..."
 ./scripts/test.sh
+echo "TESTS: COMPLETE"
 
-echo "tested"
-
-
-echo "building"
+echo "BUILD: BUILDING..."
 ./scripts/build-docs.sh
+echo "BUILD: COMPLETE"
 
-echo "built"
-
+# make new repo at build directory
+# have new repo overwrite gh-pages
 cd ./docs/_build/html
 
-echo "git configuring"
-
+echo "GIT: CONFIGURING..."
 git init
 git config user.name "${GITHUB_ACTOR}"
 git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+echo "GIT: CONFIGURED"
 
-echo "git configured"
-echo "${GITHUB_ACTOR}"
-echo "${GITHUB_REPOSITORY}"
-echo "https://${ACCESS_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-
+echo "GIT: COMMITTING..."
 git add .
 git commit -m "Auto deploy from GitHub Actions"
+echo "GIT: COMITTED"
 
-echo "pushing"
-
+echo "GIT: PUSHING..."
 git push -f "https://${ACCESS_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" master:gh-pages
-
-rm -rf .git
-
-echo "pushed"
+echo "GIT: PUSHED"

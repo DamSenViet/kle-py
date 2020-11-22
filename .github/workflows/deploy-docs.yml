@@ -6,12 +6,14 @@ on:
 jobs:
   deploy-docs:
     runs-on: ubuntu-18.04
+    container:
+      image: python:3.7.8-buster
+      env:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
     steps:
       - name: checkout
         uses: actions/checkout@v2
         with:
           ref: master
       - name: deploy-docs
-        uses: ./.github/actions/deploy-docs
-        env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: ./.github/workflows/deploy-docs.sh
