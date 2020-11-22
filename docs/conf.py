@@ -30,7 +30,8 @@ author = 'damsenviet'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autodoc.typehints',
-    'sphinx.ext.autosummary'
+    'sphinx.ext.autosummary',
+    'sphinx.ext.githubpages'
 ]
 
 autodoc_typehints = 'description'
@@ -58,6 +59,7 @@ html_theme = 'pydata_sphinx_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['static']
 
+html_baseurl = "/kle-py/"
 
 add_module_names = False
 
