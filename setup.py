@@ -10,10 +10,19 @@ st.setup(
     author="DamSenViet",
     license="MIT",
     namespace_packages=['damsenviet'],
-    packages=st.find_packages(exclude=["tests"]),
+    packages=st.find_packages(
+        exclude=["tests", "docs", "scripts"]
+    ),
     install_requires=[],
     extras_require={
-        "test": ["matplotlib>=3.1.2"]
+        "test": [
+            "matplotlib>=3.1.2",
+            "pytest>=6.1.2",
+        ],
+        "docs": [
+            "sphinx>=3.3.1",
+            "pydata-sphinx-theme>=0.4.1",
+        ]
     },
     python_requires=">=3.5",
     classifiers=[

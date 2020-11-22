@@ -1,20 +1,19 @@
 import os
-import glob
 import json
 import pytest
 import damsenviet.kle as kle
 
 
-inputs_dir = os.path.join(
+inputs_dir = os.path.abspath(os.path.join(
     os.path.dirname(__file__),
     "..",
     "inputs"
-)
-outputs_dir = os.path.join(
+))
+outputs_dir = os.path.abspath(os.path.join(
     os.path.dirname(__file__),
     "..",
     "outputs"
-)
+))
 os.makedirs(outputs_dir, exist_ok=True)
 keyboard_jsons = list()
 file_names = list()
