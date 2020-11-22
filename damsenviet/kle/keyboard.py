@@ -272,18 +272,26 @@ class Keyboard:
             self.metadata.css,
             default_metadata.css,
         )
-        record_change(
-            metadata_changes,
-            "plate",
-            self.metadata.plate,
-            default_metadata.plate,
-        )
-        record_change(
-            metadata_changes,
-            "pcb",
-            self.metadata.pcb,
-            default_metadata.pcb,
-        )
+        if (
+            self.metadata.plate != default_metadata.plate or
+            self.metadata._include_plate
+        ):
+            record_change(
+                metadata_changes,
+                "plate",
+                self.metadata.plate,
+                None,
+            )
+        if (
+            self.metadata.pcb != default_metadata.pcb or
+            self.metadata._include_pcb
+        ):
+            record_change(
+                metadata_changes,
+                "pcb",
+                self.metadata.pcb,
+                None,
+            )
         if len(metadata_changes) > 0:
             keyboard_json.append(metadata_changes)
 
@@ -374,7 +382,7 @@ class Keyboard:
                         ordered["text_color"][i] != ordered["text_color"][0]
                     ):
                         # maybe an error in the original referenced source code here
-                        ordered["text_color"][i] = key.default["text_color"]
+                        ordered["text_color"][i] = key.default_text_color
             current.text_colors = record_change(
                 key_changes,
                 "t",

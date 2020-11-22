@@ -1,7 +1,3 @@
-from typing import (
-    Union
-)
-
 from .background import Background
 
 
@@ -28,8 +24,12 @@ class Metadata:
     :vartype switch_brand: str
     :ivar switch_type: the switch type, defaults to ""
     :vartype switch_type: str
+    :ivar __include_pcb: whether to include the pcb value, true when loaded
+    :vartype __include_pcb: bool
     :ivar pcb: whether a pcb is used to mount switches, defaults to False
     :vartype pcb: bool
+    :ivar __include_plate: whether to include the plate value, true when loaded
+    :vartype __include_plate: bool
     :ivar plate: whether a plate is used to mount switches, defaults to False
     :vartype plate: bool
     """
@@ -45,5 +45,24 @@ class Metadata:
         self.switch_mount = ""
         self.switch_brand = ""
         self.switch_type = ""
-        self.pcb = None
-        self.plate = None
+        self._include_pcb = False
+        self.pcb = False
+        self._include_plate = False
+        self.plate = False
+
+    def __eq__(self, other):
+        return (
+            type(other) is type(self) and
+            other.author == self.author and
+            self.background_color == other.background_color and
+            self.background == other.background and
+            self.name == other.name and
+            self.notes == other.notes and
+            self.radii == other.radii and
+            self.css == other.css and
+            self.switch_mount == other.switch_mount and
+            self.switch_brand == other.switch_brand and
+            self.switch_type == other.switch_type and
+            self.pcb == other.pcb and
+            self.plate == other.plate
+        )

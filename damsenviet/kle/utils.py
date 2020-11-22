@@ -142,8 +142,10 @@ def playback_metadata_changes(metadata: Metadata, metadata_changes: Dict) -> Non
         metadata.css = metadata_changes["css"]
     if "pcb" in metadata_changes:
         metadata.pcb = metadata_changes["pcb"]
+        metadata._include_pcb = True
     if "plate" in metadata_changes:
         metadata.plate = metadata_changes["plate"]
+        metadata._include_plate = True
 
 
 def playback_key_changes(
