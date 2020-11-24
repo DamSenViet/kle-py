@@ -55,35 +55,35 @@ disallowed_alignnment_for_labels = [
 T = TypeVar('T')
 
 
-def undo_align(items: List, align: int, default_val: Any) -> List:
-    """Removes the alignment on the aligned items.
+def unaligned(aligned_items: List, alignment: int, default_val: Any) -> List:
+    """Returns the unaligned ordering of aligned items.
 
-    :param items: The items to be reordered.
+    :param items: The aligned_items to be unaligned.
     :type items: List
     :param align: The alignment option. 0-7
     :type align: int
     :return: The reordered items.
     :rtype: list
     """
-    ret = [default_val for i in range(12)]
-    for i, item in enumerate(items):
-        ret[label_map[align][i]] = item
-    return ret
+    unaligned_items = [default_val for i in range(12)]
+    for i, aligned_item in enumerate(aligned_items):
+        unaligned_items[label_map[alignment][i]] = aligned_item
+    return unaligned_items
 
 
 def compare_text_sizes(
     text_sizes: Union[int, List[int]],
-    ordered_text_sizes: List[Union[int, float, None]],
-    ordered_labels: List[str],
+    aligned_text_sizes: List[Union[int, float]],
+    aligned_text_labels: List[str],
 ) -> bool:
     """Determines whether text sizes and ordered version are equal.
 
     :param text_sizes: the text sizes to compare
     :type text_sizes: Union[int, List[int]]
-    :param ordered_text_sizes: the ordered text sizes
-    :type ordered_text_sizes: List[Union[int, float, None]]
-    :param ordered_labels: the ordered labels
-    :type ordered_labels: List[str]
+    :param aligned_text_sizes: the ordered text sizes
+    :type algined_text_sizes: List[Union[int, float]]
+    :param aligned_text_labels: the ordered labels
+    :type aligned_text_labels: List[str]
     :return: whether text sizes are equal
     :rtype: bool
     """
@@ -91,16 +91,18 @@ def compare_text_sizes(
         type(text_sizes) is int or
         type(text_sizes) is float
     ):
-        text_sizes = [text_sizes] + [None for i in range(11)]
+        text_sizes = [text_sizes] + [0 for i in range(11)]
     for i in range(12):
+        if aligned_text_labels[i] == "":
+            continue
+
         if (
-            bool(ordered_labels[i]) and
+            # text size is non 0 and aligned text size is 0 or
+            # text is 0 and aligned text size is non 0
+            (bool(text_sizes[i]) != bool(aligned_text_sizes[i])) or
             (
-                (bool(text_sizes[i]) != bool(ordered_text_sizes[i])) or
-                (
-                    bool(text_sizes[i]) and
-                    text_sizes[i] != ordered_text_sizes[i]
-                )
+                text_sizes[i] != 0 and
+                text_sizes[i] != aligned_text_sizes[i]
             )
         ):
             return False
@@ -142,16 +144,16 @@ def playback_metadata_changes(metadata: Metadata, metadata_changes: Dict) -> Non
         metadata.css = metadata_changes["css"]
     if "pcb" in metadata_changes:
         metadata.pcb = metadata_changes["pcb"]
-        metadata._include_pcb = True
+        metadata.include_pcb = True
     if "plate" in metadata_changes:
         metadata.plate = metadata_changes["plate"]
-        metadata._include_plate = True
+        metadata.include_plate = True
 
 
 def playback_key_changes(
     key: Key,
     key_changes: Dict,
-    align: int,
+    alignment: int,
     cluster_rotation_x: Decimal,
     cluster_rotation_y: Decimal,
 ) -> Tuple[int, Decimal, Decimal]:
@@ -161,8 +163,8 @@ def playback_key_changes(
     :type key: Key
     :param key_changes: the changes
     :type key_changes: Dict
-    :param align: the tracked text alignment
-    :type align: int
+    :param alignment: the tracked text alignment
+    :type alignment: int
     :param cluster_rotation_x: the tracked rotation origin x
     :type cluster_rotation_x: Decimal
     :param cluster_rotation_y: the tracked rotation origin y
@@ -183,10 +185,11 @@ def playback_key_changes(
         key.x = cluster_rotation_x
         key.y = cluster_rotation_y
     if "a" in key_changes:
-        align = key_changes["a"]
+        alignment = key_changes["a"]
     if "f" in key_changes:
         key.default_text_size = key_changes["f"]
-        key.text_sizes = [None for i in range(12)]
+        for i in range(len(key.text_sizes)):
+            key.text_sizes[i] = 0
     if "f2" in key_changes:
         for i in range(1, 12):
             if i < len(key.text_sizes):
@@ -194,7 +197,10 @@ def playback_key_changes(
             else:
                 key.text_sizes.append(key_changes["f2"])
     if "fa" in key_changes:
-        key.text_sizes = deepcopy(key_changes["fa"])
+        for i in range(len(key_changes["fa"])):
+            key.text_sizes[i] = key_changes["fa"][i]
+        for i in range(len(key_changes["fa"]), 12):
+            key.text_sizes[i] = 0
     if "p" in key_changes:
         key.profile = key_changes["p"]
     if "c" in key_changes:
@@ -203,7 +209,7 @@ def playback_key_changes(
         text_colors = deepcopy(key_changes["t"]).split("\n")
         if text_colors[0] != "":
             key.default_text_color = text_colors[0]
-        key.text_colors = undo_align(text_colors, align, None)
+        key.text_colors = unaligned(text_colors, alignment, "")
     if "x" in key_changes:
         key.x += Decimal(key_changes["x"])
     if "y" in key_changes:
@@ -237,7 +243,7 @@ def playback_key_changes(
     if "st" in key_changes:
         key.switch_type = key_changes["st"]
     return (
-        align,
+        alignment,
         cluster_rotation_x,
         cluster_rotation_y,
     )
@@ -297,24 +303,21 @@ def record_change(
     return val
 
 
-def reduced_text_sizes(text_sizes: List[Union[int, float, None]]):
-    """Turns Nones into 0 and removes trailing zeroes from the text sizes.
+def reduced_text_sizes(text_sizes: List[Union[int, float]]):
+    """Returns a copy of text sizes with right zeroes stripped.
 
     :param arr: [description]
     :type arr: List[Union[int, float]]
     :return: [description]
     :rtype: [type]
     """
-    text_sizes = list(map(
-        lambda text_size: 0 if text_size is None else text_size,
-        text_sizes,
-    ))
+    text_sizes = deepcopy(text_sizes)
     while len(text_sizes) > 0 and text_sizes[-1] == 0:
         text_sizes.pop()
     return text_sizes
 
 
-def reorder_labels(key: Key, current: Key) -> Dict:
+def aligned_key_properties(key: Key, current: Key) -> Dict:
     """More space efficient text labels, text colors, text sizes.
 
     :param key: the key to compute the reorder of
@@ -324,35 +327,42 @@ def reorder_labels(key: Key, current: Key) -> Dict:
     :return: a return dict with reordered version of props stored
     :rtype: Dict
     """
-    align = [7, 5, 6, 4, 3, 1, 2, 0]
+    alignments = [7, 5, 6, 4, 3, 1, 2, 0]
     # remove impossible flag combinations
     for i in range(len(key.text_labels)):
-        if bool(key.text_labels[i]):
-            align = list(
-                filter(lambda n: n not in disallowed_alignnment_for_labels[i], align))
-    # generate label array in correct order
-    ret = {
-        "align": align[0],
-        "labels": ["" for i in range(12)],
-        "text_color": [None for i in range(12)],
-        "text_size": [None for i in range(12)],
-    }
-    for i in range(12):
-        if i not in label_map[ret["align"]]:
-            continue
-        ndx = label_map[ret["align"]].index(i)
-        if ndx >= 0:
-            if bool(key.text_labels[i]):
-                ret["labels"][ndx] = key.text_labels[i]
-            if bool(key.text_colors[i]):
-                ret["text_color"][ndx] = key.text_colors[i]
-            if bool(key.text_sizes[i]):
-                ret["text_size"][ndx] = key.text_sizes[i]
-    # clean up
-    for i in range(len(reduced_text_sizes(ret["text_size"]))):
-        if not ret["labels"][i]:
-            ret["text_size"][i] = current.text_sizes[i]
+        if key.text_labels[i] != "":
+            try:
+                for alignment in deepcopy(alignments):
+                    if alignment in disallowed_alignnment_for_labels[i]:
+                        alignments.remove(alignment)
+            except ValueError:
+                pass
 
-        if not bool(ret["text_size"][i]) or ret["text_size"] == key.default_text_size:
-            ret["text_size"][i] = 0
-    return ret
+    # generate label array in correct order
+    alignment = alignments[0]
+    aligned_text_labels = ["" for i in range(12)]
+    aligned_text_color = ["" for i in range(12)]
+    aligned_text_size = [0 for i in range(12)]
+    for i in range(12):
+        if i not in label_map[alignment]:
+            continue
+        ndx = label_map[alignment].index(i)
+        if ndx >= 0:
+            if key.text_labels[i] != "":
+                aligned_text_labels[ndx] = key.text_labels[i]
+            if key.text_colors[i] != "":
+                aligned_text_color[ndx] = key.text_colors[i]
+            if key.text_sizes[i] != 0:
+                aligned_text_size[ndx] = key.text_sizes[i]
+    # clean up
+    for i in range(len(reduced_text_sizes(aligned_text_size))):
+        if aligned_text_labels[i] == "":
+            aligned_text_size[i] = current.text_sizes[i]
+        if aligned_text_size == key.default_text_size:
+            aligned_text_size[i] = 0
+    return (
+        alignment,
+        aligned_text_labels,
+        aligned_text_color,
+        aligned_text_size,
+    )

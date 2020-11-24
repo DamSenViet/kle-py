@@ -1,4 +1,6 @@
-import copy
+from copy import (
+    deepcopy,
+)
 import json
 from decimal import Decimal
 from typing import (
@@ -37,10 +39,10 @@ class Key:
     :vartype color: str
     :ivar text_labels: text labels , defaults to ["" for i in range(12)]
     :vartype text_labels: List[str]
-    :ivar text_colors: text colors of the labels, defaults to [None for i in range(12)]
-    :vartype text_colors: List[Union[str, None]]
-    :ivar text_size: text sizes of the labels, defaults to [None for i in range(12)]
-    :vartype text_size: List[Union[int, float, None]]
+    :ivar text_colors: text colors of the labels, defaults to ["" for i in range(12)]
+    :vartype text_colors: List[str]
+    :ivar text_size: text sizes of the labels, defaults to [0 for i in range(12)]
+    :vartype text_size: List[Union[int, float]
     :ivar default_text_color: default text color, defaults to "#000000"
     :vartype default_text_color: str
     :ivar default_text_size: default text size, defaults to 3
@@ -51,7 +53,7 @@ class Key:
     :vartype ghost: bool
     :ivar stepped: whether the key is stepped, defaults to False
     :vartype stepped: bool
-    :ivar nub: whether the key is nubbed, defaults to False
+    :ivar nub: whether the key has a nub, defaults to False
     :vartype nub: bool
     :ivar profile: the profile of the key, defaults to ""
     :vartype profile: str
@@ -66,9 +68,9 @@ class Key:
     def __init__(self):
         self.color = "#cccccc"
         self.text_labels = ["" for i in range(12)]
-        self.text_colors = [None for i in range(12)]
+        self.text_colors = ["" for i in range(12)]
         # cannot be 0, either None or positive
-        self.text_sizes = [None for i in range(12)]
+        self.text_sizes = [0 for i in range(12)]
         self.default_text_color = "#000000"
         self.default_text_size = 3
         self.x = Decimal(0.0)
@@ -91,21 +93,7 @@ class Key:
         self.switch_brand = ""
         self.switch_type = ""
 
-    def __deepcopy__(self, memo: Dict = None) -> "Key":
-        """Creates a deep copy of the key.
-
-        :return: A duplicate of the key.
-        :rtype: Key
-        """
-        new_key = type(self)()
-        memo[id(self)] = new_key
-        new_key.__dict__.update(self.__dict__)
-        new_key.text_labels = copy.deepcopy(self.text_labels, memo)
-        new_key.text_colors = copy.deepcopy(self.text_colors, memo)
-        new_key.text_sizes = copy.deepcopy(self.text_sizes, memo)
-        return new_key
-
-    def __str__(self) -> str:
+    def __str__(self):
         d = dict()
         d["color"] = self.color
         d["text_labels"] = self.text_labels
@@ -133,3 +121,19 @@ class Key:
         d["switch_brand"] = self.switch_brand
         d["switch_type"] = self.switch_type
         return json.dumps(d)
+
+    def __deepcopy__(self, memo: Dict = dict()):
+        """Creates a deep copy of the Key.
+
+        :param memo: dictionary of objects already copied
+        :type memo: Dict
+        :return: deep copy of the Key
+        :rtype: Key
+        """
+        new_key = type(self)()
+        memo[id(self)] = new_key
+        new_key.__dict__.update(self.__dict__)
+        new_key.text_labels = deepcopy(self.text_labels, memo)
+        new_key.text_colors = deepcopy(self.text_colors, memo)
+        new_key.text_sizes = deepcopy(self.text_sizes, memo)
+        return new_key

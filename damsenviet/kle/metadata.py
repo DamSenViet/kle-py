@@ -1,3 +1,12 @@
+from __future__ import annotations
+from copy import (
+    deepcopy,
+)
+from typing import (
+    Dict,
+)
+
+
 from .background import Background
 
 
@@ -24,12 +33,14 @@ class Metadata:
     :vartype switch_brand: str
     :ivar switch_type: the switch type, defaults to ""
     :vartype switch_type: str
-    :ivar __include_pcb: whether to include the pcb value, true when loaded
-    :vartype __include_pcb: bool
+    :ivar include_pcb: whether to include the pcb value in json, true when
+        loaded from json
+    :vartype include_pcb: bool
     :ivar pcb: whether a pcb is used to mount switches, defaults to False
     :vartype pcb: bool
-    :ivar __include_plate: whether to include the plate value, true when loaded
-    :vartype __include_plate: bool
+    :ivar include_plate: whether to include the plate value in json true when
+        loaded from json
+    :vartype include_plate: bool
     :ivar plate: whether a plate is used to mount switches, defaults to False
     :vartype plate: bool
     """
@@ -45,15 +56,23 @@ class Metadata:
         self.switch_mount = ""
         self.switch_brand = ""
         self.switch_type = ""
-        self._include_pcb = False
+        self.include_pcb = False
         self.pcb = False
-        self._include_plate = False
+        self.include_plate = False
         self.plate = False
 
+    # overriding only bc specific properties need to be ignored
     def __eq__(self, other):
+        """Checks for Metadata equality.
+
+        :param other: the other object
+        :type other: Any
+        :return: whether the objects are equal
+        :rtype: bool
+        """
         return (
-            type(other) is type(self) and
-            other.author == self.author and
+            type(other) is Metadata and
+            self.author == other.author and
             self.background_color == other.background_color and
             self.background == other.background and
             self.name == other.name and
@@ -66,3 +85,17 @@ class Metadata:
             self.pcb == other.pcb and
             self.plate == other.plate
         )
+
+    def __deepcopy__(self, memo: Dict = dict()):
+        """Creates a deep copy of the Metadata.
+
+        :param memo: dictionary of objects already copied
+        :type memo: Dict
+        :return: deep copy of the Metadata
+        :rtype: Metadata
+        """
+        new_metadata = type(self)()
+        memo[id(self)] = new_metadata
+        new_metadata.__dict__.update(self.__dict__)
+        new_metadata.background = deepcopy(self.background)
+        return new_metadata

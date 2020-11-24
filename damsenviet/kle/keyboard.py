@@ -21,9 +21,9 @@ from .background import Background
 from .utils import (
     key_sort_criteria,
     record_change,
-    reorder_labels,
+    aligned_key_properties,
     reduced_text_sizes,
-    undo_align,
+    unaligned,
     compare_text_sizes,
     playback_key_changes,
     playback_metadata_changes,
@@ -78,44 +78,40 @@ class Keyboard:
                 for k in range(len(keyboard_json[r])):
                     item = keyboard_json[r][k]
                     if type(item) is str:
-                        label = item
+                        labels = item
                         # create copy of key data
-                        new_key = deepcopy(current, {})
-
-                        # calculate generated values
-                        new_key.width2 = (
-                            current.width
-                            if new_key.width2 == 0
-                            else current.width2
-                        )
-                        new_key.height2 = (
-                            current.height
-                            if new_key.height2 == 0
-                            else current.height2
-                        )
-                        new_key.text_labels = undo_align(
-                            label.split("\n"),
+                        new_key = deepcopy(current)
+                        if new_key.width2 != 0:
+                            new_key.width2 = current.width2
+                        else:
+                            new_key.width2 = current.width
+                        if new_key.height2 != 0:
+                            new_key.height2 = current.height2
+                        else:
+                            new_key.height2 = current.height
+                        new_key.text_labels = unaligned(
+                            labels.split("\n"),
                             align,
                             ""
                         )
-                        new_key.text_sizes = undo_align(
+                        new_key.text_sizes = unaligned(
                             new_key.text_sizes,
                             align,
-                            None
+                            0
                         )
                         # clean up generated data
                         for i in range(12):
                             if not new_key.text_labels[i]:
-                                new_key.text_sizes[i] = None
-                                new_key.text_colors[i] = None
-                            if new_key.text_sizes[i] == new_key.default_text_size:
-                                new_key.text_sizes[i] = None
+                                new_key.text_colors[i] = ""
+                                new_key.text_sizes[i] = 0
                             if new_key.text_colors[i] == new_key.default_text_color:
-                                new_key.text_colors[i] = None
+                                new_key.text_colors[i] = ""
+                            if new_key.text_sizes[i] == new_key.default_text_size:
+                                new_key.text_sizes[i] = 0
                         # add key
                         keyboard.keys.append(new_key)
 
-                        # adjustments for next key gen
+                        # adjustments for the next key
                         current.x += Decimal(current.width)
                         current.width = Decimal(1)
                         current.height = Decimal(1)
@@ -152,7 +148,7 @@ class Keyboard:
                         )
                     else:
                         raise DeserializeException(
-                            f"Expected an object specifying key changes or a label \
+                            f"Expected an object specifying key changes or labels \
                             for a key",
                             item
                         )
@@ -185,7 +181,6 @@ class Keyboard:
         :return: the KLE formatted json
         :rtype: List[Union[Dict, List[Union[str, Dict]]]]
         """
-        # current key that we track
         keyboard_json = list()
         row = list()
         current = Key()
@@ -274,7 +269,7 @@ class Keyboard:
         )
         if (
             self.metadata.plate != default_metadata.plate or
-            self.metadata._include_plate
+            self.metadata.include_plate
         ):
             record_change(
                 metadata_changes,
@@ -284,7 +279,7 @@ class Keyboard:
             )
         if (
             self.metadata.pcb != default_metadata.pcb or
-            self.metadata._include_pcb
+            self.metadata.include_pcb
         ):
             record_change(
                 metadata_changes,
@@ -301,7 +296,12 @@ class Keyboard:
         sorted_keys = list(sorted(self.keys, key=key_sort_criteria))
         for key in sorted_keys:
             key_changes = OrderedDict()
-            ordered = reorder_labels(key, current)
+            (
+                alignment,
+                aligned_text_labels,
+                aligned_text_color,
+                aligned_text_size,
+            ) = aligned_key_properties(key, current)
 
             # start a new row when necessary
             is_cluster_changed = (
@@ -373,25 +373,19 @@ class Keyboard:
                 current.color,
             )
             # if statement for ordered color
-            if not ordered["text_color"][0]:
-                ordered["text_color"][0] = key.default_text_color
+            if not aligned_text_color[0]:
+                aligned_text_color[0] = key.default_text_color
             else:
                 for i in range(2, 12):
                     if (
-                        ordered["text_color"][i] != "" and
-                        ordered["text_color"][i] != ordered["text_color"][0]
+                        aligned_text_color[i] != "" and
+                        aligned_text_color[i] != aligned_text_color[0]
                     ):
-                        # maybe an error in the original referenced source code here
-                        ordered["text_color"][i] = key.default_text_color
+                        aligned_text_color[i] = key.default_text_color
             current.text_colors = record_change(
                 key_changes,
                 "t",
-                "\n".join(
-                    map(
-                        lambda text_color: "" if text_color is None else text_color,
-                        ordered["text_color"]
-                    )
-                ).rstrip(),
+                "\n".join(aligned_text_color).rstrip(),
                 current.text_colors
             )
             current.ghost = record_change(
@@ -427,7 +421,7 @@ class Keyboard:
             align = record_change(
                 key_changes,
                 "a",
-                ordered["align"],
+                alignment,
                 align,
             )
             current.default_text_size = record_change(
@@ -437,14 +431,14 @@ class Keyboard:
                 current.default_text_size,
             )
             if "f" in key_changes:
-                current.text_sizes = [None for i in range(12)]
+                current.text_sizes = [0 for i in range(12)]
             # if text sizes arent already optimized, optimize it
             if not compare_text_sizes(
                 current.text_sizes,
-                ordered["text_size"],
-                ordered["labels"]
+                aligned_text_size,
+                aligned_text_labels
             ):
-                if (len(reduced_text_sizes(ordered["text_size"])) == 0):
+                if (len(reduced_text_sizes(aligned_text_size)) == 0):
                     # force f to be written
                     record_change(
                         key_changes,
@@ -453,25 +447,25 @@ class Keyboard:
                         -1,
                     )
                 else:
-                    optimizeF2 = not bool(ordered["text_size"][0])
-                    for i in range(2, len(reduced_text_sizes(ordered["text_size"]))):
+                    optimizeF2 = not bool(aligned_text_size[0])
+                    for i in range(2, len(reduced_text_sizes(aligned_text_size))):
                         if not optimizeF2:
                             break
                         optimizeF2 = (
-                            ordered["text_size"][i] == ordered["text_size"][1]
+                            aligned_text_size[i] == aligned_text_size[1]
                         )
                     if optimizeF2:
-                        f2 = ordered["text_size"][1]
+                        f2 = aligned_text_size[1]
                         # current.f2 not ever used
                         # removed current.f2 = serializeProp(props, "f2", f2, -1);
                         record_change(key_changes, "f2", f2, -1)
                         current.text_sizes = [0] + [f2 for i in range(11)]
                     else:
-                        current.text_sizes = ordered["text_size"]
+                        current.text_sizes = aligned_text_size
                         record_change(
                             key_changes,
                             "fa",
-                            reduced_text_sizes(ordered["text_size"]),
+                            reduced_text_sizes(aligned_text_size),
                             [],
                         )
             record_change(key_changes, "w", key.width, Decimal(1.0))
@@ -485,8 +479,8 @@ class Keyboard:
             record_change(key_changes, "d", key.decal, False)
             if len(key_changes) > 0:
                 row.append(key_changes)
-            current.text_labels = ordered["labels"]
-            row.append("\n".join(ordered["labels"]).rstrip())
+            current.text_labels = aligned_text_labels
+            row.append("\n".join(aligned_text_labels).rstrip())
         if len(row) > 0:
             keyboard_json.append(row)
         return keyboard_json
