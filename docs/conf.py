@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('./../damsenviet'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'damsenviet.kle'
+project = 'kle-py'
 copyright = '2020, damsenviet'
 author = 'damsenviet'
 
@@ -33,6 +33,7 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.githubpages'
 ]
+
 
 autodoc_typehints = 'description'
 autodoc_member_order = 'bysource'
@@ -53,40 +54,32 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
+html_title = "kle-py"
+html_logo = "_static/logo-text.svg"
+html_favicon = "_static/logo.svg"
 html_theme = 'pydata_sphinx_theme'
+html_context = {
+    "github_user": "DamSenViet",
+    "github_repo": "kle-py",
+    "github_version": "master",
+    "doc_path": "docs",
+}
+html_theme_options = {
+    "github_url": "https://github.com/DamSenViet/kle-py",
+    "show_prev_next": False,
+    # "use_edit_page_button": True,
+}
+language = "en"
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['static']
+html_static_path = ['_static']
 
 html_baseurl = "/kle-py/"
 
 add_module_names = False
 
-# skip base class object
 
-add_line = ClassDocumenter.add_line
-line_to_delete = _(u'Bases: %s') % u':class:`object`'
-
-
-def add_line_no_object_base(self, text, *args, **kwargs):
-    if text.strip() == line_to_delete:
-        return
-
-    add_line(self, text, *args, **kwargs)
-
-
-add_directive_header = ClassDocumenter.add_directive_header
-
-
-def add_directive_header_no_object_base(self, *args, **kwargs):
-    self.add_line = add_line_no_object_base.__get__(self)
-
-    result = add_directive_header(self, *args, **kwargs)
-
-    del self.add_line
-
-    return result
-
-
-ClassDocumenter.add_directive_header = add_directive_header_no_object_base
+def setup(app):
+    app.add_css_file('style.css')  # may also be an URL

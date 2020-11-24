@@ -2,7 +2,9 @@
 
 A Python library for interacting with KLE data structures and files.
 
-Originally ported from [keyboard-layout-editor/serial.js](https://github.com/ijprest/keyboard-layout-editor/).
+Originally ported from [keyboard-layout-editor/serial.js](https://github.com/ijprest/keyboard-layout-editor/)
+with improvements to make the source code increasingly portable across
+different language platforms.
 
 ## Table of Contents
 
@@ -16,7 +18,7 @@ To view documentation, examples, visit the [documentation site](https://damsenvi
 
 ## Installation
 
-To install and use the library use the installation method listed below.
+To install and use the library, use the installation method listed below.
 
 ``` bash
 pip3 install damsenviet.kle

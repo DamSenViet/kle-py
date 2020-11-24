@@ -1,0 +1,28 @@
+.hero-img {
+  display: block;
+  max-width: 100%;
+  height: 200px;  
+  margin: 1.8rem 0rem;
+}
+
+.hero-description {
+  color: #6a8bad;
+  font-size: 1.6rem;
+}
+
+.action-button {
+  display: inline-block;
+  font-size: 1.2rem;
+  color: #ffffff;
+  background-color: #130654;
+  padding: 0.8rem 1.6rem;
+  margin: 1.8rem 0rem;
+  border-radius: 4px;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+.action-button:hover {
+  color: white;
+  text-decoration: none;
+}
