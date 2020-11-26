@@ -1,3 +1,4 @@
+from __future__ import annotations
 from copy import (
     deepcopy,
 )
@@ -137,3 +138,153 @@ class Key:
         new_key.text_colors = deepcopy(self.text_colors, memo)
         new_key.text_sizes = deepcopy(self.text_sizes, memo)
         return new_key
+
+    def get_color(self) -> str:
+        return self.color
+
+    def set_color(self, color: str) -> Key:
+        return self
+
+    def get_text_labels(self) -> List[str]:
+        return deepcopy(self.text_labels)
+
+    def set_text_labels(self, text_labels: List[str]) -> Key:
+        return self
+
+    def get_text_colors(self) -> List[str]:
+        return deepcopy(self.text_colors)
+
+    def set_text_colors(self, text_colors: List[str]) -> Key:
+        return self.text_colors
+
+    def get_text_sizes(self) -> List[Union[int, float]]:
+        return deepcopy(self.text_sizes)
+
+    def set_text_sizes(self, text_sizes: List[Union[int, float]]) -> Key:
+        return self
+
+    def get_default_text_color(self) -> str:
+        return self.default_text_color
+
+    def set_default_text_color(self, default_text_color: str) -> Key:
+        return self
+
+    def get_default_text_size(self) -> Union[int, float]:
+        return self.default_text_size
+
+    def set_default_text_size(self, default_text_size: Union[int, float]) -> Key:
+        return self
+
+    def get_x(self) -> Decimal:
+        return self.x
+
+    def set_x(self, x: Decimal) -> Key:
+        return self
+
+    def get_y(self) -> Decimal:
+        return self.y
+
+    def set_y(self, y: Decimal) -> Key:
+        return self
+
+    def get_width(self) -> Decimal:
+        return self.width
+
+    def set_width(self, width: Decimal) -> Key:
+        return self
+
+    def get_height(self) -> Decimal:
+        return self.height
+
+    def set_height(self, height: Decimal) -> Key:
+        return self
+
+    def get_x2(self) -> Decimal:
+        return self.x2
+
+    def set_x2(self, x2: Decimal) -> Key:
+        return self
+
+    def get_y2(self) -> Decimal:
+        return self.y2
+
+    def set_y2(self, y2: Decimal) -> Key:
+        return self
+
+    def get_width2(self) -> Decimal:
+        return self.width2
+
+    def set_width2(self, width2: Decimal) -> Key:
+        return self
+
+    def get_height2(self) -> Decimal:
+        return self.height2
+
+    def set_height2(self, height2: Decimal) -> Key:
+        return self
+
+    def get_rotation_x(self) -> Decimal:
+        return self.rotation_x
+
+    def set_rotation_x(self, rotation_x: Decimal) -> Key:
+        return self
+
+    def get_rotation_y(self) -> Decimal:
+        return self.rotation_y
+
+    def set_rotation_y(self, rotation_y: Decimal) -> Key:
+        return self
+
+    def get_rotation_angle(self) -> Decimal:
+        return self.rotation_angle
+
+    def set_rotation_angle(self, rotation_angle: Decimal) -> Key:
+        return self
+
+    def get_decal(self) -> bool:
+        pass
+
+    def set_decal(self, decal: bool) -> Key:
+        pass
+
+    def get_ghost(self) -> bool:
+        pass
+
+    def set_ghost(self, ghost: bool) -> Key:
+        pass
+
+    def get_stepped(self) -> bool:
+        pass
+
+    def set_stepped(self, stepped: bool) -> Key:
+        pass
+
+    def get_nub(self) -> bool:
+        pass
+
+    def set_nub(self, nub: bool) -> Key:
+        pass
+
+    def get_profile(self) -> str:
+        pass
+
+    def set_profile(self, profile: str) -> Key:
+        pass
+
+    def get_switch_mount(self) -> str:
+        pass
+
+    def set_switch_mount(self, switch_mount: str) -> Key:
+        return self
+
+    def get_switch_brand(self) -> str:
+        pass
+
+    def set_switch_brand(self, switch_brand: str) -> Key:
+        return self
+
+    def get_switch_type(self) -> str:
+        pass
+
+    def set_switch_type(self, switch_type: str) -> Key:
+        return self

@@ -71,7 +71,7 @@ class Metadata:
         :rtype: bool
         """
         return (
-            type(other) is Metadata and
+            Metadata is type(other) and
             self.author == other.author and
             self.background_color == other.background_color and
             self.background == other.background and
@@ -85,6 +85,9 @@ class Metadata:
             self.pcb == other.pcb and
             self.plate == other.plate
         )
+
+    def __ne__(self, other):
+        return not other == self
 
     def __deepcopy__(self, memo: Dict = dict()):
         """Creates a deep copy of the Metadata.
