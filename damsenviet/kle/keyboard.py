@@ -15,9 +15,10 @@ from typing import (
     Dict,
 )
 
-from .key import Key
 from .metadata import Metadata
 from .background import Background
+from .key import Key
+from .label import Label
 from .utils import (
     key_sort_criteria,
     record_change,
@@ -61,13 +62,14 @@ class Keyboard:
             raise DeserializeException(
                 "Expected an array of objects:", keyboard_json)
 
-        # track rotation info for reset x/y positions
-        # if rotation_angle != 0, it is always specified LAST
-        current = Key()  # readies the next key data when str encountered
         keyboard = Keyboard()
-        align = 4
 
-        # keys are row separated by clusters, clusters defines
+        # tracks the key with accumulated changes
+        current = Key()
+        # tmp variables to construct final labels
+        align = 4
+        # keys are row separated by clusters
+        # track rotation info for reset x/y positions
         cluster_rotation_x = Decimal(0.0)
         cluster_rotation_y = Decimal(0.0)
 
@@ -89,25 +91,28 @@ class Keyboard:
                             new_key.height2 = current.height2
                         else:
                             new_key.height2 = current.height
-                        new_key.text_labels = unaligned(
+                        for i, text in enumerate(unaligned(
                             labels.split("\n"),
                             align,
-                            ""
-                        )
-                        new_key.text_sizes = unaligned(
-                            new_key.text_sizes,
+                            "",
+                        )):
+                            new_key.labels[i].set_text(text)
+
+                        for i, size in enumerate(unaligned(
+                            [label.get_size() for label in new_key.labels],
                             align,
-                            0
-                        )
+                            0,
+                        )):
+                            new_key.labels[i].set_size(size)
                         # clean up generated data
-                        for i in range(12):
-                            if not new_key.text_labels[i]:
-                                new_key.text_colors[i] = ""
-                                new_key.text_sizes[i] = 0
-                            if new_key.text_colors[i] == new_key.default_text_color:
-                                new_key.text_colors[i] = ""
-                            if new_key.text_sizes[i] == new_key.default_text_size:
-                                new_key.text_sizes[i] = 0
+                        for label in new_key.labels:
+                            if label.get_text() == "":
+                                label.set_color("")
+                                label.set_size(0)
+                            if label.get_color() == new_key.default_text_color:
+                                label.set_color("")
+                            if label.get_size() == new_key.default_text_size:
+                                label.set_size(0)
                         # add key
                         keyboard.keys.append(new_key)
 
@@ -184,8 +189,9 @@ class Keyboard:
         keyboard_json = list()
         row = list()
         current = Key()
-        current.text_colors = current.default_text_color
         align = 4
+        current_labels_color = current.default_text_color
+        current_labels_size = [label.get_size() for label in current.labels]
         cluster_rotation_angle = Decimal(0.0)
         cluster_rotation_x = Decimal(0.0)
         cluster_rotation_y = Decimal(0.0)
@@ -301,7 +307,10 @@ class Keyboard:
                 aligned_text_labels,
                 aligned_text_color,
                 aligned_text_size,
-            ) = aligned_key_properties(key, current)
+            ) = aligned_key_properties(
+                key,
+                current_labels_size
+            )
 
             # start a new row when necessary
             is_cluster_changed = (
@@ -382,11 +391,11 @@ class Keyboard:
                         aligned_text_color[i] != aligned_text_color[0]
                     ):
                         aligned_text_color[i] = key.default_text_color
-            current.text_colors = record_change(
+            current_labels_color = record_change(
                 key_changes,
                 "t",
                 "\n".join(aligned_text_color).rstrip(),
-                current.text_colors
+                current_labels_color,
             )
             current.ghost = record_change(
                 key_changes,
@@ -431,10 +440,10 @@ class Keyboard:
                 current.default_text_size,
             )
             if "f" in key_changes:
-                current.text_sizes = [0 for i in range(12)]
+                current_labels_size = [0 for i in range(12)]
             # if text sizes arent already optimized, optimize it
             if not compare_text_sizes(
-                current.text_sizes,
+                current_labels_size,
                 aligned_text_size,
                 aligned_text_labels
             ):
@@ -459,9 +468,9 @@ class Keyboard:
                         # current.f2 not ever used
                         # removed current.f2 = serializeProp(props, "f2", f2, -1);
                         record_change(key_changes, "f2", f2, -1)
-                        current.text_sizes = [0] + [f2 for i in range(11)]
+                        current_labels_size = [0] + [f2 for i in range(11)]
                     else:
-                        current.text_sizes = aligned_text_size
+                        current_labels_size = aligned_text_size
                         record_change(
                             key_changes,
                             "fa",
@@ -479,7 +488,6 @@ class Keyboard:
             record_change(key_changes, "d", key.decal, False)
             if len(key_changes) > 0:
                 row.append(key_changes)
-            current.text_labels = aligned_text_labels
             row.append("\n".join(aligned_text_labels).rstrip())
         if len(row) > 0:
             keyboard_json.append(row)

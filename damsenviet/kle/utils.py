@@ -17,8 +17,8 @@ from typing import (
     Dict,
 )
 
-from .key import Key
 from .metadata import Metadata
+from .key import Key
 
 getcontext().prec = 64
 
@@ -72,7 +72,7 @@ def unaligned(aligned_items: List, alignment: int, default_val: Any) -> List:
 
 
 def compare_text_sizes(
-    text_sizes: Union[int, List[int]],
+    text_sizes: Union[int, float, List[Union[int, float]]],
     aligned_text_sizes: List[Union[int, float]],
     aligned_text_labels: List[str],
 ) -> bool:
@@ -188,28 +188,26 @@ def playback_key_changes(
         alignment = key_changes["a"]
     if "f" in key_changes:
         key.default_text_size = key_changes["f"]
-        for i in range(len(key.text_sizes)):
-            key.text_sizes[i] = 0
+        for i in range(len([label.get_size() for label in key.labels])):
+            key.labels[i].set_size(0)
     if "f2" in key_changes:
         for i in range(1, 12):
-            if i < len(key.text_sizes):
-                key.text_sizes[i] = key_changes["f2"]
-            else:
-                key.text_sizes.append(key_changes["f2"])
+            key.labels[i].set_size(key_changes["f2"])
     if "fa" in key_changes:
         for i in range(len(key_changes["fa"])):
-            key.text_sizes[i] = key_changes["fa"][i]
+            key.labels[i].set_size(key_changes["fa"][i])
         for i in range(len(key_changes["fa"]), 12):
-            key.text_sizes[i] = 0
+            key.labels[i].set_size(0)
     if "p" in key_changes:
         key.profile = key_changes["p"]
     if "c" in key_changes:
         key.color = key_changes["c"]
     if "t" in key_changes:
-        text_colors = deepcopy(key_changes["t"]).split("\n")
-        if text_colors[0] != "":
-            key.default_text_color = text_colors[0]
-        key.text_colors = unaligned(text_colors, alignment, "")
+        labels_color = deepcopy(key_changes["t"]).split("\n")
+        if labels_color[0] != "":
+            key.default_text_color = labels_color[0]
+        for i, color in enumerate(unaligned(labels_color, alignment, "")):
+            key.labels[i].set_color(color)
     if "x" in key_changes:
         key.x += Decimal(key_changes["x"])
     if "y" in key_changes:
@@ -317,7 +315,7 @@ def reduced_text_sizes(text_sizes: List[Union[int, float]]):
     return text_sizes
 
 
-def aligned_key_properties(key: Key, current: Key) -> Dict:
+def aligned_key_properties(key: Key, current_labels_size: List[Union[int, float]]) -> Dict:
     """More space efficient text labels, text colors, text sizes.
 
     :param key: the key to compute the reorder of
@@ -327,10 +325,13 @@ def aligned_key_properties(key: Key, current: Key) -> Dict:
     :return: a return dict with reordered version of props stored
     :rtype: Dict
     """
+    texts = [label.get_text() for label in key.labels]
+    colors = [label.get_color() for label in key.labels]
+    sizes = [label.get_size() for label in key.labels]
     alignments = [7, 5, 6, 4, 3, 1, 2, 0]
     # remove impossible flag combinations
-    for i in range(len(key.text_labels)):
-        if key.text_labels[i] != "":
+    for i in range(len(texts)):
+        if texts[i] != "":
             try:
                 for alignment in deepcopy(alignments):
                     if alignment in disallowed_alignnment_for_labels[i]:
@@ -348,16 +349,16 @@ def aligned_key_properties(key: Key, current: Key) -> Dict:
             continue
         ndx = label_map[alignment].index(i)
         if ndx >= 0:
-            if key.text_labels[i] != "":
-                aligned_text_labels[ndx] = key.text_labels[i]
-            if key.text_colors[i] != "":
-                aligned_text_color[ndx] = key.text_colors[i]
-            if key.text_sizes[i] != 0:
-                aligned_text_size[ndx] = key.text_sizes[i]
+            if texts[i] != "":
+                aligned_text_labels[ndx] = texts[i]
+            if colors[i] != "":
+                aligned_text_color[ndx] = colors[i]
+            if sizes[i] != 0:
+                aligned_text_size[ndx] = sizes[i]
     # clean up
     for i in range(len(reduced_text_sizes(aligned_text_size))):
         if aligned_text_labels[i] == "":
-            aligned_text_size[i] = current.text_sizes[i]
+            aligned_text_size[i] = current_labels_size[i]
         if aligned_text_size == key.default_text_size:
             aligned_text_size[i] = 0
     return (

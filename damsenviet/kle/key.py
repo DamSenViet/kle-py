@@ -10,6 +10,8 @@ from typing import (
     Dict,
 )
 
+from .label import Label
+
 
 class Key:
     """Class for storing a KLE Key.
@@ -68,10 +70,7 @@ class Key:
 
     def __init__(self):
         self.color = "#cccccc"
-        self.text_labels = ["" for i in range(12)]
-        self.text_colors = ["" for i in range(12)]
-        # cannot be 0, either None or positive
-        self.text_sizes = [0 for i in range(12)]
+        self.labels = [Label() for i in range(12)]
         self.default_text_color = "#000000"
         self.default_text_size = 3
         self.x = Decimal(0.0)
@@ -97,9 +96,7 @@ class Key:
     def __str__(self):
         d = dict()
         d["color"] = self.color
-        d["text_labels"] = self.text_labels
-        d["text_colors"] = self.text_colors
-        d["text_sizes"] = self.text_sizes
+        d["labels"] = self.labels
         d["default_text_color"] = self.default_text_color
         d["default_text_size"] = self.default_text_size
         d["x"] = float(self.x)
@@ -121,7 +118,7 @@ class Key:
         d["switch_mount"] = self.switch_mount
         d["switch_brand"] = self.switch_brand
         d["switch_type"] = self.switch_type
-        return json.dumps(d)
+        return str(d)
 
     def __deepcopy__(self, memo: Dict = dict()):
         """Creates a deep copy of the Key.
@@ -134,9 +131,7 @@ class Key:
         new_key = type(self)()
         memo[id(self)] = new_key
         new_key.__dict__.update(self.__dict__)
-        new_key.text_labels = deepcopy(self.text_labels, memo)
-        new_key.text_colors = deepcopy(self.text_colors, memo)
-        new_key.text_sizes = deepcopy(self.text_sizes, memo)
+        new_key.labels = deepcopy(self.labels, memo)
         return new_key
 
     def get_color(self) -> str:
@@ -145,22 +140,10 @@ class Key:
     def set_color(self, color: str) -> Key:
         return self
 
-    def get_text_labels(self) -> List[str]:
-        return deepcopy(self.text_labels)
+    def get_labels(self) -> List[Label]:
+        pass
 
-    def set_text_labels(self, text_labels: List[str]) -> Key:
-        return self
-
-    def get_text_colors(self) -> List[str]:
-        return deepcopy(self.text_colors)
-
-    def set_text_colors(self, text_colors: List[str]) -> Key:
-        return self.text_colors
-
-    def get_text_sizes(self) -> List[Union[int, float]]:
-        return deepcopy(self.text_sizes)
-
-    def set_text_sizes(self, text_sizes: List[Union[int, float]]) -> Key:
+    def set_labels(self, labels: List[Label]) -> Key:
         return self
 
     def get_default_text_color(self) -> str:
@@ -269,7 +252,7 @@ class Key:
         pass
 
     def set_profile(self, profile: str) -> Key:
-        pass
+        return self
 
     def get_switch_mount(self) -> str:
         pass
