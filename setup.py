@@ -13,7 +13,10 @@ st.setup(
     packages=st.find_packages(
         exclude=["tests", "docs", "scripts"]
     ),
-    install_requires=[],
+    install_requires=[
+        "typeguard>=2.10.0",
+        "webcolors>=1.11.1",
+    ],
     extras_require={
         "test": [
             "matplotlib>=3.1.2",
