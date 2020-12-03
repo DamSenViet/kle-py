@@ -6,10 +6,8 @@ from decimal import (
     Decimal,
     getcontext,
 )
-from collections import (
-    OrderedDict,
-)
 from typing import (
+    cast,
     Union,
     List,
     Dict,
@@ -37,6 +35,8 @@ from .exceptions import (
 
 getcontext().prec = 64
 
+Keyboard_JSON = List[Union[Dict, List[Union[str, Dict]]]]
+
 
 class Keyboard:
     """Class for storing KLE Keyboard.
@@ -48,7 +48,7 @@ class Keyboard:
     """
 
     @classmethod
-    def from_json(cls, keyboard_json: List[Union[Dict, List[Union[str, Dict]]]]) -> Keyboard:
+    def from_json(cls, keyboard_json: Keyboard_JSON) -> Keyboard:
         """Deserializes a KLE json array into a keyboard.
 
         :param keyboard_json: the KLE formatted json
@@ -64,27 +64,30 @@ class Keyboard:
             raise DeserializeException(
                 "Expected an array of objects:", keyboard_json)
 
-        keyboard = Keyboard()
+        keyboard: Keyboard = Keyboard()
 
         # tracks the key with accumulated changes
-        current = Key()
+        current: Key = Key()
         # tmp variables to construct final labels
-        align = 4
+        align: int = 4
         # keys are row separated by clusters
         # track rotation info for reset x/y positions
-        cluster_rotation_x = Decimal(0.0)
-        cluster_rotation_y = Decimal(0.0)
+        cluster_rotation_x: Decimal = Decimal(0.0)
+        cluster_rotation_y: Decimal = Decimal(0.0)
 
         # for object in list
         for r in range(len(keyboard_json)):
             if type(keyboard_json[r]) is list:
                 # for item in list
                 for k in range(len(keyboard_json[r])):
-                    item = keyboard_json[r][k]
+                    item: Union[str, dict] = cast(
+                        Union[str, dict],
+                        keyboard_json[r][k],
+                    )
                     if type(item) is str:
-                        labels = item
+                        labels: str = item
                         # create copy of key data
-                        new_key = deepcopy(current)
+                        new_key: Key = deepcopy(current)
                         if new_key.get_width2() != 0:
                             new_key.set_width2(current.get_width2())
                         else:
@@ -184,7 +187,7 @@ class Keyboard:
         self.metadata = Metadata()
         self.keys = []
 
-    def to_json(self: Keyboard) -> List[Union[Dict, List[Union[str, Dict]]]]:
+    def to_json(self: Keyboard) -> Keyboard_JSON:
         """Serializes the Keyboard to a KLE formatted json.
 
         :param keyboard: the keyboard to deserialize
@@ -192,21 +195,22 @@ class Keyboard:
         :return: the KLE formatted json
         :rtype: List[Union[Dict, List[Union[str, Dict]]]]
         """
-        keyboard_json = list()
-        row = list()
-        current = Key()
-        align = 4
-        current_labels_color = current.get_default_text_color()
-        current_labels_size = [
+        keyboard_json: Keyboard_JSON = list()
+        row: List[Union[str, Dict]] = list()
+        current: Key = Key()
+        align: int = 4
+        current_labels_color: List[str] = current.get_default_text_color()
+        current_labels_size: List[Union[int, float]] = [
             label.get_size()
-            for label in current.get_labels()
+            for label
+            in current.get_labels()
         ]
-        cluster_rotation_angle = Decimal(0.0)
-        cluster_rotation_x = Decimal(0.0)
-        cluster_rotation_y = Decimal(0.0)
+        cluster_rotation_angle: Decimal = Decimal(0.0)
+        cluster_rotation_x: Decimal = Decimal(0.0)
+        cluster_rotation_y: Decimal = Decimal(0.0)
 
-        metadata_changes = OrderedDict()
-        default_metadata = Metadata()
+        metadata_changes: Dict = dict()
+        default_metadata: Metadata = Metadata()
         record_change(
             metadata_changes,
             "backcolor",
@@ -231,8 +235,8 @@ class Keyboard:
             self.metadata.notes,
             default_metadata.notes,
         )
-        background_changes = OrderedDict()
-        default_background = Background()
+        background_changes: Dict = dict()
+        default_background: Background = Background()
         record_change(
             background_changes,
             "name",
@@ -305,13 +309,13 @@ class Keyboard:
         if len(metadata_changes) > 0:
             keyboard_json.append(metadata_changes)
 
-        is_new_row = True
+        is_new_row: bool = True
         # will be incremented on first row
         current.set_y(current.get_y() - Decimal(1))
 
-        sorted_keys = list(sorted(self.keys, key=key_sort_criteria))
+        sorted_keys: List[Key] = list(sorted(self.keys, key=key_sort_criteria))
         for key in sorted_keys:
-            key_changes = OrderedDict()
+            key_changes = dict()
             (
                 alignment,
                 aligned_text_labels,
@@ -323,12 +327,12 @@ class Keyboard:
             )
 
             # start a new row when necessary
-            is_cluster_changed = (
+            is_cluster_changed: bool = (
                 (key.get_rotation_angle() != cluster_rotation_angle) or
                 (key.get_rotation_x() != cluster_rotation_x) or
                 (key.get_rotation_y() != cluster_rotation_y)
             )
-            is_row_changed = (key.get_y() != current.get_y())
+            is_row_changed: bool = (key.get_y() != current.get_y())
             if len(row) > 0 and (is_row_changed or is_cluster_changed):
                 # set up for the new row
                 keyboard_json.append(row)
@@ -466,7 +470,7 @@ class Keyboard:
                         -1,
                     )
                 else:
-                    optimizeF2 = not bool(aligned_text_size[0])
+                    optimizeF2: bool = not bool(aligned_text_size[0])
                     for i in range(2, len(reduced_text_sizes(aligned_text_size))):
                         if not optimizeF2:
                             break
@@ -474,7 +478,7 @@ class Keyboard:
                             aligned_text_size[i] == aligned_text_size[1]
                         )
                     if optimizeF2:
-                        f2 = aligned_text_size[1]
+                        f2: Union[int, float] = aligned_text_size[1]
                         # current.f2 not ever used
                         # removed current.f2 = serializeProp(props, "f2", f2, -1);
                         record_change(key_changes, "f2", f2, -1)

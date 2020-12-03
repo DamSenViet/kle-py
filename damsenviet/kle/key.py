@@ -71,29 +71,29 @@ class Key:
     """
 
     def __init__(self):
-        self.__color = "#cccccc"
-        self.__labels = [Label() for i in range(12)]
-        self.__default_text_color = "#000000"
-        self.__default_text_size = 3
-        self.__x = Decimal(0.0)
-        self.__y = Decimal(0.0)
-        self.__width = Decimal(1.0)
-        self.__height = Decimal(1.0)
-        self.__x2 = Decimal(0.0)
-        self.__y2 = Decimal(0.0)
-        self.__width2 = Decimal(1.0)
-        self.__height2 = Decimal(1.0)
-        self.__rotation_x = Decimal(0.0)
-        self.__rotation_y = Decimal(0.0)
-        self.__rotation_angle = Decimal(0.0)
-        self.__decal = False
-        self.__ghosted = False
-        self.__stepped = False
-        self.__nubbed = False
-        self.__profile = ""
-        self.__switch_mount = ""
-        self.__switch_brand = ""
-        self.__switch_type = ""
+        self.__color: str = "#cccccc"
+        self.__labels: List[Label] = [Label() for i in range(12)]
+        self.__default_text_color: str = "#000000"
+        self.__default_text_size: str = 3
+        self.__x: Decimal = Decimal(0.0)
+        self.__y: Decimal = Decimal(0.0)
+        self.__width: Decimal = Decimal(1.0)
+        self.__height: Decimal = Decimal(1.0)
+        self.__x2: Decimal = Decimal(0.0)
+        self.__y2: Decimal = Decimal(0.0)
+        self.__width2: Decimal = Decimal(1.0)
+        self.__height2: Decimal = Decimal(1.0)
+        self.__rotation_x: Decimal = Decimal(0.0)
+        self.__rotation_y: Decimal = Decimal(0.0)
+        self.__rotation_angle: Decimal = Decimal(0.0)
+        self.__decal: bool = False
+        self.__ghosted: bool = False
+        self.__stepped: bool = False
+        self.__nubbed: bool = False
+        self.__profile: str = ""
+        self.__switch_mount: str = ""
+        self.__switch_brand: str = ""
+        self.__switch_type: str = ""
 
     def __str__(self):
         d = dict()
@@ -130,7 +130,7 @@ class Key:
         :return: deep copy of the Key
         :rtype: Key
         """
-        new_key = Key()
+        new_key: Key = Key()
         memo[id(self)] = new_key
         new_key.__dict__.update(self.__dict__)
         new_key.set_labels(deepcopy(self.get_labels(), memo))

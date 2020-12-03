@@ -1,6 +1,7 @@
 from copy import (
     deepcopy,
 )
+from damsenviet.kle.label import Label
 from decimal import (
     Decimal,
     getcontext
@@ -20,6 +21,7 @@ from typing import (
 from .metadata import Metadata
 from .key import Key
 
+T = TypeVar('T')
 getcontext().prec = 64
 
 
@@ -51,8 +53,6 @@ disallowed_alignnment_for_labels = [
     [],  # 10
     [4, 5, 6, 7]  # 11
 ]
-
-T = TypeVar('T')
 
 
 def unaligned(aligned_items: List, alignment: int, default_val: Any) -> List:
@@ -309,13 +309,21 @@ def reduced_text_sizes(text_sizes: List[Union[int, float]]):
     :return: [description]
     :rtype: [type]
     """
-    text_sizes = deepcopy(text_sizes)
+    text_sizes: List[Union[int, float]] = deepcopy(text_sizes)
     while len(text_sizes) > 0 and text_sizes[-1] == 0:
         text_sizes.pop()
     return text_sizes
 
 
-def aligned_key_properties(key: Key, current_labels_size: List[Union[int, float]]) -> Dict:
+def aligned_key_properties(
+    key: Key,
+    current_labels_size: List[Union[int, float]],
+) -> Tuple[
+    int,
+    List[str],
+    List[str],
+    List[Union[int, float]],
+]:
     """More space efficient text labels, text colors, text sizes.
 
     :param key: the key to compute the reorder of
@@ -325,10 +333,22 @@ def aligned_key_properties(key: Key, current_labels_size: List[Union[int, float]
     :return: a return dict with reordered version of props stored
     :rtype: Dict
     """
-    texts = [label.get_text() for label in key.get_labels()]
-    colors = [label.get_color() for label in key.get_labels()]
-    sizes = [label.get_size() for label in key.get_labels()]
-    alignments = [7, 5, 6, 4, 3, 1, 2, 0]
+    texts: List[str] = [
+        label.get_text()
+        for label
+        in key.get_labels()
+    ]
+    colors: List[str] = [
+        label.get_color()
+        for label
+        in key.get_labels()
+    ]
+    sizes: List[Union[int, float]] = [
+        label.get_size()
+        for label
+        in key.get_labels()
+    ]
+    alignments: List[int] = [7, 5, 6, 4, 3, 1, 2, 0]
     # remove impossible flag combinations
     for i in range(len(texts)):
         if texts[i] != "":

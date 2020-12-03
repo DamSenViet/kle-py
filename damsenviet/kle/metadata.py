@@ -46,20 +46,20 @@ class Metadata:
     """
 
     def __init__(self):
-        self.author = ""
-        self.background_color = "#eeeeee"
-        self.background = Background()
-        self.name = ""
-        self.notes = ""
-        self.radii = ""
-        self.css = ""
-        self.switch_mount = ""
-        self.switch_brand = ""
-        self.switch_type = ""
-        self.include_pcb = False
-        self.pcb = False
-        self.include_plate = False
-        self.plate = False
+        self.author: str = ""
+        self.background_color: str = "#eeeeee"
+        self.background: str = Background()
+        self.name: str = ""
+        self.notes: str = ""
+        self.radii: str = ""
+        self.css: str = ""
+        self.switch_mount: str = ""
+        self.switch_brand: str = ""
+        self.switch_type: str = ""
+        self.include_pcb: bool = False
+        self.pcb: bool = False
+        self.include_plate: bool = False
+        self.plate: bool = False
 
     # overriding only bc specific properties need to be ignored
     def __eq__(self, other):
@@ -97,7 +97,7 @@ class Metadata:
         :return: deep copy of the Metadata
         :rtype: Metadata
         """
-        new_metadata = type(self)()
+        new_metadata: Metadata = Metadata()
         memo[id(self)] = new_metadata
         new_metadata.__dict__.update(self.__dict__)
         new_metadata.background = deepcopy(self.background)

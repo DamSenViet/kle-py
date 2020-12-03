@@ -14,9 +14,9 @@ class Label:
     def __init__(self):
         """Instantiates a Label.
         """
-        self.__text = ""
-        self.__color = ""
-        self.__size = 0
+        self.__text: str = ""
+        self.__color: str = ""
+        self.__size: Union[int, float] = 0
 
     def __str__(self):
         d = dict()
@@ -42,7 +42,7 @@ class Label:
         :return: deep copy of the Label
         :rtype: Label
         """
-        new_label = type(self)()
+        new_label: Label = type(self)()
         memo[id(self)] = new_label
         new_label.__dict__.update(self.__dict__)
         return new_label

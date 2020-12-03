@@ -13,5 +13,5 @@ class Background:
     """
 
     def __init__(self):
-        self.name = None
-        self.style = None
+        self.name: str = ""
+        self.style: str = ""
