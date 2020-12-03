@@ -15,6 +15,8 @@ from typing import (
     Dict,
 )
 
+from typeguard import typechecked
+
 from .metadata import Metadata
 from .background import Background
 from .key import Key
@@ -83,50 +85,54 @@ class Keyboard:
                         labels = item
                         # create copy of key data
                         new_key = deepcopy(current)
-                        if new_key.width2 != 0:
-                            new_key.width2 = current.width2
+                        if new_key.get_width2() != 0:
+                            new_key.set_width2(current.get_width2())
                         else:
-                            new_key.width2 = current.width
-                        if new_key.height2 != 0:
-                            new_key.height2 = current.height2
+                            new_key.set_width2(current.get_width())
+                        if new_key.get_height2() != 0:
+                            new_key.set_height2(current.get_height2())
                         else:
-                            new_key.height2 = current.height
+                            new_key.set_height2(current.get_height())
                         for i, text in enumerate(unaligned(
                             labels.split("\n"),
                             align,
                             "",
                         )):
-                            new_key.labels[i].set_text(text)
+                            new_key.get_labels()[i].set_text(text)
 
                         for i, size in enumerate(unaligned(
-                            [label.get_size() for label in new_key.labels],
+                            [
+                                label.get_size()
+                                for label in new_key.get_labels()
+                            ],
                             align,
                             0,
                         )):
-                            new_key.labels[i].set_size(size)
+                            new_key.get_labels()[i].set_size(size)
                         # clean up generated data
-                        for label in new_key.labels:
+                        for label in new_key.get_labels():
                             if label.get_text() == "":
                                 label.set_color("")
                                 label.set_size(0)
-                            if label.get_color() == new_key.default_text_color:
+                            if label.get_color() == new_key.get_default_text_color():
                                 label.set_color("")
-                            if label.get_size() == new_key.default_text_size:
+                            if label.get_size() == new_key.get_default_text_size():
                                 label.set_size(0)
                         # add key
                         keyboard.keys.append(new_key)
 
                         # adjustments for the next key
-                        current.x += Decimal(current.width)
-                        current.width = Decimal(1)
-                        current.height = Decimal(1)
-                        current.x2 = Decimal(0)
-                        current.y2 = Decimal(0)
-                        current.width2 = Decimal(0)
-                        current.height2 = Decimal(0)
-                        current.nub = False
-                        current.stepped = False
-                        current.decal = False
+                        current.set_x(current.get_x() +
+                                      Decimal(current.get_width()))
+                        current.set_width(Decimal(1))
+                        current.set_height(Decimal(1))
+                        current.set_x2(Decimal(0))
+                        current.set_y2(Decimal(0))
+                        current.set_width2(Decimal(0))
+                        current.set_height2(Decimal(0))
+                        current.set_nubbed(False)
+                        current.set_stepped(False)
+                        current.set_decal(False)
                     elif type(item) is dict:
                         key_changes = item
                         if k != 0 and (
@@ -157,7 +163,7 @@ class Keyboard:
                             for a key",
                             item
                         )
-                current.y += Decimal(1.0)
+                current.set_y(current.get_y() + Decimal(1.0))
             elif type(keyboard_json[r]) is dict:
                 metadata_changes = keyboard_json[r]
                 if r != 0:
@@ -171,7 +177,7 @@ class Keyboard:
                     f"Unexpected row type: {type(keyboard_json[r])}",
                     keyboard_json[r]
                 )
-            current.x = Decimal(current.rotation_x)
+            current.set_x(Decimal(current.get_rotation_x()))
         return keyboard
 
     def __init__(self):
@@ -190,8 +196,11 @@ class Keyboard:
         row = list()
         current = Key()
         align = 4
-        current_labels_color = current.default_text_color
-        current_labels_size = [label.get_size() for label in current.labels]
+        current_labels_color = current.get_default_text_color()
+        current_labels_size = [
+            label.get_size()
+            for label in current.get_labels()
+        ]
         cluster_rotation_angle = Decimal(0.0)
         cluster_rotation_x = Decimal(0.0)
         cluster_rotation_y = Decimal(0.0)
@@ -297,7 +306,8 @@ class Keyboard:
             keyboard_json.append(metadata_changes)
 
         is_new_row = True
-        current.y -= Decimal(1)  # will be incremented on first row
+        # will be incremented on first row
+        current.set_y(current.get_y() - Decimal(1))
 
         sorted_keys = list(sorted(self.keys, key=key_sort_criteria))
         for key in sorted_keys:
@@ -314,11 +324,11 @@ class Keyboard:
 
             # start a new row when necessary
             is_cluster_changed = (
-                (key.rotation_angle != cluster_rotation_angle) or
-                (key.rotation_x != cluster_rotation_x) or
-                (key.rotation_y != cluster_rotation_y)
+                (key.get_rotation_angle() != cluster_rotation_angle) or
+                (key.get_rotation_x() != cluster_rotation_x) or
+                (key.get_rotation_y() != cluster_rotation_y)
             )
-            is_row_changed = (key.y != current.y)
+            is_row_changed = (key.get_y() != current.get_y())
             if len(row) > 0 and (is_row_changed or is_cluster_changed):
                 # set up for the new row
                 keyboard_json.append(row)
@@ -326,119 +336,119 @@ class Keyboard:
                 is_new_row = True
 
             if is_new_row:
-                current.y += Decimal(1.0)
+                current.set_y(current.get_y() + Decimal(1.0))
 
                 # set up for the new row
                 # y is reset if either rx or ry are changed
                 if (
-                    key.rotation_y != cluster_rotation_y or
-                    key.rotation_x != cluster_rotation_x
+                    key.get_rotation_y() != cluster_rotation_y or
+                    key.get_rotation_x() != cluster_rotation_x
                 ):
-                    current.y = key.rotation_y
+                    current.set_y(key.get_rotation_y())
                 # always reset x to rx (which defaults to zero)
-                current.x = key.rotation_x
+                current.set_x(key.get_rotation_x())
 
                 # update current cluster
-                cluster_rotation_angle = key.rotation_angle
-                cluster_rotation_x = key.rotation_x
-                cluster_rotation_y = key.rotation_y
+                cluster_rotation_angle = key.get_rotation_angle()
+                cluster_rotation_x = key.get_rotation_x()
+                cluster_rotation_y = key.get_rotation_y()
 
                 is_new_row = False
 
-            current.rotation_angle = record_change(
+            current.set_rotation_angle(record_change(
                 key_changes,
                 "r",
-                key.rotation_angle,
-                current.rotation_angle,
-            )
-            current.rotation_x = record_change(
+                key.get_rotation_angle(),
+                current.get_rotation_angle(),
+            ))
+            current.set_rotation_x(record_change(
                 key_changes,
                 "rx",
-                key.rotation_x,
-                current.rotation_x,
-            )
-            current.rotation_y = record_change(
+                key.get_rotation_x(),
+                current.get_rotation_x(),
+            ))
+            current.set_rotation_y(record_change(
                 key_changes,
                 "ry",
-                key.rotation_y,
-                current.rotation_y,
-            )
-            current.y += record_change(
+                key.get_rotation_y(),
+                current.get_rotation_y(),
+            ))
+            current.set_y(current.get_y() + record_change(
                 key_changes,
                 "y",
-                key.y - current.y,
+                key.get_y() - current.get_y(),
                 Decimal(0.0),
-            )
-            current.x += record_change(
+            ))
+            current.set_x(current.get_x() + record_change(
                 key_changes,
                 "x",
-                key.x - current.x,
+                key.get_x() - current.get_x(),
                 Decimal(0.0),
-            ) + key.width
-            current.color = record_change(
+            ) + key.get_width())
+            current.set_color(record_change(
                 key_changes,
                 "c",
-                key.color,
-                current.color,
-            )
+                key.get_color(),
+                current.get_color(),
+            ))
             # if statement for ordered color
             if not aligned_text_color[0]:
-                aligned_text_color[0] = key.default_text_color
+                aligned_text_color[0] = key.get_default_text_color()
             else:
                 for i in range(2, 12):
                     if (
                         aligned_text_color[i] != "" and
                         aligned_text_color[i] != aligned_text_color[0]
                     ):
-                        aligned_text_color[i] = key.default_text_color
+                        aligned_text_color[i] = key.get_default_text_color()
             current_labels_color = record_change(
                 key_changes,
                 "t",
                 "\n".join(aligned_text_color).rstrip(),
                 current_labels_color,
             )
-            current.ghost = record_change(
+            current.set_ghosted(record_change(
                 key_changes,
                 "g",
-                key.ghost,
-                current.ghost,
-            )
-            current.profile = record_change(
+                key.get_ghosted(),
+                current.get_ghosted(),
+            ))
+            current.set_profile(record_change(
                 key_changes,
                 "p",
-                key.profile,
-                current.profile,
-            )
-            current.sm = record_change(
+                key.get_profile(),
+                current.get_profile(),
+            ))
+            current.set_switch_mount(record_change(
                 key_changes,
                 "sm",
-                key.switch_mount,
-                current.switch_mount,
-            )
-            current.sb = record_change(
+                key.get_switch_mount(),
+                current.get_switch_mount(),
+            ))
+            current.set_switch_brand(record_change(
                 key_changes,
                 "sb",
-                key.switch_brand,
-                current.switch_brand,
-            )
-            current.st = record_change(
+                key.get_switch_brand(),
+                current.get_switch_brand(),
+            ))
+            current.set_switch_type(record_change(
                 key_changes,
                 "st",
-                key.switch_type,
-                current.switch_type,
-            )
+                key.get_switch_type(),
+                current.get_switch_type(),
+            ))
             align = record_change(
                 key_changes,
                 "a",
                 alignment,
                 align,
             )
-            current.default_text_size = record_change(
+            current.set_default_text_size(record_change(
                 key_changes,
                 "f",
-                key.default_text_size,
-                current.default_text_size,
-            )
+                key.get_default_text_size(),
+                current.get_default_text_size(),
+            ))
             if "f" in key_changes:
                 current_labels_size = [0 for i in range(12)]
             # if text sizes arent already optimized, optimize it
@@ -452,7 +462,7 @@ class Keyboard:
                     record_change(
                         key_changes,
                         "f",
-                        key.default_text_size,
+                        key.get_default_text_size(),
                         -1,
                     )
                 else:
@@ -477,15 +487,16 @@ class Keyboard:
                             reduced_text_sizes(aligned_text_size),
                             [],
                         )
-            record_change(key_changes, "w", key.width, Decimal(1.0))
-            record_change(key_changes, "h", key.height, Decimal(1.0))
-            record_change(key_changes, "w2", key.width2, key.width)
-            record_change(key_changes, "h2", key.height2, key.height)
-            record_change(key_changes, "x2", key.x2, Decimal(0.0))
-            record_change(key_changes, "y2", key.y2, Decimal(0.0))
-            record_change(key_changes, "n", key.nub, False)
-            record_change(key_changes, "l", key.stepped, False)
-            record_change(key_changes, "d", key.decal, False)
+            record_change(key_changes, "w", key.get_width(), Decimal(1.0))
+            record_change(key_changes, "h", key.get_height(), Decimal(1.0))
+            record_change(key_changes, "w2", key.get_width2(), key.get_width())
+            record_change(key_changes, "h2",
+                          key.get_height2(), key.get_height())
+            record_change(key_changes, "x2", key.get_x2(), Decimal(0.0))
+            record_change(key_changes, "y2", key.get_y2(), Decimal(0.0))
+            record_change(key_changes, "n", key.get_nubbed(), False)
+            record_change(key_changes, "l", key.get_stepped(), False)
+            record_change(key_changes, "d", key.get_decal(), False)
             if len(key_changes) > 0:
                 row.append(key_changes)
             row.append("\n".join(aligned_text_labels).rstrip())

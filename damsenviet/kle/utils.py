@@ -173,73 +173,73 @@ def playback_key_changes(
     :rtype: Tuple[int, Decimal, Decimal]
     """
     if "r" in key_changes:
-        key.rotation_angle = Decimal(key_changes["r"])
+        key.set_rotation_angle(Decimal(key_changes["r"]))
     if "rx" in key_changes:
-        key.rotation_x = Decimal(key_changes["rx"])
+        key.set_rotation_x(Decimal(key_changes["rx"]))
         cluster_rotation_x = Decimal(key_changes["rx"])
-        key.x = cluster_rotation_x
-        key.y = cluster_rotation_y
+        key.set_x(cluster_rotation_x)
+        key.set_y(cluster_rotation_y)
     if "ry" in key_changes:
-        key.rotation_y = Decimal(key_changes["ry"])
+        key.set_rotation_y(Decimal(key_changes["ry"]))
         cluster_rotation_y = Decimal(key_changes["ry"])
-        key.x = cluster_rotation_x
-        key.y = cluster_rotation_y
+        key.set_x(cluster_rotation_x)
+        key.set_y(cluster_rotation_y)
     if "a" in key_changes:
         alignment = key_changes["a"]
     if "f" in key_changes:
-        key.default_text_size = key_changes["f"]
-        for i in range(len([label.get_size() for label in key.labels])):
-            key.labels[i].set_size(0)
+        key.set_default_text_size(key_changes["f"])
+        for i in range(len([label.get_size() for label in key.get_labels()])):
+            key.get_labels()[i].set_size(0)
     if "f2" in key_changes:
         for i in range(1, 12):
-            key.labels[i].set_size(key_changes["f2"])
+            key.get_labels()[i].set_size(key_changes["f2"])
     if "fa" in key_changes:
         for i in range(len(key_changes["fa"])):
-            key.labels[i].set_size(key_changes["fa"][i])
+            key.get_labels()[i].set_size(key_changes["fa"][i])
         for i in range(len(key_changes["fa"]), 12):
-            key.labels[i].set_size(0)
+            key.get_labels()[i].set_size(0)
     if "p" in key_changes:
-        key.profile = key_changes["p"]
+        key.set_profile(key_changes["p"])
     if "c" in key_changes:
-        key.color = key_changes["c"]
+        key.set_color(key_changes["c"])
     if "t" in key_changes:
         labels_color = deepcopy(key_changes["t"]).split("\n")
         if labels_color[0] != "":
-            key.default_text_color = labels_color[0]
+            key.set_default_text_color(labels_color[0])
         for i, color in enumerate(unaligned(labels_color, alignment, "")):
-            key.labels[i].set_color(color)
+            key.get_labels()[i].set_color(color)
     if "x" in key_changes:
-        key.x += Decimal(key_changes["x"])
+        key.set_x(key.get_x() + Decimal(key_changes["x"]))
     if "y" in key_changes:
-        key.y += Decimal(key_changes["y"])
+        key.set_y(key.get_y() + Decimal(key_changes["y"]))
     if "w" in key_changes:
-        key.width = Decimal(key_changes["w"])
-        key.width2 = Decimal(key_changes["w"])
+        key.set_width(Decimal(key_changes["w"]))
+        key.set_width2(Decimal(key_changes["w"]))
     if "h" in key_changes:
-        key.height = Decimal(key_changes["h"])
-        key.height2 = Decimal(key_changes["h"])
+        key.set_height(Decimal(key_changes["h"]))
+        key.set_height2(Decimal(key_changes["h"]))
     if "x2" in key_changes:
-        key.x2 = Decimal(key_changes["x2"])
+        key.set_x2(Decimal(key_changes["x2"]))
     if "y2" in key_changes:
-        key.y2 = Decimal(key_changes["y2"])
+        key.set_y2(Decimal(key_changes["y2"]))
     if "w2" in key_changes:
-        key.width2 = Decimal(key_changes["w2"])
+        key.set_width2(Decimal(key_changes["w2"]))
     if "h2" in key_changes:
-        key.height2 = Decimal(key_changes["h2"])
+        key.set_height2(Decimal(key_changes["h2"]))
     if "n" in key_changes:
-        key.nub = key_changes["n"]
+        key.set_nubbed(key_changes["n"])
     if "l" in key_changes:
-        key.stepped = key_changes["l"]
+        key.set_stepped(key_changes["l"])
     if "d" in key_changes:
-        key.decal = key_changes["d"]
+        key.set_decal(key_changes["d"])
     if "g" in key_changes:
-        key.ghost = key_changes["g"]
+        key.set_ghosted(key_changes["g"])
     if "sm" in key_changes:
-        key.switch_mount = key_changes["sm"]
+        key.set_switch_mount(key_changes["sm"])
     if "sb" in key_changes:
-        key.switch_brand = key_changes["sb"]
+        key.set_switch_brand(key_changes["sb"])
     if "st" in key_changes:
-        key.switch_type = key_changes["st"]
+        key.set_switch_type(key_changes["st"])
     return (
         alignment,
         cluster_rotation_x,
@@ -262,11 +262,11 @@ def key_sort_criteria(key: Key) -> Tuple[
     :rtype: Tuple[ Decimal, Decimal, Decimal, Decimal, Decimal, ]
     """
     return (
-        (key.rotation_angle + 360) % 360,
-        key.rotation_x,
-        key.rotation_y,
-        key.y,
-        key.x,
+        (key.get_rotation_angle() + 360) % 360,
+        key.get_rotation_x(),
+        key.get_rotation_y(),
+        key.get_y(),
+        key.get_x(),
     )
 
 
@@ -325,9 +325,9 @@ def aligned_key_properties(key: Key, current_labels_size: List[Union[int, float]
     :return: a return dict with reordered version of props stored
     :rtype: Dict
     """
-    texts = [label.get_text() for label in key.labels]
-    colors = [label.get_color() for label in key.labels]
-    sizes = [label.get_size() for label in key.labels]
+    texts = [label.get_text() for label in key.get_labels()]
+    colors = [label.get_color() for label in key.get_labels()]
+    sizes = [label.get_size() for label in key.get_labels()]
     alignments = [7, 5, 6, 4, 3, 1, 2, 0]
     # remove impossible flag combinations
     for i in range(len(texts)):
@@ -359,7 +359,7 @@ def aligned_key_properties(key: Key, current_labels_size: List[Union[int, float]
     for i in range(len(reduced_text_sizes(aligned_text_size))):
         if aligned_text_labels[i] == "":
             aligned_text_size[i] = current_labels_size[i]
-        if aligned_text_size == key.default_text_size:
+        if aligned_text_size == key.get_default_text_size():
             aligned_text_size[i] = 0
     return (
         alignment,
