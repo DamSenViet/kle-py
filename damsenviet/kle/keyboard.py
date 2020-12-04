@@ -18,7 +18,6 @@ from typeguard import typechecked
 from .metadata import Metadata
 from .background import Background
 from .key import Key
-from .label import Label
 from .utils import (
     key_sort_criteria,
     record_change,
@@ -46,6 +45,50 @@ class Keyboard:
     :ivar keys: defaults to []
     :vartype keys: List[Key]
     """
+
+    def __init__(self):
+        self.__metadata: Metadata = Metadata()
+        self.__keys: List[Key] = []
+
+    def get_metadata(self) -> Metadata:
+        """Gets the metadata.
+
+        :return: [description]
+        :rtype: Metadata
+        """
+        return self.__metadata
+
+    @typechecked
+    def set_metadata(self, metadata: Metadata) -> Keyboard:
+        """Sets the metadata.
+
+        :param metadata: [description]
+        :type metadata: Metadata
+        :return: [description]
+        :rtype: Keyboard
+        """
+        self.__metadata = metadata
+        return self
+
+    def get_keys(self) -> List[Key]:
+        """Gets the keys.
+
+        :return: [description]
+        :rtype: List[Key]
+        """
+        return self.__keys
+
+    @typechecked
+    def set_keys(self, keys: List[Key]) -> Keyboard:
+        """Sets the keys.
+
+        :param keys: [description]
+        :type keys: List[Key]
+        :return: [description]
+        :rtype: Keyboard
+        """
+        self.__keys = keys
+        return self
 
     @classmethod
     def from_json(cls, keyboard_json: Keyboard_JSON) -> Keyboard:
@@ -122,7 +165,7 @@ class Keyboard:
                             if label.get_size() == new_key.get_default_text_size():
                                 label.set_size(0)
                         # add key
-                        keyboard.keys.append(new_key)
+                        keyboard.__keys.append(new_key)
 
                         # adjustments for the next key
                         current.set_x(current.get_x() +
@@ -174,7 +217,8 @@ class Keyboard:
                         f"Keyboard metadata can only be at index 0, is index {r}:",
                         keyboard_json[r]
                     )
-                playback_metadata_changes(keyboard.metadata, metadata_changes)
+                playback_metadata_changes(
+                    keyboard.__metadata, metadata_changes)
             else:
                 raise DeserializeException(
                     f"Unexpected row type: {type(keyboard_json[r])}",
@@ -182,10 +226,6 @@ class Keyboard:
                 )
             current.set_x(Decimal(current.get_rotation_x()))
         return keyboard
-
-    def __init__(self):
-        self.metadata = Metadata()
-        self.keys = []
 
     def to_json(self: Keyboard) -> Keyboard_JSON:
         """Serializes the Keyboard to a KLE formatted json.
@@ -214,40 +254,40 @@ class Keyboard:
         record_change(
             metadata_changes,
             "backcolor",
-            self.metadata.background_color,
-            default_metadata.background_color,
+            self.__metadata.get_background_color(),
+            default_metadata.get_background_color(),
         )
         record_change(
             metadata_changes,
             "name",
-            self.metadata.name,
-            default_metadata.name,
+            self.__metadata.get_name(),
+            default_metadata.get_name(),
         )
         record_change(
             metadata_changes,
             "author",
-            self.metadata.author,
-            default_metadata.author,
+            self.__metadata.get_author(),
+            default_metadata.get_author(),
         )
         record_change(
             metadata_changes,
             "notes",
-            self.metadata.notes,
-            default_metadata.notes,
+            self.__metadata.get_notes(),
+            default_metadata.get_notes(),
         )
         background_changes: Dict = dict()
         default_background: Background = Background()
         record_change(
             background_changes,
             "name",
-            self.metadata.background.name,
-            default_background.name,
+            self.__metadata.get_background().get_name(),
+            default_background.get_name(),
         )
         record_change(
             background_changes,
             "style",
-            self.metadata.background.style,
-            default_background.style,
+            self.__metadata.get_background().get_style(),
+            default_background.get_style(),
         )
         if len(background_changes) > 0:
             record_change(
@@ -259,51 +299,51 @@ class Keyboard:
         record_change(
             metadata_changes,
             "radii",
-            self.metadata.radii,
-            default_metadata.radii,
+            self.__metadata.get_radii(),
+            default_metadata.get_radii(),
         )
         record_change(
             metadata_changes,
             "switchMount",
-            self.metadata.switch_mount,
-            default_metadata.switch_mount,
+            self.__metadata.get_switch_mount(),
+            default_metadata.get_switch_mount(),
         )
         record_change(
             metadata_changes,
             "switchBrand",
-            self.metadata.switch_brand,
-            default_metadata.switch_brand,
+            self.__metadata.get_switch_brand(),
+            default_metadata.get_switch_brand(),
         )
         record_change(
             metadata_changes,
             "switchType",
-            self.metadata.switch_type,
-            default_metadata.switch_type,
+            self.__metadata.get_switch_type(),
+            default_metadata.get_switch_type(),
         )
         record_change(
             metadata_changes,
             "css",
-            self.metadata.css,
-            default_metadata.css,
+            self.__metadata.get_css(),
+            default_metadata.get_css(),
         )
         if (
-            self.metadata.plate != default_metadata.plate or
-            self.metadata.include_plate
+            self.__metadata.get_plate() != default_metadata.get_plate() or
+            self.__metadata.get_include_plate()
         ):
             record_change(
                 metadata_changes,
                 "plate",
-                self.metadata.plate,
+                self.__metadata.get_plate(),
                 None,
             )
         if (
-            self.metadata.pcb != default_metadata.pcb or
-            self.metadata.include_pcb
+            self.__metadata.get_pcb() != default_metadata.get_pcb() or
+            self.__metadata.get_include_pcb()
         ):
             record_change(
                 metadata_changes,
                 "pcb",
-                self.metadata.pcb,
+                self.__metadata.get_pcb(),
                 None,
             )
         if len(metadata_changes) > 0:
@@ -313,7 +353,8 @@ class Keyboard:
         # will be incremented on first row
         current.set_y(current.get_y() - Decimal(1))
 
-        sorted_keys: List[Key] = list(sorted(self.keys, key=key_sort_criteria))
+        sorted_keys: List[Key] = list(
+            sorted(self.__keys, key=key_sort_criteria))
         for key in sorted_keys:
             key_changes = dict()
             (

@@ -120,34 +120,42 @@ def playback_metadata_changes(metadata: Metadata, metadata_changes: Dict) -> Non
     :rtype: Metadata
     """
     if "author" in metadata_changes:
-        metadata.author = metadata_changes["author"]
+        metadata.set_author(metadata_changes["author"])
     if "backcolor" in metadata_changes:
-        metadata.background_color = metadata_changes["backcolor"]
+        metadata.set_background_color(metadata_changes["backcolor"])
     if "background" in metadata_changes:
         if "name" in metadata_changes["background"]:
-            metadata.background.name = metadata_changes["background"]["name"]
+            (
+                metadata
+                .get_background()
+                .set_name(metadata_changes["background"]["name"])
+            )
         if "style" in metadata_changes["background"]:
-            metadata.background.style = metadata_changes["background"]["style"]
+            (
+                metadata
+                .get_background()
+                .set_style(metadata_changes["background"]["style"])
+            )
     if "name" in metadata_changes:
-        metadata.name = metadata_changes["name"]
+        metadata.set_name(metadata_changes["name"])
     if "notes" in metadata_changes:
-        metadata.notes = metadata_changes["notes"]
+        metadata.set_notes(metadata_changes["notes"])
     if "radii" in metadata_changes:
-        metadata.radii = metadata_changes["radii"]
+        metadata.set_radii(metadata_changes["radii"])
     if "switchMount" in metadata_changes:
-        metadata.switch_mount = metadata_changes["switchMount"]
+        metadata.set_switch_mount(metadata_changes["switchMount"])
     if "switchBrand" in metadata_changes:
-        metadata.switch_brand = metadata_changes["switchBrand"]
+        metadata.set_switch_brand(metadata_changes["switchBrand"])
     if "switchType" in metadata_changes:
-        metadata.switch_type = metadata_changes["switchType"]
+        metadata.set_switch_type(metadata_changes["switchType"])
     if "css" in metadata_changes:
-        metadata.css = metadata_changes["css"]
+        metadata.set_css(metadata_changes["css"])
     if "pcb" in metadata_changes:
-        metadata.pcb = metadata_changes["pcb"]
-        metadata.include_pcb = True
+        metadata.set_pcb(metadata_changes["pcb"])
+        metadata.set_include_pcb(True)
     if "plate" in metadata_changes:
-        metadata.plate = metadata_changes["plate"]
-        metadata.include_plate = True
+        metadata.set_plate(metadata_changes["plate"])
+        metadata.set_include_plate(True)
 
 
 def playback_key_changes(
