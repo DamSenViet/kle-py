@@ -1,73 +1,16 @@
 from __future__ import annotations
-from copy import (
-    deepcopy,
-)
-import json
 from decimal import Decimal
 from typing import (
     Union,
     List,
-    Dict,
 )
-
 from typeguard import typechecked
 
 from .label import Label
 
 
 class Key:
-    """Class for storing a KLE Key.
-
-    :ivar x: x position of the main shape, defaults to Decimal(0.0)
-    :vartype x: Decimal
-    :ivar y: y position of the main shape, defaults to Decimal(0.0)
-    :vartype y: Decimal
-    :ivar width: width of the main shape, defaults to Decimal(1.0)
-    :vartype width: Decimal
-    :ivar height: height of the main shape, defaults to Decimal(1.0)
-    :vartype height: Decimal
-    :ivar x2: x position offset of the secondary shape, defaults to Decimal(0.0)
-    :vartype x2: Decimal
-    :ivar y2: y position offset of the secondary shape, defaults to Decimal(0.0)
-    :vartype y2: Decimal
-    :ivar width2: width of the secondary shape, defaults to Decimal(1.0)
-    :vartype width2: Decimal
-    :ivar height2: height of hte secondary shape, defaults to Decimal(1.0)
-    :vartype height2: Decimal
-    :ivar rotation_x: x position of the origin of rotation, defaults to Decimal(0.0)
-    :vartype rotation_x: Decimal
-    :ivar rotation_y: y position of the origin of rotation, defaults to Decimal(0.0)
-    :vartype rotation_y: Decimal
-    :ivar rotation_angle: rotation angle about the origin in degrees, defaults to Decimal(0.0)
-    :vartype rotation_angle: Decimal
-    :ivar color: fill color, defaults to "#cccccc"
-    :vartype color: str
-    :ivar text_labels: text labels , defaults to ["" for i in range(12)]
-    :vartype text_labels: List[str]
-    :ivar text_colors: text colors of the labels, defaults to ["" for i in range(12)]
-    :vartype text_colors: List[str]
-    :ivar text_size: text sizes of the labels, defaults to [0 for i in range(12)]
-    :vartype text_size: List[Union[int, float]
-    :ivar default_text_color: default text color, defaults to "#000000"
-    :vartype default_text_color: str
-    :ivar default_text_size: default text size, defaults to 3
-    :vartype default_text_size: Union[int, float]
-    :ivar decal: whether the key is decorative, defaults to False
-    :vartype decal: bool
-    :ivar ghost: whether the key is invisible, defaults to False
-    :vartype ghost: bool
-    :ivar stepped: whether the key is stepped, defaults to False
-    :vartype stepped: bool
-    :ivar nub: whether the key has a nub, defaults to False
-    :vartype nub: bool
-    :ivar profile: the profile of the key, defaults to ""
-    :vartype profile: str
-    :ivar switch_mount: switch mount, defaults to ""
-    :vartype switch_mount: str
-    :ivar switch_brand: switch brand, defaults to ""
-    :vartype switch_brand: str
-    :ivar switch_type: switch type, defaults to ""
-    :vartype switch_type: str
+    """Class storing Key.
     """
 
     def __init__(self):
@@ -97,21 +40,21 @@ class Key:
 
     def __str__(self):
         d = dict()
-        d["color"] = self.get_color()
-        d["labels"] = self.get_labels()
-        d["default_text_color"] = self.get_default_text_color()
-        d["default_text_size"] = self.get_default_text_size()
-        d["x"] = float(self.get_x())
-        d["y"] = float(self.get_y())
-        d["x2"] = float(self.get_x2())
-        d["y2"] = float(self.get_y2())
-        d["width"] = float(self.get_width())
-        d["height"] = float(self.get_height())
-        d["width2"] = float(self.get_width2())
-        d["height2"] = float(self.get_height2())
-        d["rotation_x"] = float(self.get_rotation_x())
-        d["rotation_y"] = float(self.get_rotation_y())
-        d["rotation_angle"] = float(self.get_rotation_angle())
+        d["color"] = self.color
+        d["labels"] = self.labels
+        d["default_text_color"] = self.default_text_color
+        d["default_text_size"] = self.default_text_size
+        d["x"] = float(self.x)
+        d["y"] = float(self.y)
+        d["x2"] = float(self.x2)
+        d["y2"] = float(self.y2)
+        d["width"] = float(self.width)
+        d["height"] = float(self.height)
+        d["width2"] = float(self.width2)
+        d["height2"] = float(self.height2)
+        d["rotation_x"] = float(self.rotation_x)
+        d["rotation_y"] = float(self.rotation_y)
+        d["rotation_angle"] = float(self.rotation_angle)
         d["decal"] = self.get_decal()
         d["profile"] = self.get_profile()
         d["ghosted"] = self.get_ghosted()
@@ -122,208 +65,514 @@ class Key:
         d["switch_type"] = self.get_switch_type()
         return str(d)
 
-    def __deepcopy__(self, memo: Dict = dict()):
-        """Creates a deep copy of the Key.
+    @property
+    def color(self) -> str:
+        """Gets fill color.
 
-        :param memo: dictionary of objects already copied
-        :type memo: Dict
-        :return: deep copy of the Key
-        :rtype: Key
+        :return: fill color
+        :rtype: str
         """
-        new_key: Key = Key()
-        memo[id(self)] = new_key
-        new_key.__dict__.update(self.__dict__)
-        new_key.set_labels(deepcopy(self.get_labels(), memo))
-        return new_key
-
-    def get_color(self) -> str:
         return self.__color
 
+    @color.setter
     @typechecked
-    def set_color(self, color: str) -> Key:
+    def color(self, color: str) -> Key:
+        """Sets fill color.
+
+        :param color: fill color
+        :type color: str
+        :return: invoker
+        :rtype: Key
+        """
         self.__color = color
         return self
 
-    def get_labels(self) -> List[Label]:
+    @property
+    def labels(self) -> List[Label]:
+        """Gets the 12 labels.
+
+        :return: 12 labels
+        :rtype: List[Label]
+        """
         return self.__labels
 
+    @labels.setter
     @typechecked
-    def set_labels(self, labels: List[Label]) -> Key:
+    def labels(self, labels: List[Label]) -> Key:
+        """Sets the 12 labels.
+
+        :param labels: 12 labels
+        :type labels: List[Label]
+        :return: invoker
+        :rtype: Key
+        """
         self.__labels = labels
         return self
 
-    def get_default_text_color(self) -> str:
+    @property
+    def default_text_color(self) -> str:
+        """Gets default text color.
+
+        Used to optimize the json size.
+
+        :return: default text color
+        :rtype: str
+        """
         return self.__default_text_color
 
+    @default_text_color.setter
     @typechecked
-    def set_default_text_color(self, default_text_color: str) -> Key:
+    def default_text_color(self, default_text_color: str) -> Key:
+        """Sets default text color.
+
+        Used to optimize the json size.
+
+        :param default_text_color: default text color
+        :type default_text_color: str
+        :return: invoker
+        :rtype: Key
+        """
         self.__default_text_color = default_text_color
         return self
 
-    def get_default_text_size(self) -> Union[int, float]:
+    @property
+    def default_text_size(self) -> Union[int, float]:
+        """Sets default text size
+
+        Used to optimize the json size.
+
+        :return: default text size
+        :rtype: Union[int, float]
+        """
         return self.__default_text_size
 
+    @default_text_size.setter
     @typechecked
-    def set_default_text_size(self, default_text_size: Union[int, float]) -> Key:
+    def default_text_size(self, default_text_size: Union[int, float]) -> Key:
+        """Sets default text size.
+
+        Used to optimize the json size.
+
+        :param default_text_size: the default text size
+        :type default_text_size: Union[int, float]
+        :return: invoker
+        :rtype: Key
+        """
         self.__default_text_size = default_text_size
         return self
 
-    def get_x(self) -> Decimal:
-        """Gets the x position of the main shape."""
+    @property
+    def x(self) -> Decimal:
+        """Gets x position of raised primary shape.
+
+        :return: x posiiton of raised primary shape
+        :rtype: Decimal
+        """
         return self.__x
 
+    @x.setter
     @typechecked
-    def set_x(self, x: Decimal) -> Key:
-        """Sets the x position of the main shape."""
+    def x(self, x: Decimal) -> Key:
+        """Sets x position of raised primary shape.
+
+        :param x: x position of raised primary shape
+        :type x: Decimal
+        :return: invoker
+        :rtype: Key
+        """
         self.__x = x
         return self
 
-    def get_y(self) -> Decimal:
-        """Gets the y position of the main shape."""
+    @property
+    def y(self) -> Decimal:
+        """Gets y position of raised primary shape
+
+        :return: [description]
+        :rtype: Decimal
+        """
         return self.__y
 
+    @y.setter
     @typechecked
-    def set_y(self, y: Decimal) -> Key:
-        """Sets the y position of the main shape."""
+    def y(self, y: Decimal) -> Key:
+        """Sets y position of raised primary shape.
+
+        :param y: y position of raised primary shape
+        :type y: Decimal
+        """
         self.__y = y
         return self
 
-    def get_width(self) -> Decimal:
-        """Gets the width of the main shape."""
+    @property
+    def width(self) -> Decimal:
+        """Gets width of raised primary shape.
+
+        :return: width of raised primary shape
+        :rtype: Decimal
+        """
         return self.__width
 
+    @width.setter
     @typechecked
-    def set_width(self, width: Decimal) -> Key:
-        """Sets the width of the main shape."""
+    def width(self, width: Decimal) -> Key:
+        """Sets width of raised primary shape.
+
+        :param width: width of raised primary shape
+        :type width: Decimal
+        :return: invoker
+        :rtype: Key
+        """
         self.__width = width
         return self
 
-    def get_height(self) -> Decimal:
-        """Gets the height of the main shape."""
+    @property
+    def height(self) -> Decimal:
+        """Gets height of raised primary shape.
+
+        :return: height of raised primary shape
+        :rtype: Decimal
+        """
         return self.__height
 
+    @height.setter
     @typechecked
-    def set_height(self, height: Decimal) -> Key:
-        """Sets the height of the main shape."""
+    def height(self, height: Decimal) -> Key:
+        """Sets height of raised primary shape.
+
+        :param height: height of raised primary shape
+        :type height: Decimal
+        :return: invoker
+        :rtype: Key
+        """
         self.__height = height
         return self
 
-    def get_x2(self) -> Decimal:
+    @property
+    def x2(self) -> Decimal:
+        """Gets x position offset of the lowered secondary shape.
+
+        :return: x position offset of the lowered secondary shape
+        :rtype: Decimal
+        """
         return self.__x2
 
+    @x2.setter
     @typechecked
-    def set_x2(self, x2: Decimal) -> Key:
+    def x2(self, x2: Decimal) -> Key:
+        """Sets x position offset of the lowered secondary shape.
+
+        :param x2: x position offset of the lowered secondary shape
+        :type x2: Decimal
+        :return: invoker
+        :rtype: Key
+        """
         self.__x2 = x2
         return self
 
-    def get_y2(self) -> Decimal:
+    @property
+    def y2(self) -> Decimal:
+        """Gets y position offset of lowered secondary shape.
+
+        :return: y position offset of lowered secondary shape
+        :rtype: Decimal
+        """
         return self.__y2
 
+    @y2.setter
     @typechecked
-    def set_y2(self, y2: Decimal) -> Key:
+    def y2(self, y2: Decimal) -> Key:
+        """Sets y position offset of lowered secondary shape.
+
+        :param y2: y position offset of lowered secondary shape
+        :type y2: Decimal
+        :return: invoker
+        :rtype: Key
+        """
         self.__y2 = y2
         return self
 
-    def get_width2(self) -> Decimal:
+    @property
+    def width2(self) -> Decimal:
+        """Gets width of lowered secondary shape.
+
+        :return: width of lowered secondary shape
+        :rtype: Decimal
+        """
         return self.__width2
 
+    @width2.setter
     @typechecked
-    def set_width2(self, width2: Decimal) -> Key:
+    def width2(self, width2: Decimal) -> Key:
+        """Sets width of lowered secondary shape.
+
+        :param width2: width of lowered secondary shape
+        :type width2: Decimal
+        :return: invoker
+        :rtype: Key
+        """
         self.__width2 = width2
         return self
 
-    def get_height2(self) -> Decimal:
+    @property
+    def height2(self) -> Decimal:
+        """Gets height of lowered secondary shape.
+
+        :return: height of lowered secondary shape.
+        :rtype: Decimal
+        """
         return self.__height2
 
+    @height2.setter
     @typechecked
-    def set_height2(self, height2: Decimal) -> Key:
+    def height2(self, height2: Decimal) -> Key:
+        """Sets height of lowered secondary shape.
+
+        :param height2: height of lowered secondary shape
+        :type height2: Decimal
+        :return: invoker
+        :rtype: Key
+        """
         self.__height2 = height2
         return self
 
-    def get_rotation_x(self) -> Decimal:
+    @property
+    def rotation_x(self) -> Decimal:
+        """Gets x position of rotation origin.
+
+        :return: x position of rotation origin
+        :rtype: Decimal
+        """
         return self.__rotation_x
 
+    @rotation_x.setter
     @typechecked
-    def set_rotation_x(self, rotation_x: Decimal) -> Key:
+    def rotation_x(self, rotation_x: Decimal) -> Key:
+        """Sets x position of rotation origin.
+
+        :param rotation_x: x position of rotation origin
+        :type rotation_x: Decimal
+        :return: invoker
+        :rtype: Key
+        """
         self.__rotation_x = rotation_x
         return self
 
-    def get_rotation_y(self) -> Decimal:
+    @property
+    def rotation_y(self) -> Decimal:
+        """Gets y position of rotation origin
+
+        :return: y position of rotation origin
+        :rtype: Decimal
+        """
         return self.__rotation_y
 
+    @rotation_y.setter
     @typechecked
-    def set_rotation_y(self, rotation_y: Decimal) -> Key:
+    def rotation_y(self, rotation_y: Decimal) -> Key:
+        """Sets y position of rotation origin.
+
+        :param rotation_y: y position of rotation origin
+        :type rotation_y: Decimal
+        :return: invoker
+        :rtype: Key
+        """
         self.__rotation_y = rotation_y
         return self
 
-    def get_rotation_angle(self) -> Decimal:
+    @property
+    def rotation_angle(self) -> Decimal:
+        """Gets rotation angle in degrees.
+
+        :return: rotation angle in degrees
+        :rtype: Decimal
+        """
         return self.__rotation_angle
 
+    @rotation_angle.setter
     @typechecked
-    def set_rotation_angle(self, rotation_angle: Decimal) -> Key:
+    def rotation_angle(self, rotation_angle: Decimal) -> Key:
+        """Sets rotation angle in degrees.
+
+        :param rotation_angle: rotation angle in degrees
+        :type rotation_angle: Decimal
+        :return: invoker
+        :rtype: Key
+        """
         self.__rotation_angle = rotation_angle
         return self
 
-    def get_decal(self) -> bool:
+    @property
+    def decal(self) -> bool:
+        """Gets whether the key is decorative.
+
+        :return: whether the key is decorative
+        :rtype: bool
+        """
         return self.__decal
 
+    @decal.setter
     @typechecked
-    def set_decal(self, decal: bool) -> Key:
+    def decal(self, decal: bool) -> Key:
+        """Sets whether the key is decorative.
+
+        :param decal: whether the key is decorative
+        :type decal: bool
+        :return: invoker
+        :rtype: Key
+        """
         self.__decal = decal
         return self
 
-    def get_ghosted(self) -> bool:
+    @property
+    def ghosted(self) -> bool:
+        """Gets whether the key is ghosted.
+
+        :return: whether the key is ghosted
+        :rtype: bool
+        """
         return self.__ghosted
 
+    @ghosted.setter
     @typechecked
-    def set_ghosted(self, ghosted: bool) -> Key:
+    def ghosted(self, ghosted: bool) -> Key:
+        """Sets whether the key is ghosted.
+
+        :param ghosted: whether the key is ghosted
+        :type ghosted: bool
+        :return: invoker
+        :rtype: Key
+        """
         self.__ghosted = ghosted
         return self
 
-    def get_stepped(self) -> bool:
+    @property
+    def stepped(self) -> bool:
+        """Gets whether the key is stepped.
+
+        :return: whether the key is stepped
+        :rtype: bool
+        """
         return self.__stepped
 
+    @stepped.setter
     @typechecked
-    def set_stepped(self, stepped: bool) -> Key:
+    def stepped(self, stepped: bool) -> Key:
+        """Sets whether the key is stepepd.
+
+        :param stepped: whether the key is stepped
+        :type stepped: bool
+        :return: invoker
+        :rtype: Key
+        """
         self.__stepped = stepped
         return self
 
-    def get_nubbed(self) -> bool:
+    @property
+    def nubbed(self) -> bool:
+        """Gets whether the keycap is nubbed.
+
+        :return: whether the keycap is nubbed
+        :rtype: bool
+        """
         return self.__nubbed
 
+    @nubbed.setter
     @typechecked
-    def set_nubbed(self, nub: bool) -> Key:
+    def nubbed(self, nub: bool) -> Key:
+        """Sets whether the keycap is nubbed.
+
+        :param nub: whether the key is nubbed
+        :type nub: bool
+        :return: invoker
+        :rtype: Key
+        """
         self.__nubbed = nub
         return self
 
-    def get_profile(self) -> str:
+    @property
+    def profile(self) -> str:
+        """Gets keycap profile.
+
+        :return: keycap profile
+        :rtype: str
+        """
         return self.__profile
 
+    @profile.setter
     @typechecked
-    def set_profile(self, profile: str) -> Key:
+    def profile(self, profile: str) -> Key:
+        """Sets keycap profile.
+
+        :param profile: keycap profile
+        :type profile: str
+        :return: invoker
+        :rtype: Key
+        """
         self.__profile = profile
         return self
 
-    def get_switch_mount(self) -> str:
+    @property
+    def switch_mount(self) -> str:
+        """Gets switch mount.
+
+        :return: switch mount
+        :rtype: str
+        """
         return self.__switch_mount
 
+    @switch_mount.setter
     @typechecked
-    def set_switch_mount(self, switch_mount: str) -> Key:
+    def switch_mount(self, switch_mount: str) -> Key:
+        """Sets switch mount.
+
+        :param switch_mount: switch mount
+        :type switch_mount: str
+        :return: invoker
+        :rtype: Key
+        """
         self.__switch_mount = switch_mount
         return self
 
-    def get_switch_brand(self) -> str:
+    @property
+    def switch_brand(self) -> str:
+        """Gets switch brand.
+
+        :return: switch brand
+        :rtype: str
+        """
         return self.__switch_brand
 
+    @switch_brand.setter
     @typechecked
-    def set_switch_brand(self, switch_brand: str) -> Key:
+    def switch_brand(self, switch_brand: str) -> Key:
+        """Sets switch brand.
+
+        :param switch_brand: switch brand
+        :type switch_brand: str
+        :return: invoker
+        :rtype: Key
+        """
         self.__switch_brand = switch_brand
         return self
 
-    def get_switch_type(self) -> str:
+    @property
+    def switch_type(self) -> str:
+        """Gets switch type.
+
+        :return: switch type
+        :rtype: str
+        """
         return self.__switch_type
 
+    @switch_type.setter
     @typechecked
-    def set_switch_type(self, switch_type: str) -> Key:
+    def switch_type(self, switch_type: str) -> Key:
+        """Sets switch type.
+
+        :param switch_type: switch type
+        :type switch_type: str
+        :return: invoker
+        :rtype: Key
+        """
         self.__switch_type = switch_type
         return self

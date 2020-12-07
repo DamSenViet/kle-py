@@ -1,49 +1,11 @@
 from __future__ import annotations
-from copy import (
-    deepcopy,
-)
-from typing import (
-    Dict,
-)
-
 from typeguard import typechecked
 
 from .background import Background
 
 
 class Metadata:
-    """Class for storing KLE Metadata.
-
-    :ivar author: author, defaults to ""
-    :vartype author: str
-    :ivar background_color: background color, defaults to "#eeeeee"
-    :vartype background_color: str
-    :ivar background: the background, defaults to Background()
-    :vartype background: Background
-    :ivar name: the Keyboard name, defaults to ""
-    :vartype name: str
-    :ivar notes: notes, defaults to ""
-    :vartype notes: str
-    :ivar css: custom css rules
-    :vartype css: str
-    :ivar radii: a CSS size value, defaults to ""
-    :vartype radii: str
-    :ivar switch_mount: the switch mount, defaults to ""
-    :vartype switch_mount: str
-    :ivar switch_brand: the switch brand, defaults to ""
-    :vartype switch_brand: str
-    :ivar switch_type: the switch type, defaults to ""
-    :vartype switch_type: str
-    :ivar include_pcb: whether to include the pcb value in json, true when
-        loaded from json
-    :vartype include_pcb: bool
-    :ivar pcb: whether a pcb is used to mount switches, defaults to False
-    :vartype pcb: bool
-    :ivar include_plate: whether to include the plate value in json true when
-        loaded from json
-    :vartype include_plate: bool
-    :ivar plate: whether a plate is used to mount switches, defaults to False
-    :vartype plate: bool
+    """Class storing Keyboard's Metadata.
     """
 
     def __init__(self):
@@ -62,128 +24,293 @@ class Metadata:
         self.__include_plate: bool = False
         self.__plate: bool = False
 
-    def __deepcopy__(self, memo: Dict = dict()):
-        """Creates a deep copy of the Metadata.
+    @property
+    def author(self) -> str:
+        """Gets author name.
 
-        :param memo: dictionary of objects already copied
-        :type memo: Dict
-        :return: deep copy of the Metadata
-        :rtype: Metadata
+        :return: author name
+        :rtype: str
         """
-        new_metadata: Metadata = Metadata()
-        memo[id(self)] = new_metadata
-        new_metadata.__dict__.update(self.__dict__)
-        new_metadata.set_background(deepcopy(self.__background))
-        return new_metadata
-
-    def get_author(self) -> str:
         return self.__author
 
+    @author.setter
     @typechecked
-    def set_author(self, author: str) -> Metadata:
-        self.__author = author
-        return self
+    def author(self, author: str) -> None:
+        """Sets author name.
 
-    def get_background_color(self) -> str:
+        :param author: author name
+        :type author: str
+        """
+        self.__author = author
+
+    @property
+    def background_color(self) -> str:
+        """Get author name.
+
+        :return: get author name
+        :rtype: str
+        """
         return self.__background_color
 
+    @background_color.setter
     @typechecked
-    def set_background_color(self, background_color: str) -> Metadata:
-        self.__background_color = background_color
-        return self
+    def background_color(self, background_color: str) -> None:
+        """Sets background color.
 
-    def get_background(self) -> Background:
+        :param background_color: background color
+        :type background_color: str
+        :return: invoker
+        :rtype: Metadata
+        """
+        self.__background_color = background_color
+
+    @property
+    def background(self) -> Background:
+        """Gets background of the keyboard.
+
+        :return: background of the keyboard
+        :rtype: Background
+        """
         return self.__background
 
+    @background.setter
     @typechecked
-    def set_background(self, background: Background) -> Metadata:
-        self.__background = background
-        return self
+    def background(self, background: Background) -> None:
+        """Sets background of the keyboard.
 
-    def get_name(self) -> str:
+        :param background: background of the keyboard
+        :type background: Background
+        :return: invoker
+        :rtype: Metadata
+        """
+        self.__background = background
+
+    @property
+    def name(self) -> str:
+        """Gets name of the keyboard.
+
+        :return: name of the keyboard
+        :rtype: str
+        """
         return self.__name
 
+    @name.setter
     @typechecked
-    def set_name(self, name: str) -> Metadata:
-        self.__name = name
-        return self
+    def name(self, name: str) -> None:
+        """Sets name of the keyboard.
 
-    def get_notes(self) -> str:
+        :param name: name of the keyboard
+        :type name: str
+        :return: invoker
+        :rtype: Metadata
+        """
+        self.__name = name
+
+    @property
+    def notes(self) -> str:
+        """Gets notes.
+
+        :return: notes
+        :rtype: str
+        """
         return self.__notes
 
+    @notes.setter
     @typechecked
-    def set_notes(self, notes: str) -> Metadata:
-        self.__notes = notes
-        return self
+    def notes(self, notes: str) -> None:
+        """Sets notes.
 
-    def get_radii(self) -> str:
+        :param notes: notes
+        :type notes: str
+        :return: invoker
+        :rtype: Metadata
+        """
+        self.__notes = notes
+
+    @property
+    def radii(self) -> str:
+        """Gets radius CSS size value.
+
+        :return: radius CSS size value.
+        :rtype: str
+        """
         return self.__radii
 
+    @radii.setter
     @typechecked
-    def set_radii(self, radii: str) -> Metadata:
-        self.__radii = radii
-        return self
+    def radii(self, radii: str) -> None:
+        """Sets radius CSS size value.
 
-    def get_css(self) -> str:
+        :param radii: radius CSS size value
+        :type radii: str
+        :return: invoker
+        :rtype: Metadata
+        """
+        self.__radii = radii
+
+    @property
+    def css(self) -> str:
+        """Gets CSS stylesheet.
+
+        :return: CSS stylehseet
+        :rtype: str
+        """
         return self.__css
 
+    @css.setter
     @typechecked
-    def set_css(self, css: str) -> Metadata:
-        self.__css = css
-        return self
+    def css(self, css: str) -> None:
+        """Sets CSS stylesheet
 
-    def get_switch_mount(self) -> str:
+        :param css: CSS stylesheet
+        :type css: str
+        :return: invoker
+        :rtype: Metadata
+        """
+        self.__css = css
+
+    @property
+    def switch_mount(self) -> str:
+        """Gets switch mount.
+
+        :return: switch mount
+        :rtype: str
+        """
         return self.__switch_mount
 
+    @switch_mount.setter
     @typechecked
-    def set_switch_mount(self, switch_mount: str) -> Metadata:
-        self.__switch_mount = switch_mount
-        return self
+    def switch_mount(self, switch_mount: str) -> None:
+        """Sets switch mount.
 
-    def get_switch_brand(self) -> str:
+        :param switch_mount: switch mount
+        :type switch_mount: str
+        :return: invoker
+        :rtype: Metadata
+        """
+        self.__switch_mount = switch_mount
+
+    @property
+    def switch_brand(self) -> str:
+        """Gets switch brand.
+
+        :return: switch brand
+        :rtype: str
+        """
         return self.__switch_brand
 
+    @switch_brand.setter
     @typechecked
-    def set_switch_brand(self, switch_brand: str) -> Metadata:
-        self.__switch_brand = switch_brand
-        return self
+    def switch_brand(self, switch_brand: str) -> None:
+        """Sets switch brand.
 
-    def get_switch_type(self) -> str:
+        :param switch_brand: switch  brand
+        :type switch_brand: str
+        :return: invoker
+        :rtype: Metadata
+        """
+        self.__switch_brand = switch_brand
+
+    @property
+    def switch_type(self) -> str:
+        """Gets switch type.
+
+        :return: switch type
+        :rtype: str
+        """
         return self.__switch_type
 
+    @switch_type.setter
     @typechecked
-    def set_switch_type(self, switch_type: str) -> Metadata:
-        self.__switch_type = switch_type
-        return self
+    def switch_type(self, switch_type: str) -> None:
+        """Sets switch type.
 
-    def get_include_pcb(self) -> bool:
+        :param switch_type: switch type
+        :type switch_type: str
+        :return: invoker
+        :rtype: Metadata
+        """
+        self.__switch_type = switch_type
+
+    @property
+    def include_pcb(self) -> bool:
+        """Gets whether to include default pcb setting in json.
+
+        :return: whether to include default pcb setting in json
+        :rtype: bool
+        """
         return self.__include_pcb
 
+    @include_pcb.setter
     @typechecked
-    def set_include_pcb(self, include_pcb: bool) -> Metadata:
-        self.__include_pcb = include_pcb
-        return self
+    def include_pcb(self, include_pcb: bool) -> None:
+        """Sets whether to include default pcb setting in json.
 
-    def get_pcb(self) -> bool:
+        :param include_pcb: whether to include default pcb setting in json
+        :type include_pcb: bool
+        :return: invoker
+        :rtype: Metadata
+        """
+        self.__include_pcb = include_pcb
+
+    @property
+    def pcb(self) -> bool:
+        """Gets whether the switches are pcb mounted.
+
+        :return: whether switches are pcb mounted
+        :rtype: bool
+        """
         return self.__pcb
 
+    @pcb.setter
     @typechecked
-    def set_pcb(self, pcb: bool) -> Metadata:
-        self.__pcb = pcb
-        return self
+    def pcb(self, pcb: bool) -> None:
+        """Sets whether switches are pcb mounted.
 
-    def get_include_plate(self) -> bool:
+        :param pcb: whether switches are pcb mounted
+        :type pcb: bool
+        :return: invoker
+        :rtype: Metadata
+        """
+        self.__pcb = pcb
+
+    @property
+    def include_plate(self) -> bool:
+        """Sets whether to include default plate setting in json.
+        :return: whether to include default plate setting in json
+        :rtype: bool
+        """
         return self.__include_plate
 
+    @include_plate.setter
     @typechecked
-    def set_include_plate(self, include_plate: bool) -> Metadata:
-        self.__include_plate = include_plate
-        return self
+    def include_plate(self, include_plate: bool) -> None:
+        """Sets whether to include default plate setting in json.
 
-    def get_plate(self) -> bool:
+        :param include_plate: whether to include default plate setting in json
+        :type include_plate: bool
+        :return: invoker
+        :rtype: Metadata
+        """
+        self.__include_plate = include_plate
+
+    @property
+    def plate(self) -> bool:
+        """Gets whether switches are plate mounted.
+
+        :return: whether switches are plate mounted
+        :rtype: bool
+        """
         return self.__plate
 
+    @plate.setter
     @typechecked
-    def set_plate(self, plate: bool) -> Metadata:
+    def plate(self, plate: bool) -> None:
+        """Sets whether switches are plate mounted.
+
+        :param plate: whether switches are plate mounted
+        :type plate: bool
+        :return: invoker
+        :rtype: Metadata
+        """
         self.__plate = plate
-        return self

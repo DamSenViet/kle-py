@@ -1,13 +1,7 @@
-from copy import (
-    deepcopy,
-)
-from damsenviet.kle.label import Label
+from copy import deepcopy
 from decimal import (
     Decimal,
-    getcontext
-)
-from collections import (
-    OrderedDict,
+    getcontext,
 )
 from typing import (
     Any,
@@ -17,11 +11,13 @@ from typing import (
     List,
     Dict,
 )
+from typeguard import typechecked
 
 from .metadata import Metadata
 from .key import Key
 
 T = TypeVar('T')
+S = TypeVar('S')
 getcontext().prec = 64
 
 
@@ -55,6 +51,7 @@ disallowed_alignnment_for_labels = [
 ]
 
 
+@typechecked
 def unaligned(aligned_items: List, alignment: int, default_val: Any) -> List:
     """Returns the unaligned ordering of aligned items.
 
@@ -71,6 +68,7 @@ def unaligned(aligned_items: List, alignment: int, default_val: Any) -> List:
     return unaligned_items
 
 
+@typechecked
 def compare_text_sizes(
     text_sizes: Union[int, float, List[Union[int, float]]],
     aligned_text_sizes: List[Union[int, float]],
@@ -109,10 +107,11 @@ def compare_text_sizes(
     return True
 
 
+@typechecked
 def playback_metadata_changes(metadata: Metadata, metadata_changes: Dict) -> None:
     """Playback the changes into the metadata.
 
-    :param metadata: the metadata
+    :param metadata: metadata
     :type metadata: Metadata
     :param metadata_changes: the changes
     :type metadata_changes: Dict
@@ -120,44 +119,37 @@ def playback_metadata_changes(metadata: Metadata, metadata_changes: Dict) -> Non
     :rtype: Metadata
     """
     if "author" in metadata_changes:
-        metadata.set_author(metadata_changes["author"])
+        metadata.author = metadata_changes["author"]
     if "backcolor" in metadata_changes:
-        metadata.set_background_color(metadata_changes["backcolor"])
+        metadata.background_color = metadata_changes["backcolor"]
     if "background" in metadata_changes:
         if "name" in metadata_changes["background"]:
-            (
-                metadata
-                .get_background()
-                .set_name(metadata_changes["background"]["name"])
-            )
+            metadata.background.name = metadata_changes["background"]["name"]
         if "style" in metadata_changes["background"]:
-            (
-                metadata
-                .get_background()
-                .set_style(metadata_changes["background"]["style"])
-            )
+            metadata.background.style = metadata_changes["background"]["style"]
     if "name" in metadata_changes:
-        metadata.set_name(metadata_changes["name"])
+        metadata.name = metadata_changes["name"]
     if "notes" in metadata_changes:
-        metadata.set_notes(metadata_changes["notes"])
+        metadata.notes = metadata_changes["notes"]
     if "radii" in metadata_changes:
-        metadata.set_radii(metadata_changes["radii"])
+        metadata.radii = metadata_changes["radii"]
     if "switchMount" in metadata_changes:
-        metadata.set_switch_mount(metadata_changes["switchMount"])
+        metadata.switch_mount = metadata_changes["switchMount"]
     if "switchBrand" in metadata_changes:
-        metadata.set_switch_brand(metadata_changes["switchBrand"])
+        metadata.switch_brand = metadata_changes["switchBrand"]
     if "switchType" in metadata_changes:
-        metadata.set_switch_type(metadata_changes["switchType"])
+        metadata.switch_type = metadata_changes["switchType"]
     if "css" in metadata_changes:
-        metadata.set_css(metadata_changes["css"])
+        metadata.css = metadata_changes["css"]
     if "pcb" in metadata_changes:
-        metadata.set_pcb(metadata_changes["pcb"])
-        metadata.set_include_pcb(True)
+        metadata.pcb = metadata_changes["pcb"]
+        metadata.include_pcb = True
     if "plate" in metadata_changes:
-        metadata.set_plate(metadata_changes["plate"])
-        metadata.set_include_plate(True)
+        metadata.plate = metadata_changes["plate"]
+        metadata.include_plate = True
 
 
+@typechecked
 def playback_key_changes(
     key: Key,
     key_changes: Dict,
@@ -181,73 +173,73 @@ def playback_key_changes(
     :rtype: Tuple[int, Decimal, Decimal]
     """
     if "r" in key_changes:
-        key.set_rotation_angle(Decimal(key_changes["r"]))
+        key.rotation_angle = Decimal(key_changes["r"])
     if "rx" in key_changes:
-        key.set_rotation_x(Decimal(key_changes["rx"]))
+        key.rotation_x = Decimal(key_changes["rx"])
         cluster_rotation_x = Decimal(key_changes["rx"])
-        key.set_x(cluster_rotation_x)
-        key.set_y(cluster_rotation_y)
+        key.x = cluster_rotation_x
+        key.y = cluster_rotation_y
     if "ry" in key_changes:
-        key.set_rotation_y(Decimal(key_changes["ry"]))
+        key.rotation_y = Decimal(key_changes["ry"])
         cluster_rotation_y = Decimal(key_changes["ry"])
-        key.set_x(cluster_rotation_x)
-        key.set_y(cluster_rotation_y)
+        key.x = cluster_rotation_x
+        key.y = cluster_rotation_y
     if "a" in key_changes:
         alignment = key_changes["a"]
     if "f" in key_changes:
-        key.set_default_text_size(key_changes["f"])
-        for i in range(len([label.get_size() for label in key.get_labels()])):
-            key.get_labels()[i].set_size(0)
+        key.default_text_size = key_changes["f"]
+        for i in range(len([label.size for label in key.labels])):
+            key.labels[i].size = 0
     if "f2" in key_changes:
         for i in range(1, 12):
-            key.get_labels()[i].set_size(key_changes["f2"])
+            key.labels[i].size = key_changes["f2"]
     if "fa" in key_changes:
         for i in range(len(key_changes["fa"])):
-            key.get_labels()[i].set_size(key_changes["fa"][i])
+            key.labels[i].size = key_changes["fa"][i]
         for i in range(len(key_changes["fa"]), 12):
-            key.get_labels()[i].set_size(0)
+            key.labels[i].size = 0
     if "p" in key_changes:
-        key.set_profile(key_changes["p"])
+        key.profile = key_changes["p"]
     if "c" in key_changes:
-        key.set_color(key_changes["c"])
+        key.color = key_changes["c"]
     if "t" in key_changes:
         labels_color = deepcopy(key_changes["t"]).split("\n")
         if labels_color[0] != "":
-            key.set_default_text_color(labels_color[0])
+            key.default_text_color = labels_color[0]
         for i, color in enumerate(unaligned(labels_color, alignment, "")):
-            key.get_labels()[i].set_color(color)
+            key.labels[i].color = color
     if "x" in key_changes:
-        key.set_x(key.get_x() + Decimal(key_changes["x"]))
+        key.x = key.x + Decimal(key_changes["x"])
     if "y" in key_changes:
-        key.set_y(key.get_y() + Decimal(key_changes["y"]))
+        key.y = key.y + Decimal(key_changes["y"])
     if "w" in key_changes:
-        key.set_width(Decimal(key_changes["w"]))
-        key.set_width2(Decimal(key_changes["w"]))
+        key.width = Decimal(key_changes["w"])
+        key.width2 = Decimal(key_changes["w"])
     if "h" in key_changes:
-        key.set_height(Decimal(key_changes["h"]))
-        key.set_height2(Decimal(key_changes["h"]))
+        key.height = Decimal(key_changes["h"])
+        key.height2 = Decimal(key_changes["h"])
     if "x2" in key_changes:
-        key.set_x2(Decimal(key_changes["x2"]))
+        key.x2 = Decimal(key_changes["x2"])
     if "y2" in key_changes:
-        key.set_y2(Decimal(key_changes["y2"]))
+        key.y2 = Decimal(key_changes["y2"])
     if "w2" in key_changes:
-        key.set_width2(Decimal(key_changes["w2"]))
+        key.width2 = Decimal(key_changes["w2"])
     if "h2" in key_changes:
-        key.set_height2(Decimal(key_changes["h2"]))
+        key.height2 = Decimal(key_changes["h2"])
     if "n" in key_changes:
-        key.set_nubbed(key_changes["n"])
+        key.nubbed = key_changes["n"]
     if "l" in key_changes:
-        key.set_stepped(key_changes["l"])
+        key.stepped = key_changes["l"]
     if "d" in key_changes:
-        key.set_decal(key_changes["d"])
+        key.decal = key_changes["d"]
     if "g" in key_changes:
-        key.set_ghosted(key_changes["g"])
+        key.ghosted = key_changes["g"]
     if "sm" in key_changes:
-        key.set_switch_mount(key_changes["sm"])
+        key.switch_mount = key_changes["sm"]
     if "sb" in key_changes:
-        key.set_switch_brand(key_changes["sb"])
+        key.switch_brand = key_changes["sb"]
     if "st" in key_changes:
-        key.set_switch_type(key_changes["st"])
+        key.switch_type = key_changes["st"]
     return (
         alignment,
         cluster_rotation_x,
@@ -255,6 +247,7 @@ def playback_key_changes(
     )
 
 
+@typechecked
 def key_sort_criteria(key: Key) -> Tuple[
     Decimal,
     Decimal,
@@ -270,24 +263,25 @@ def key_sort_criteria(key: Key) -> Tuple[
     :rtype: Tuple[ Decimal, Decimal, Decimal, Decimal, Decimal, ]
     """
     return (
-        (key.get_rotation_angle() + 360) % 360,
-        key.get_rotation_x(),
-        key.get_rotation_y(),
-        key.get_y(),
-        key.get_x(),
+        (key.rotation_angle + 360) % 360,
+        key.rotation_x,
+        key.rotation_y,
+        key.y,
+        key.x,
     )
 
 
+@typechecked
 def record_change(
-    changes: OrderedDict,
+    changes: Dict,
     name: str,
     val: T,
-    default_val: T
+    default_val: S
 ) -> T:
     """Registers the change if value is not equal to default.
 
     :param changes: the existing changes
-    :type changes: OrderedDict
+    :type changes: Dict
     :param name: the property name
     :type name: str
     :param val: the value
@@ -309,6 +303,7 @@ def record_change(
     return val
 
 
+@typechecked
 def reduced_text_sizes(text_sizes: List[Union[int, float]]):
     """Returns a copy of text sizes with right zeroes stripped.
 
@@ -323,6 +318,7 @@ def reduced_text_sizes(text_sizes: List[Union[int, float]]):
     return text_sizes
 
 
+@typechecked
 def aligned_key_properties(
     key: Key,
     current_labels_size: List[Union[int, float]],
@@ -342,19 +338,19 @@ def aligned_key_properties(
     :rtype: Dict
     """
     texts: List[str] = [
-        label.get_text()
+        label.text
         for label
-        in key.get_labels()
+        in key.labels
     ]
     colors: List[str] = [
-        label.get_color()
+        label.color
         for label
-        in key.get_labels()
+        in key.labels
     ]
     sizes: List[Union[int, float]] = [
-        label.get_size()
+        label.size
         for label
-        in key.get_labels()
+        in key.labels
     ]
     alignments: List[int] = [7, 5, 6, 4, 3, 1, 2, 0]
     # remove impossible flag combinations
@@ -387,7 +383,7 @@ def aligned_key_properties(
     for i in range(len(reduced_text_sizes(aligned_text_size))):
         if aligned_text_labels[i] == "":
             aligned_text_size[i] = current_labels_size[i]
-        if aligned_text_size == key.get_default_text_size():
+        if aligned_text_size == key.default_text_size:
             aligned_text_size[i] = 0
     return (
         alignment,

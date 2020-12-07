@@ -1,56 +1,54 @@
 from __future__ import annotations
-from typing import (
-    Union,
-)
-
 from typeguard import typechecked
 
 
 class Background:
-    """Class for storing KLE Metadata Background.
-
-    :ivar name: name of the background style, defaults to None.
-    :vartype name: Union[str, None]
-    :ivar style: a CSS rule for background, defaults to None.
-    :vartype style: Union[str, None]
+    """Class storing Metadata's Background.
     """
 
     def __init__(self):
         self.__name: str = ""
         self.__style: str = ""
 
-    def get_name(self) -> str:
-        """Gets the name of the background.
+    @property
+    def name(self) -> str:
+        """Gets name.
+
+        :return: name
+        :rtype: str
         """
         return self.__name
 
+    @name.setter
     @typechecked
-    def set_name(self, name: str) -> Background:
-        """Sets the name of the background.
+    def name(self, name: str) -> Background:
+        """Sets name.
 
-        :param name: the name of the background
+        :param name: name
         :type name: str
-        :return: the invoking background
+        :return: invoker
         :rtype: Background
         """
         self.__name = name
         return self
 
-    def get_style(self) -> str:
-        """Gets the CSS style rule for the background.
+    @property
+    def style(self) -> str:
+        """Gets CSS style rule.
 
-        :return: the CSS style rule
+        :return: CSS style rule
         :rtype: str
         """
         return self.__style
 
+    @style.setter
     @typechecked
-    def set_style(self, style: str) -> Background:
-        """Sets the CSS style rule for the background.
+    def style(self, style: str) -> Background:
+        """Sets CSS style rule.
 
-        :param style: the CSS style rule
+        :param style: CSS style rule
         :type style: str
-        :return: the invoking background
+        :return: invoker
         :rtype: Background
         """
         self.__style = style

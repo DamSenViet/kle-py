@@ -1,16 +1,12 @@
 from __future__ import annotations
-from copy import (
-    deepcopy,
-)
-from typing import(
-    Union,
-)
-from typeguard import(
-    typechecked,
-)
+from typing import Union
+from typeguard import typechecked
 
 
 class Label:
+    """Class storing Key's Label.
+    """
+
     def __init__(self):
         """Instantiates a Label.
         """
@@ -25,48 +21,68 @@ class Label:
         d["size"] = self.__size
         return str(d)
 
-    def __copy__(self):
-        """Creates a shallow copy of the Label.
+    @property
+    def text(self) -> str:
+        """Gets text content.
 
-        :return: shallow copy of the Label
-        :rtype: Label
+        :return: text content
+        :rtype: str
         """
-        new_label = type(self)()
-        return new_label
-
-    def __deepcopy__(self, memo):
-        """Creates a deepcopy of the Label.
-
-        :param memo: dictionary of objects already copied
-        :type memo: Dict
-        :return: deep copy of the Label
-        :rtype: Label
-        """
-        new_label: Label = type(self)()
-        memo[id(self)] = new_label
-        new_label.__dict__.update(self.__dict__)
-        return new_label
-
-    def get_text(self) -> str:
         return self.__text
 
+    @text.setter
     @typechecked
-    def set_text(self, text: str) -> Label:
+    def text(self, text: str) -> Label:
+        """Sets text content.
+
+        :param text: text content
+        :type text: str
+        :return: invoker
+        :rtype: Label
+        """
         self.__text = text
         return self
 
-    def get_color(self) -> str:
+    @property
+    def color(self) -> str:
+        """Gets font color.
+
+        :return: font color
+        :rtype: str
+        """
         return self.__color
 
+    @color.setter
     @typechecked
-    def set_color(self, color: str) -> Label:
+    def color(self, color: str) -> Label:
+        """Sets font color.
+
+        :param color: font color
+        :type color: str
+        :return: invoker
+        :rtype: Label
+        """
         self.__color = color
         return self
 
-    def get_size(self) -> Union[int, float]:
+    @property
+    def size(self) -> Union[int, float]:
+        """Gets font size.
+
+        :return: font size
+        :rtype: Union[int, float]
+        """
         return self.__size
 
+    @size.setter
     @typechecked
-    def set_size(self, size: Union[int, float]) -> Label:
+    def size(self, size: Union[int, float]) -> Label:
+        """Sets font size.
+
+        :param size: font size
+        :type size: Union[int, float]
+        :return: invoker
+        :rtype: Label
+        """
         self.__size = size
         return self
