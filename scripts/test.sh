@@ -6,4 +6,5 @@ BASEDIR=$(dirname "$0")
 cd "$BASEDIR"
 
 cd ./../tests
-pytest -vv
+# run pytest in parallel
+pytest -n auto

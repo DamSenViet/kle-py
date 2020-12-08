@@ -10,9 +10,7 @@ st.setup(
     author="DamSenViet",
     license="MIT",
     namespace_packages=['damsenviet'],
-    packages=st.find_packages(
-        exclude=["tests", "docs", "scripts"]
-    ),
+    packages=st.find_packages(),
     install_requires=[
         "typeguard>=2.10.0",
         "webcolors>=1.11.1",
@@ -21,13 +19,14 @@ st.setup(
         "test": [
             "matplotlib>=3.1.2",
             "pytest>=6.1.2",
+            "pytest-xdist>=2.1.0",
         ],
         "docs": [
             "sphinx>=3.3.1",
             "pydata-sphinx-theme>=0.4.1",
         ]
     },
-    python_requires=">=3.5",
+    python_requires=">=3.7",
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
