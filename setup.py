@@ -9,7 +9,7 @@ st.setup(
     download_url="https://github.com/DamSenViet/kle-py/tarball/0.0.0",
     author="DamSenViet",
     license="MIT",
-    namespace_packages=['damsenviet'],
+    namespace_packages=["damsenviet"],
     packages=st.find_packages(),
     install_requires=[
         "typeguard>=2.10.0",
@@ -17,9 +17,12 @@ st.setup(
     ],
     extras_require={
         "dev": [
+            # test dependencies
             "matplotlib>=3.1.2",
             "pytest>=6.1.2",
-            "flake8",
+            # formatting
+            "black>=20.8b1",
+            # docs
             "sphinx>=3.3.1",
             "pydata-sphinx-theme>=0.4.1",
         ],
