@@ -4,12 +4,10 @@ from typeguard import typechecked
 
 
 class Label:
-    """Class storing Key's Label.
-    """
+    """Class storing Key's Label."""
 
     def __init__(self):
-        """Instantiates a Label.
-        """
+        """Instantiates a Label."""
         self.__text: str = ""
         self.__color: str = ""
         self.__size: Union[int, float] = 0

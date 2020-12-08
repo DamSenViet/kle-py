@@ -10,8 +10,7 @@ from .label import Label
 
 
 class Key:
-    """Class storing Key.
-    """
+    """Class storing Key."""
 
     def __init__(self):
         self.__color: str = "#cccccc"

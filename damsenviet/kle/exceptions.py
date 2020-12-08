@@ -1,16 +1,28 @@
-import json
 from typing import (
     Union,
     List,
     Dict,
 )
 
+from typeguard import typechecked
+
 
 class DeserializeException(Exception):
     """Class for all exceptions encountered during deserialization."""
 
-    def __init__(self, message: str = None,
-                 payload: Union[Dict, List] = None):
+    @typechecked
+    def __init__(
+        self,
+        message: str,
+        payload: Union[
+            int,
+            float,
+            str,
+            None,
+            Dict,
+            List,
+        ] = None,
+    ):
         """Construct a `DeserializeException`.
 
         :param message: A message indicating a processing error during
@@ -20,7 +32,12 @@ class DeserializeException(Exception):
             to `None`.
         :type payload: Union[dict, list, None], optional
         """
-        super().__init__(
-            message + ("\n" + json.dumps(payload) if payload else "")
-            if message else None
-        )
+        super().__init__(message)
+        self.payload: Union[
+            int,
+            float,
+            str,
+            None,
+            Dict,
+            List,
+        ] = payload

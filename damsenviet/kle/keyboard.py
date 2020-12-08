@@ -35,10 +35,10 @@ Keyboard_JSON = List[Union[Dict, List[Union[str, Dict]]]]
 
 
 class Keyboard:
-    """Class storing Keyboard.
-    """
+    """Class storing Keyboard."""
 
     def __init__(self):
+        """Initializes a Keyboard."""
         self.__metadata: Metadata = Metadata()
         self.__keys: List[Key] = []
 
@@ -92,15 +92,17 @@ class Keyboard:
         :param keyboard_json: the KLE formatted json
         :type keyboard_json: List[Union[Dict, List[Union[str, Dict]]]]
         :raises DeserializeException: keyboard_json is not an array
-        :raises DeserializeException: rotation changes not made at beginning of row
-        :raises DeserializeException: metadata specified but not first item in keyboard_json
-        :raises DeserializeException: a row in the json is not an expected type
+        :raises DeserializeException: rotation changes not at beginning of row
+        :raises DeserializeException: metadata specified but not as first item
+        :raises DeserializeException: item not expected type
         :return: the Keyboard
         :rtype: Keyboard
         """
         if type(keyboard_json) != list:
             raise DeserializeException(
-                "Expected an array of objects:", keyboard_json)
+                message="Expected an array of objects:",
+                payload=keyboard_json,
+            )
 
         keyboard: Keyboard = Keyboard()
 
@@ -134,21 +136,22 @@ class Keyboard:
                             new_key.height2 = current.height2
                         else:
                             new_key.height2 = current.height
-                        for i, text in enumerate(unaligned(
-                            labels.split("\n"),
-                            align,
-                            "",
-                        )):
+                        for i, text in enumerate(
+                            unaligned(
+                                labels.split("\n"),
+                                align,
+                                "",
+                            )
+                        ):
                             new_key.labels[i].text = text
 
-                        for i, size in enumerate(unaligned(
-                            [
-                                label.size
-                                for label in new_key.labels
-                            ],
-                            align,
-                            0,
-                        )):
+                        for i, size in enumerate(
+                            unaligned(
+                                [label.size for label in new_key.labels],
+                                align,
+                                0,
+                            )
+                        ):
                             new_key.labels[i].size = size
                         # clean up generated data
                         for label in new_key.labels:
@@ -176,16 +179,20 @@ class Keyboard:
                     elif type(item) is dict:
                         key_changes = item
                         if k != 0 and (
-                            "r" in key_changes or
-                            "rx" in key_changes or
-                            "ry" in key_changes
+                            "r" in key_changes
+                            or "rx" in key_changes
+                            or "ry" in key_changes
                         ):
-                            raise DeserializeException(
-                                "Rotation changes can only be made at the \
-                                beginning of the row:",
-                                keyboard_json[r]
+                            message = (
+                                "Rotataion changes can only be made at the"
+                                + "beginning of the row"
                             )
-                        # rotation changes can only be specified at beginning of row
+                            raise DeserializeException(
+                                message=message,
+                                payload=keyboard_json[r],
+                            )
+                        # rotation changes can only be specified at beginning
+                        # at the start of the row
                         (
                             align,
                             cluster_rotation_x,
@@ -195,30 +202,30 @@ class Keyboard:
                             key_changes,
                             align,
                             cluster_rotation_x,
-                            cluster_rotation_y
+                            cluster_rotation_y,
                         )
                     else:
+                        message = (
+                            "Expected an object specifying key changes or"
+                            "labels for a key"
+                        )
                         raise DeserializeException(
-                            f"Expected an object specifying key changes or labels \
-                            for a key",
-                            item
+                            message=message,
+                            payload=item,
                         )
                 current.y = current.y + Decimal(1.0)
             elif type(keyboard_json[r]) is dict:
                 metadata_changes = keyboard_json[r]
                 if r != 0:
                     raise DeserializeException(
-                        f"Keyboard metadata can only be at index 0, is index {r}:",
-                        keyboard_json[r]
+                        "Keyboard metadata can only be specified as first item\
+                        .",
+                        keyboard_json[r],
                     )
-                playback_metadata_changes(
-                    keyboard.metadata, metadata_changes)
-
+                playback_metadata_changes(keyboard.metadata, metadata_changes)
             else:
-                raise DeserializeException(
-                    f"Unexpected row type: {type(keyboard_json[r])}",
-                    keyboard_json[r]
-                )
+                message = "Encountered unexpected type of " f"{type(keyboard_json[r])}"
+                raise DeserializeException(message=message, payload=keyboard_json[r])
             current.x = Decimal(current.rotation_x)
         return keyboard
 
@@ -236,9 +243,7 @@ class Keyboard:
         align: int = 4
         current_labels_color: List[str] = current.default_text_color
         current_labels_size: List[Union[int, float]] = [
-            label.size
-            for label
-            in current.labels
+            label.size for label in current.labels
         ]
         cluster_rotation_angle: Decimal = Decimal(0.0)
         cluster_rotation_x: Decimal = Decimal(0.0)
@@ -285,12 +290,7 @@ class Keyboard:
             default_background.style,
         )
         if len(background_changes) > 0:
-            record_change(
-                metadata_changes,
-                "background",
-                background_changes,
-                None
-            )
+            record_change(metadata_changes, "background", background_changes, None)
         record_change(
             metadata_changes,
             "radii",
@@ -321,20 +321,14 @@ class Keyboard:
             self.metadata.css,
             default_metadata.css,
         )
-        if (
-            self.metadata.include_plate or
-            self.metadata.plate != default_metadata.plate
-        ):
+        if self.metadata.include_plate or self.metadata.plate != default_metadata.plate:
             record_change(
                 metadata_changes,
                 "plate",
                 self.metadata.plate,
                 None,
             )
-        if (
-            self.metadata.include_pcb or
-            self.metadata.pcb != default_metadata.pcb
-        ):
+        if self.metadata.include_pcb or self.metadata.pcb != default_metadata.pcb:
             record_change(
                 metadata_changes,
                 "pcb",
@@ -348,8 +342,7 @@ class Keyboard:
         # will be incremented on first row
         current.y = current.y - Decimal(1)
 
-        sorted_keys: List[Key] = list(
-            sorted(self.__keys, key=key_sort_criteria))
+        sorted_keys: List[Key] = list(sorted(self.__keys, key=key_sort_criteria))
         for key in sorted_keys:
             key_changes = dict()
             (
@@ -357,18 +350,15 @@ class Keyboard:
                 aligned_text_labels,
                 aligned_text_color,
                 aligned_text_size,
-            ) = aligned_key_properties(
-                key,
-                current_labels_size
-            )
+            ) = aligned_key_properties(key, current_labels_size)
 
             # start a new row when necessary
             is_cluster_changed: bool = (
-                (key.rotation_angle != cluster_rotation_angle) or
-                (key.rotation_x != cluster_rotation_x) or
-                (key.rotation_y != cluster_rotation_y)
+                (key.rotation_angle != cluster_rotation_angle)
+                or (key.rotation_x != cluster_rotation_x)
+                or (key.rotation_y != cluster_rotation_y)
             )
-            is_row_changed: bool = (key.y != current.y)
+            is_row_changed: bool = key.y != current.y
             if len(row) > 0 and (is_row_changed or is_cluster_changed):
                 # set up for the new row
                 keyboard_json.append(row)
@@ -381,8 +371,8 @@ class Keyboard:
                 # set up for the new row
                 # y is reset if either rx or ry are changed
                 if (
-                    key.rotation_y != cluster_rotation_y or
-                    key.rotation_x != cluster_rotation_x
+                    key.rotation_y != cluster_rotation_y
+                    or key.rotation_x != cluster_rotation_x
                 ):
                     current.y = key.rotation_y
                 # always reset x to rx (which defaults to zero)
@@ -419,12 +409,16 @@ class Keyboard:
                 key.y - current.y,
                 Decimal(0.0),
             )
-            current.x = (current.x + record_change(
-                key_changes,
-                "x",
-                key.x - current.x,
-                Decimal(0.0),
-            ) + key.width)
+            current.x = (
+                current.x
+                + record_change(
+                    key_changes,
+                    "x",
+                    key.x - current.x,
+                    Decimal(0.0),
+                )
+                + key.width
+            )
             current.color = record_change(
                 key_changes,
                 "c",
@@ -437,8 +431,8 @@ class Keyboard:
             else:
                 for i in range(2, 12):
                     if (
-                        aligned_text_color[i] != "" and
-                        aligned_text_color[i] != aligned_text_color[0]
+                        aligned_text_color[i] != ""
+                        and aligned_text_color[i] != aligned_text_color[0]
                     ):
                         aligned_text_color[i] = key.default_text_color
             current_labels_color = record_change(
@@ -493,11 +487,9 @@ class Keyboard:
                 current_labels_size = [0 for i in range(12)]
             # if text sizes arent already optimized, optimize it
             if not compare_text_sizes(
-                current_labels_size,
-                aligned_text_size,
-                aligned_text_labels
+                current_labels_size, aligned_text_size, aligned_text_labels
             ):
-                if (len(reduced_text_sizes(aligned_text_size)) == 0):
+                if len(reduced_text_sizes(aligned_text_size)) == 0:
                     # force f to be written
                     record_change(
                         key_changes,
@@ -510,9 +502,7 @@ class Keyboard:
                     for i in range(2, len(reduced_text_sizes(aligned_text_size))):
                         if not optimizeF2:
                             break
-                        optimizeF2 = (
-                            aligned_text_size[i] == aligned_text_size[1]
-                        )
+                        optimizeF2 = aligned_text_size[i] == aligned_text_size[1]
                     if optimizeF2:
                         f2: Union[int, float] = aligned_text_size[1]
                         # current.f2 not ever used
@@ -530,8 +520,7 @@ class Keyboard:
             record_change(key_changes, "w", key.width, Decimal(1.0))
             record_change(key_changes, "h", key.height, Decimal(1.0))
             record_change(key_changes, "w2", key.width2, key.width)
-            record_change(key_changes, "h2",
-                          key.height2, key.height)
+            record_change(key_changes, "h2", key.height2, key.height)
             record_change(key_changes, "x2", key.x2, Decimal(0.0))
             record_change(key_changes, "y2", key.y2, Decimal(0.0))
             record_change(key_changes, "n", key.nubbed, False)

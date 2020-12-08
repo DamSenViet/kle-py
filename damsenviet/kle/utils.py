@@ -16,11 +16,11 @@ from typeguard import typechecked
 from .metadata import Metadata
 from .key import Key
 
-T = TypeVar('T')
-S = TypeVar('S')
+T = TypeVar("T")
+S = TypeVar("S")
 getcontext().prec = 64
 
-
+# fmt: off
 label_map = [
     # -1 indicates not used
     [0, 6, 2, 8, 9, 11, 3, 5, 1, 4, 7, 10],  # 0 = no centering
@@ -49,6 +49,7 @@ disallowed_alignnment_for_labels = [
     [],  # 10
     [4, 5, 6, 7]  # 11
 ]
+# fmt: on
 
 
 @typechecked
@@ -85,10 +86,7 @@ def compare_text_sizes(
     :return: whether text sizes are equal
     :rtype: bool
     """
-    if (
-        type(text_sizes) is int or
-        type(text_sizes) is float
-    ):
+    if type(text_sizes) is int or type(text_sizes) is float:
         text_sizes = [text_sizes] + [0 for i in range(11)]
     for i in range(12):
         if aligned_text_labels[i] == "":
@@ -97,11 +95,8 @@ def compare_text_sizes(
         if (
             # text size is non 0 and aligned text size is 0 or
             # text is 0 and aligned text size is non 0
-            (bool(text_sizes[i]) != bool(aligned_text_sizes[i])) or
-            (
-                text_sizes[i] != 0 and
-                text_sizes[i] != aligned_text_sizes[i]
-            )
+            (bool(text_sizes[i]) != bool(aligned_text_sizes[i]))
+            or (text_sizes[i] != 0 and text_sizes[i] != aligned_text_sizes[i])
         ):
             return False
     return True
@@ -248,13 +243,9 @@ def playback_key_changes(
 
 
 @typechecked
-def key_sort_criteria(key: Key) -> Tuple[
-    Decimal,
-    Decimal,
-    Decimal,
-    Decimal,
-    Decimal,
-]:
+def key_sort_criteria(
+    key: Key,
+) -> Tuple[Decimal, Decimal, Decimal, Decimal, Decimal]:
     """A helper to sort keys into the KLE order before serialization.
 
     :param key: the key to compare
@@ -272,12 +263,7 @@ def key_sort_criteria(key: Key) -> Tuple[
 
 
 @typechecked
-def record_change(
-    changes: Dict,
-    name: str,
-    val: T,
-    default_val: S
-) -> T:
+def record_change(changes: Dict, name: str, val: T, default_val: S) -> T:
     """Registers the change if value is not equal to default.
 
     :param changes: the existing changes
@@ -322,12 +308,7 @@ def reduced_text_sizes(text_sizes: List[Union[int, float]]):
 def aligned_key_properties(
     key: Key,
     current_labels_size: List[Union[int, float]],
-) -> Tuple[
-    int,
-    List[str],
-    List[str],
-    List[Union[int, float]],
-]:
+) -> Tuple[int, List[str], List[str], List[Union[int, float]]]:
     """More space efficient text labels, text colors, text sizes.
 
     :param key: the key to compute the reorder of
@@ -337,21 +318,9 @@ def aligned_key_properties(
     :return: a return dict with reordered version of props stored
     :rtype: Dict
     """
-    texts: List[str] = [
-        label.text
-        for label
-        in key.labels
-    ]
-    colors: List[str] = [
-        label.color
-        for label
-        in key.labels
-    ]
-    sizes: List[Union[int, float]] = [
-        label.size
-        for label
-        in key.labels
-    ]
+    texts: List[str] = [label.text for label in key.labels]
+    colors: List[str] = [label.color for label in key.labels]
+    sizes: List[Union[int, float]] = [label.size for label in key.labels]
     alignments: List[int] = [7, 5, 6, 4, 3, 1, 2, 0]
     # remove impossible flag combinations
     for i in range(len(texts)):

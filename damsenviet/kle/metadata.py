@@ -5,8 +5,7 @@ from .background import Background
 
 
 class Metadata:
-    """Class storing Keyboard's Metadata.
-    """
+    """Class storing Keyboard's Metadata."""
 
     def __init__(self):
         self.__author: str = ""

@@ -3,8 +3,7 @@ from typeguard import typechecked
 
 
 class Background:
-    """Class storing Metadata's Background.
-    """
+    """Class storing Metadata's Background."""
 
     def __init__(self):
         self.__name: str = ""
