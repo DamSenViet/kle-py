@@ -16,15 +16,13 @@ st.setup(
         "webcolors>=1.11.1",
     ],
     extras_require={
-        "test": [
+        "dev": [
             "matplotlib>=3.1.2",
             "pytest>=6.1.2",
-            "pytest-xdist>=2.1.0",
-        ],
-        "docs": [
+            "flake8",
             "sphinx>=3.3.1",
             "pydata-sphinx-theme>=0.4.1",
-        ]
+        ],
     },
     python_requires=">=3.7",
     classifiers=[

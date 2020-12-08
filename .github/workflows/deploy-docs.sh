@@ -5,7 +5,7 @@ set -e
 cd "${GITHUB_WORKSPACE}"
 
 echo "DEPENDENCIES: INSTALLING..."
-pip install .[test,docs]
+pip install .[dev]
 echo "DEPENDENCIES: COMPLETE"
 
 echo "TESTS: TESTING..."
