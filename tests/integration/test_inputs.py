@@ -4,16 +4,8 @@ import pytest
 import damsenviet.kle as kle
 
 
-inputs_dir = os.path.abspath(os.path.join(
-    os.path.dirname(__file__),
-    "..",
-    "inputs"
-))
-outputs_dir = os.path.abspath(os.path.join(
-    os.path.dirname(__file__),
-    "..",
-    "outputs"
-))
+inputs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "inputs"))
+outputs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "outputs"))
 os.makedirs(outputs_dir, exist_ok=True)
 keyboard_jsons = list()
 file_names = list()
@@ -35,15 +27,9 @@ def test_inputs(file_name):
     output_file_path = os.path.join(outputs_dir, file_name)
     output_file = open(output_file_path, "w")
     json.dump(
-        keyboard.to_json(),
-        output_file,
-        sort_keys=False,
-        indent=2,
-        ensure_ascii=False
+        keyboard.to_json(), output_file, sort_keys=False, indent=2, ensure_ascii=False
     )
     output_file.close()
     assert json.dumps(
         keyboard_json, sort_keys=True, indent=2, ensure_ascii=True
-    ) == json.dumps(
-        keyboard.to_json(), sort_keys=True, indent=2, ensure_ascii=True
-    )
+    ) == json.dumps(keyboard.to_json(), sort_keys=True, indent=2, ensure_ascii=True)

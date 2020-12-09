@@ -21,15 +21,11 @@ input_file = open(input_path)
 keyboard = kle.Keyboard.from_json(json.load(input_file))
 input_file.close()
 
-if (len(sys.argv) >= 3):
+if len(sys.argv) >= 3:
     output_path = resolve(sys.argv[2])
     output_file = open(f"{output_path}", "w")
     json.dump(
-        keyboard.to_json(),
-        output_file,
-        sort_keys=False,
-        indent=2,
-        ensure_ascii=False
+        keyboard.to_json(), output_file, sort_keys=False, indent=2, ensure_ascii=False
     )
     output_file.close()
 else:
