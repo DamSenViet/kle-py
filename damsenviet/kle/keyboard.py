@@ -104,8 +104,11 @@ class Keyboard:
 
         # tracks the key with accumulated changes
         current: Key = Key()
+        # allows for non-KLE defaults for label initializer
+        current_labels_size = [0 for label in current.labels]
+        current_labels_color = ["" for label in current.labels]
         # tmp variables to construct final labels
-        align: int = 4
+        alignment: int = 4
         # keys are row separated by clusters
         # track rotation info for reset x/y positions
         cluster_rotation_x: Decimal = Decimal(0.0)
@@ -135,29 +138,26 @@ class Keyboard:
                         for i, text in enumerate(
                             unaligned(
                                 labels.split("\n"),
-                                align,
+                                alignment,
                                 "",
                             )
                         ):
                             new_key.labels[i].text = text
 
                         for i, size in enumerate(
-                            unaligned(
-                                [label.size for label in new_key.labels],
-                                align,
-                                0,
-                            )
+                            unaligned(current_labels_size, alignment, 0)
                         ):
-                            new_key.labels[i].size = size
-                        # clean up generated data
-                        for label in new_key.labels:
-                            if label.text == "":
-                                label.color = ""
-                                label.size = 0
-                            if label.color == new_key.default_text_color:
-                                label.color = ""
-                            if label.size == new_key.default_text_size:
-                                label.size = 0
+                            if size == 0:
+                                new_key.labels[i].size = new_key.default_text_size
+                            else:
+                                new_key.labels[i].size = size
+
+                        for i, color in enumerate(current_labels_color):
+                            if color == "":
+                                new_key.labels[i].color = new_key.default_text_color
+                            else:
+                                new_key.labels[i].color = color
+
                         # add key
                         keyboard.keys.append(new_key)
 
@@ -172,6 +172,7 @@ class Keyboard:
                         current.is_homing = False
                         current.is_stepped = False
                         current.is_decal = False
+
                     elif type(item) is dict:
                         key_changes = item
                         if k != 0 and (
@@ -180,7 +181,7 @@ class Keyboard:
                             or "ry" in key_changes
                         ):
                             message = (
-                                "Rotataion changes can only be made at the"
+                                "rotataion changes can only be made at the"
                                 + "beginning of the row"
                             )
                             raise DeserializeException(
@@ -190,20 +191,24 @@ class Keyboard:
                         # rotation changes can only be specified at beginning
                         # at the start of the row
                         (
-                            align,
+                            current_labels_color,
+                            current_labels_size,
+                            alignment,
                             cluster_rotation_x,
                             cluster_rotation_y,
                         ) = playback_key_changes(
                             current,
                             key_changes,
-                            align,
+                            current_labels_color,
+                            current_labels_size,
+                            alignment,
                             cluster_rotation_x,
                             cluster_rotation_y,
                         )
                     else:
                         message = (
-                            "Expected an object specifying key changes or"
-                            "labels for a key"
+                            "expected an object specifying key changes or"
+                            "text labels for a key"
                         )
                         raise DeserializeException(
                             message=message,
@@ -214,13 +219,15 @@ class Keyboard:
                 metadata_changes = keyboard_json[r]
                 if r != 0:
                     raise DeserializeException(
-                        "Keyboard metadata can only be specified as first item\
-                        .",
+                        "metadata can only be specified as first item",
                         keyboard_json[r],
                     )
                 playback_metadata_changes(keyboard.metadata, metadata_changes)
             else:
-                message = "Encountered unexpected type of " f"{type(keyboard_json[r])}"
+                message = (
+                    "encountered unexpected type of "
+                    f"{type(keyboard_json[r]).__name__}"
+                )
                 raise DeserializeException(message=message, payload=keyboard_json[r])
             current.x = Decimal(current.rotation_x)
         return keyboard
@@ -238,9 +245,8 @@ class Keyboard:
         current: Key = Key()
         align: int = 4
         current_labels_color: List[str] = current.default_text_color
-        current_labels_size: List[Union[int, float]] = [
-            label.size for label in current.labels
-        ]
+        # allows for non-KLE defaults for label initializer, can maintain value invariants
+        current_labels_size: List[Union[int, float]] = [0 for label in current.labels]
         cluster_rotation_angle: Decimal = Decimal(0.0)
         cluster_rotation_x: Decimal = Decimal(0.0)
         cluster_rotation_y: Decimal = Decimal(0.0)
@@ -317,9 +323,8 @@ class Keyboard:
             self.metadata.css,
             default_metadata.css,
         )
-        if (
-            self.metadata.include_switches_plate_mounted
-            or self.metadata.is_switches_plate_mounted
+        if self.metadata.include_switches_plate_mounted or (
+            self.metadata.is_switches_plate_mounted
             != default_metadata.is_switches_plate_mounted
         ):
             record_change(
@@ -328,9 +333,8 @@ class Keyboard:
                 self.metadata.is_switches_plate_mounted,
                 None,
             )
-        if (
-            self.metadata.include_switches_pcb_mounted
-            or self.metadata.is_switches_pcb_mounted
+        if self.metadata.include_switches_pcb_mounted or (
+            self.metadata.is_switches_pcb_mounted
             != default_metadata.is_switches_pcb_mounted
         ):
             record_change(
@@ -354,7 +358,10 @@ class Keyboard:
                 aligned_text_labels,
                 aligned_text_color,
                 aligned_text_size,
-            ) = aligned_key_properties(key, current_labels_size)
+            ) = aligned_key_properties(
+                key,
+                current_labels_size,
+            )
 
             # start a new row when necessary
             is_cluster_changed: bool = (

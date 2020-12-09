@@ -9,8 +9,8 @@ class Label:
     def __init__(self):
         """Instantiates a Label."""
         self.text: str = ""
-        self.color: str = ""
-        self.size: Union[int, float] = 0
+        self.color: str = "#000000"
+        self.size: Union[int, float] = 3
 
     def __str__(self):
         d = dict()
@@ -47,6 +47,7 @@ class Label:
         """
         return self.__color
 
+    # any valid css color str value
     @color.setter
     @typechecked
     def color(self, color: str) -> None:
@@ -55,13 +56,15 @@ class Label:
         :param color: font color
         :type color: str
         """
+        if color == "":
+            raise TypeError("cannot be empty")
         self.__color = color
 
     @property
     def size(self) -> Union[int, float]:
-        """Gets font size.
+        """Gets font size scale.
 
-        :return: font size
+        :return: font size scale
         :rtype: Union[int, float]
         """
         return self.__size
@@ -69,9 +72,11 @@ class Label:
     @size.setter
     @typechecked
     def size(self, size: Union[int, float]) -> None:
-        """Sets font size.
+        """Sets font size scale.
 
-        :param size: font size
+        :param size: font size scale
         :type size: Union[int, float]
         """
+        if size < 0.5:
+            raise TypeError("not at least 0.5")
         self.__size = size

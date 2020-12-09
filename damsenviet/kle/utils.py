@@ -5,6 +5,7 @@ from decimal import (
 )
 from typing import (
     Any,
+    Callable,
     Union,
     TypeVar,
     Tuple,
@@ -148,24 +149,30 @@ def playback_metadata_changes(metadata: Metadata, metadata_changes: Dict) -> Non
 def playback_key_changes(
     key: Key,
     key_changes: Dict,
+    current_labels_color: List[str],
+    current_labels_size: List[Union[int, float]],
     alignment: int,
     cluster_rotation_x: Decimal,
     cluster_rotation_y: Decimal,
-) -> Tuple[int, Decimal, Decimal]:
+) -> Tuple[List[str], List[Union[int, float]], int, Decimal, Decimal]:
     """Playback the changes into the key.
 
     :param key: the recording key
     :type key: Key
     :param key_changes: the changes
     :type key_changes: Dict
+    :param current_labels_color: key's labels' color, default values set to ""
+    :type current_labels_color: List[str]
+    :param current_labels_size: key's labels' size, defaults values set to 0
+    :type current_labels_size: List[Union[int, float]]
     :param alignment: the tracked text alignment
     :type alignment: int
     :param cluster_rotation_x: the tracked rotation origin x
     :type cluster_rotation_x: Decimal
     :param cluster_rotation_y: the tracked rotation origin y
     :type cluster_rotation_y: Decimal
-    :return: align, cluster_rotation_x, cluster_rotation_y
-    :rtype: Tuple[int, Decimal, Decimal]
+    :return: current_labels_color, current_labels_size, align, cluster_rotation_x, cluster_rotation_y
+    :rtype: Tuple[List[str], List[Union[int, float]], int, Decimal, Decimal]
     """
     if "r" in key_changes:
         key.rotation_angle = Decimal(key_changes["r"])
@@ -183,16 +190,16 @@ def playback_key_changes(
         alignment = key_changes["a"]
     if "f" in key_changes:
         key.default_text_size = key_changes["f"]
-        for i in range(len([label.size for label in key.labels])):
-            key.labels[i].size = 0
+        for i in range(len([size for size in current_labels_size])):
+            current_labels_size[i] = 0
     if "f2" in key_changes:
         for i in range(1, 12):
-            key.labels[i].size = key_changes["f2"]
+            current_labels_size[i] = key_changes["f2"]
     if "fa" in key_changes:
         for i in range(len(key_changes["fa"])):
-            key.labels[i].size = key_changes["fa"][i]
+            current_labels_size[i] = key_changes["fa"][i]
         for i in range(len(key_changes["fa"]), 12):
-            key.labels[i].size = 0
+            current_labels_size[i] = 0
     if "p" in key_changes:
         key.profile_and_row = key_changes["p"]
     if "c" in key_changes:
@@ -202,7 +209,7 @@ def playback_key_changes(
         if labels_color[0] != "":
             key.default_text_color = labels_color[0]
         for i, color in enumerate(unaligned(labels_color, alignment, "")):
-            key.labels[i].color = color
+            current_labels_color[i] = color
     if "x" in key_changes:
         key.x = key.x + Decimal(key_changes["x"])
     if "y" in key_changes:
@@ -236,6 +243,8 @@ def playback_key_changes(
     if "st" in key_changes:
         key.switch_type = key_changes["st"]
     return (
+        current_labels_color,
+        current_labels_size,
         alignment,
         cluster_rotation_x,
         cluster_rotation_y,
@@ -318,10 +327,23 @@ def aligned_key_properties(
     :return: a return dict with reordered version of props stored
     :rtype: Dict
     """
+    # size and colors if match default changed to base values
+    key_labels_size = [label.size for label in key.labels]
+    key_labels_color = [label.color for label in key.labels]
+    for i, label in enumerate(key.labels):
+        if label.text == "":
+            key_labels_color[i] = ""
+            key_labels_size[i] = 0
+        if label.color == key.default_text_color:
+            key_labels_color[i] = ""
+        if label.size == key.default_text_size:
+            key_labels_size[i] = 0
+
     texts: List[str] = [label.text for label in key.labels]
-    colors: List[str] = [label.color for label in key.labels]
-    sizes: List[Union[int, float]] = [label.size for label in key.labels]
+    colors: List[str] = [color for color in key_labels_color]
+    sizes: List[Union[int, float]] = [size for size in key_labels_size]
     alignments: List[int] = [7, 5, 6, 4, 3, 1, 2, 0]
+
     # remove impossible flag combinations
     for i in range(len(texts)):
         if texts[i] != "":
@@ -332,7 +354,7 @@ def aligned_key_properties(
             except ValueError:
                 pass
 
-    # generate label array in correct order
+    # generate label arrays in correct order
     alignment = alignments[0]
     aligned_text_labels = ["" for i in range(12)]
     aligned_text_color = ["" for i in range(12)]
@@ -354,9 +376,49 @@ def aligned_key_properties(
             aligned_text_size[i] = current_labels_size[i]
         if aligned_text_size == key.default_text_size:
             aligned_text_size[i] = 0
+
     return (
         alignment,
         aligned_text_labels,
         aligned_text_color,
         aligned_text_size,
     )
+
+
+class IllegalValueException(Exception):
+    """Class for encountering illegal arguments."""
+
+    def __init__(
+        self,
+        message: str,
+    ):
+        """Initializes an IllegalArgumentException.
+
+        :param message: A message indicating an illegal argument.
+        :type message: str
+        """
+        super().__init__(message)
+
+
+def expect(
+    value_name: str,
+    value: T,
+    condition_description: str,
+    condition: Callable[[T], bool],
+) -> None:
+    """Throws an exception if value does not meet the condition.
+
+    :param value_name: value name
+    :type value_name: str
+    :param value: any value
+    :type value: T
+    :param condition_description: [description]
+    :type condition_description: str
+    :param condition: [description]
+    :type condition: Callable[[T], bool]
+    :return: None
+    :rtype: None
+    """
+    message = f"expected {value_name} to {condition_description}"
+    if not condition(value):
+        raise IllegalValueException(message)
