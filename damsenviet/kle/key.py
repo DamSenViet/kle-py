@@ -13,31 +13,31 @@ class Key:
     """Class storing Key."""
 
     def __init__(self):
-        self.__color: str = "#cccccc"
-        self.__labels: List[Label] = [Label() for i in range(12)]
-        self.__default_text_color: str = "#000000"
-        self.__default_text_size: str = 3
-        self.__x: Decimal = Decimal(0.0)
-        self.__y: Decimal = Decimal(0.0)
-        self.__width: Decimal = Decimal(1.0)
-        self.__height: Decimal = Decimal(1.0)
-        self.__x2: Decimal = Decimal(0.0)
-        self.__y2: Decimal = Decimal(0.0)
-        self.__width2: Decimal = Decimal(1.0)
-        self.__height2: Decimal = Decimal(1.0)
-        self.__rotation_x: Decimal = Decimal(0.0)
-        self.__rotation_y: Decimal = Decimal(0.0)
-        self.__rotation_angle: Decimal = Decimal(0.0)
-        self.__decal: bool = False
-        self.__ghosted: bool = False
-        self.__stepped: bool = False
-        self.__nubbed: bool = False
-        self.__profile: str = ""
-        self.__switch_mount: str = ""
-        self.__switch_brand: str = ""
-        self.__switch_type: str = ""
+        self.color: str = "#cccccc"
+        self.labels: List[Label] = [Label() for i in range(12)]
+        self.default_text_color: str = "#000000"
+        self.default_text_size: str = 3
+        self.x: Decimal = Decimal(0.0)
+        self.y: Decimal = Decimal(0.0)
+        self.width: Decimal = Decimal(1.0)
+        self.height: Decimal = Decimal(1.0)
+        self.x2: Decimal = Decimal(0.0)
+        self.y2: Decimal = Decimal(0.0)
+        self.width2: Decimal = Decimal(1.0)
+        self.height2: Decimal = Decimal(1.0)
+        self.rotation_x: Decimal = Decimal(0.0)
+        self.rotation_y: Decimal = Decimal(0.0)
+        self.rotation_angle: Decimal = Decimal(0.0)
+        self.is_ghosted: bool = False
+        self.is_stepped: bool = False
+        self.is_homing: bool = False
+        self.is_decal: bool = False
+        self.profile_and_row: str = ""
+        self.switch_mount: str = ""
+        self.switch_brand: str = ""
+        self.switch_type: str = ""
 
-    def __str__(self):
+    def __str__(self) -> str:
         d = dict()
         d["color"] = self.color
         d["labels"] = self.labels
@@ -45,24 +45,51 @@ class Key:
         d["default_text_size"] = self.default_text_size
         d["x"] = float(self.x)
         d["y"] = float(self.y)
-        d["x2"] = float(self.x2)
-        d["y2"] = float(self.y2)
         d["width"] = float(self.width)
         d["height"] = float(self.height)
+        d["x2"] = float(self.x2)
+        d["y2"] = float(self.y2)
         d["width2"] = float(self.width2)
         d["height2"] = float(self.height2)
         d["rotation_x"] = float(self.rotation_x)
         d["rotation_y"] = float(self.rotation_y)
         d["rotation_angle"] = float(self.rotation_angle)
-        d["decal"] = self.get_decal()
-        d["profile"] = self.get_profile()
-        d["ghosted"] = self.get_ghosted()
-        d["stepped"] = self.get_stepped()
-        d["nubbed"] = self.get_nubbed()
-        d["switch_mount"] = self.get_switch_mount()
-        d["switch_brand"] = self.get_switch_brand()
-        d["switch_type"] = self.get_switch_type()
+        d["is_ghosted"] = self.is_ghosted
+        d["is_stepped"] = self.is_stepped
+        d["is_homing"] = self.is_homing
+        d["is_decal"] = self.is_decal
+        d["profile_and_row"] = self.profile_and_row
+        d["switch_mount"] = self.switch_mount
+        d["switch_brand"] = self.switch_brand
+        d["switch_type"] = self.switch_type
         return str(d)
+
+    def __repr__(self) -> str:
+        d = dict()
+        d["color"] = self.color
+        d["labels"] = self.labels
+        d["default_text_color"] = self.default_text_color
+        d["default_text_size"] = self.default_text_size
+        d["x"] = float(self.x)
+        d["y"] = float(self.y)
+        d["width"] = float(self.width)
+        d["height"] = float(self.height)
+        d["x2"] = float(self.x2)
+        d["y2"] = float(self.y2)
+        d["width2"] = float(self.width2)
+        d["height2"] = float(self.height2)
+        d["rotation_x"] = float(self.rotation_x)
+        d["rotation_y"] = float(self.rotation_y)
+        d["rotation_angle"] = float(self.rotation_angle)
+        d["is_ghosted"] = self.is_ghosted
+        d["is_stepped"] = self.is_stepped
+        d["is_homing"] = self.is_homing
+        d["is_decal"] = self.is_decal
+        d["profile_and_row"] = self.profile_and_row
+        d["switch_mount"] = self.switch_mount
+        d["switch_brand"] = self.switch_brand
+        d["switch_type"] = self.switch_type
+        return f"Key(**{repr(d)})"
 
     @property
     def color(self) -> str:
@@ -75,16 +102,13 @@ class Key:
 
     @color.setter
     @typechecked
-    def color(self, color: str) -> Key:
+    def color(self, color: str) -> None:
         """Sets fill color.
 
         :param color: fill color
         :type color: str
-        :return: invoker
-        :rtype: Key
         """
         self.__color = color
-        return self
 
     @property
     def labels(self) -> List[Label]:
@@ -97,16 +121,13 @@ class Key:
 
     @labels.setter
     @typechecked
-    def labels(self, labels: List[Label]) -> Key:
+    def labels(self, labels: List[Label]) -> None:
         """Sets the 12 labels.
 
         :param labels: 12 labels
         :type labels: List[Label]
-        :return: invoker
-        :rtype: Key
         """
         self.__labels = labels
-        return self
 
     @property
     def default_text_color(self) -> str:
@@ -121,18 +142,15 @@ class Key:
 
     @default_text_color.setter
     @typechecked
-    def default_text_color(self, default_text_color: str) -> Key:
+    def default_text_color(self, default_text_color: str) -> None:
         """Sets default text color.
 
         Used to optimize the json size.
 
         :param default_text_color: default text color
         :type default_text_color: str
-        :return: invoker
-        :rtype: Key
         """
         self.__default_text_color = default_text_color
-        return self
 
     @property
     def default_text_size(self) -> Union[int, float]:
@@ -147,18 +165,15 @@ class Key:
 
     @default_text_size.setter
     @typechecked
-    def default_text_size(self, default_text_size: Union[int, float]) -> Key:
+    def default_text_size(self, default_text_size: Union[int, float]) -> None:
         """Sets default text size.
 
         Used to optimize the json size.
 
         :param default_text_size: the default text size
         :type default_text_size: Union[int, float]
-        :return: invoker
-        :rtype: Key
         """
         self.__default_text_size = default_text_size
-        return self
 
     @property
     def x(self) -> Decimal:
@@ -171,212 +186,184 @@ class Key:
 
     @x.setter
     @typechecked
-    def x(self, x: Decimal) -> Key:
-        """Sets x position of raised primary shape.
+    def x(self, x: Decimal) -> None:
+        """Sets x position of raised primary shape in key units.
 
-        :param x: x position of raised primary shape
+        :param x: x position of raised primary shape in key units
         :type x: Decimal
-        :return: invoker
-        :rtype: Key
         """
         self.__x = x
-        return self
 
     @property
     def y(self) -> Decimal:
-        """Gets y position of raised primary shape
+        """Gets y position of raised primary shape in key units.
 
-        :return: [description]
+        :return: y position of raised primary shape in key units
         :rtype: Decimal
         """
         return self.__y
 
     @y.setter
     @typechecked
-    def y(self, y: Decimal) -> Key:
-        """Sets y position of raised primary shape.
+    def y(self, y: Decimal) -> None:
+        """Sets y position of raised primary shape in key units.
 
-        :param y: y position of raised primary shape
+        :param y: y position of raised primary shape in key units
         :type y: Decimal
         """
         self.__y = y
-        return self
 
     @property
     def width(self) -> Decimal:
-        """Gets width of raised primary shape.
+        """Gets width of raised primary shape in key units .
 
-        :return: width of raised primary shape
+        :return: width of raised primary shape in key units
         :rtype: Decimal
         """
         return self.__width
 
     @width.setter
     @typechecked
-    def width(self, width: Decimal) -> Key:
-        """Sets width of raised primary shape.
+    def width(self, width: Decimal) -> None:
+        """Sets width of raised primary shape in key units.
 
-        :param width: width of raised primary shape
+        :param width: width of raised primary shape in key units
         :type width: Decimal
-        :return: invoker
-        :rtype: Key
         """
         self.__width = width
-        return self
 
     @property
     def height(self) -> Decimal:
-        """Gets height of raised primary shape.
+        """Gets height of raised primary shape in key units.
 
-        :return: height of raised primary shape
+        :return: height of raised primary shape in key units
         :rtype: Decimal
         """
         return self.__height
 
     @height.setter
     @typechecked
-    def height(self, height: Decimal) -> Key:
-        """Sets height of raised primary shape.
+    def height(self, height: Decimal) -> None:
+        """Sets height of raised primary shape in key units.
 
-        :param height: height of raised primary shape
+        :param height: height of raised primary shape in key units
         :type height: Decimal
-        :return: invoker
-        :rtype: Key
         """
         self.__height = height
-        return self
 
     @property
     def x2(self) -> Decimal:
-        """Gets x position offset of the lowered secondary shape.
+        """Gets x position offset of the lowered secondary shape in key units.
 
-        :return: x position offset of the lowered secondary shape
+        :return: x position offset of the lowered secondary shape in key units
         :rtype: Decimal
         """
         return self.__x2
 
     @x2.setter
     @typechecked
-    def x2(self, x2: Decimal) -> Key:
-        """Sets x position offset of the lowered secondary shape.
+    def x2(self, x2: Decimal) -> None:
+        """Sets x position offset of the lowered secondary shape in key units.
 
-        :param x2: x position offset of the lowered secondary shape
+        :param x2: x position offset of the lowered secondary shape in key units
         :type x2: Decimal
-        :return: invoker
-        :rtype: Key
         """
         self.__x2 = x2
-        return self
 
     @property
     def y2(self) -> Decimal:
-        """Gets y position offset of lowered secondary shape.
+        """Gets y position offset of lowered secondary shape in key units.
 
-        :return: y position offset of lowered secondary shape
+        :return: y position offset of lowered secondary shape in key units
         :rtype: Decimal
         """
         return self.__y2
 
     @y2.setter
     @typechecked
-    def y2(self, y2: Decimal) -> Key:
-        """Sets y position offset of lowered secondary shape.
+    def y2(self, y2: Decimal) -> None:
+        """Sets y position offset of lowered secondary shape in key units.
 
-        :param y2: y position offset of lowered secondary shape
+        :param y2: y position offset of lowered secondary shape in key units
         :type y2: Decimal
-        :return: invoker
-        :rtype: Key
         """
         self.__y2 = y2
-        return self
 
     @property
     def width2(self) -> Decimal:
-        """Gets width of lowered secondary shape.
+        """Gets width of lowered secondary shape in key units.
 
-        :return: width of lowered secondary shape
+        :return: width of lowered secondary shape in key units
         :rtype: Decimal
         """
         return self.__width2
 
     @width2.setter
     @typechecked
-    def width2(self, width2: Decimal) -> Key:
-        """Sets width of lowered secondary shape.
+    def width2(self, width2: Decimal) -> None:
+        """Sets width of lowered secondary shape in key units.
 
-        :param width2: width of lowered secondary shape
+        :param width2: width of lowered secondary shape in key units
         :type width2: Decimal
-        :return: invoker
-        :rtype: Key
         """
         self.__width2 = width2
-        return self
 
     @property
     def height2(self) -> Decimal:
-        """Gets height of lowered secondary shape.
+        """Gets height of lowered secondary shape in key units.
 
-        :return: height of lowered secondary shape.
+        :return: height of lowered secondary shape in key units
         :rtype: Decimal
         """
         return self.__height2
 
     @height2.setter
     @typechecked
-    def height2(self, height2: Decimal) -> Key:
-        """Sets height of lowered secondary shape.
+    def height2(self, height2: Decimal) -> None:
+        """Sets height of lowered secondary shape in key units.
 
-        :param height2: height of lowered secondary shape
+        :param height2: height of lowered secondary shape in key units
         :type height2: Decimal
-        :return: invoker
-        :rtype: Key
         """
         self.__height2 = height2
-        return self
 
     @property
     def rotation_x(self) -> Decimal:
-        """Gets x position of rotation origin.
+        """Gets x position of rotation origin in key units.
 
-        :return: x position of rotation origin
+        :return: x position of rotation origin in key units
         :rtype: Decimal
         """
         return self.__rotation_x
 
     @rotation_x.setter
     @typechecked
-    def rotation_x(self, rotation_x: Decimal) -> Key:
-        """Sets x position of rotation origin.
+    def rotation_x(self, rotation_x: Decimal) -> None:
+        """Sets x position of rotation origin in key units.
 
-        :param rotation_x: x position of rotation origin
+        :param rotation_x: x position of rotation origin in key units
         :type rotation_x: Decimal
-        :return: invoker
-        :rtype: Key
         """
         self.__rotation_x = rotation_x
-        return self
 
     @property
     def rotation_y(self) -> Decimal:
-        """Gets y position of rotation origin
+        """Gets y position of rotation origin in key units.
 
-        :return: y position of rotation origin
+        :return: y position of rotation origin in key units
         :rtype: Decimal
         """
         return self.__rotation_y
 
     @rotation_y.setter
     @typechecked
-    def rotation_y(self, rotation_y: Decimal) -> Key:
-        """Sets y position of rotation origin.
+    def rotation_y(self, rotation_y: Decimal) -> None:
+        """Sets y position of rotation origin in key units.
 
-        :param rotation_y: y position of rotation origin
+        :param rotation_y: y position of rotation origin in key units
         :type rotation_y: Decimal
-        :return: invoker
-        :rtype: Key
         """
         self.__rotation_y = rotation_y
-        return self
 
     @property
     def rotation_angle(self) -> Decimal:
@@ -389,148 +376,137 @@ class Key:
 
     @rotation_angle.setter
     @typechecked
-    def rotation_angle(self, rotation_angle: Decimal) -> Key:
+    def rotation_angle(self, rotation_angle: Decimal) -> None:
         """Sets rotation angle in degrees.
 
         :param rotation_angle: rotation angle in degrees
         :type rotation_angle: Decimal
-        :return: invoker
-        :rtype: Key
         """
         self.__rotation_angle = rotation_angle
-        return self
 
     @property
-    def decal(self) -> bool:
-        """Gets whether the key is decorative.
+    def is_ghosted(self) -> bool:
+        """Gets whether the key is rendered partially transparent.
 
-        :return: whether the key is decorative
+        :return: whether the key is rendered partially transparent
         :rtype: bool
         """
-        return self.__decal
+        return self.__is_ghosted
 
-    @decal.setter
+    @is_ghosted.setter
     @typechecked
-    def decal(self, decal: bool) -> Key:
-        """Sets whether the key is decorative.
+    def is_ghosted(self, is_ghosted: bool) -> None:
+        """Sets whether the key is rendered partially transparent.
 
-        :param decal: whether the key is decorative
-        :type decal: bool
-        :return: invoker
-        :rtype: Key
+        :param is_ghosted: whether the key is rendered partially transparent
+        :type is_ghosted: bool
         """
-        self.__decal = decal
-        return self
+        self.__is_ghosted = is_ghosted
 
     @property
-    def ghosted(self) -> bool:
-        """Gets whether the key is ghosted.
-
-        :return: whether the key is ghosted
-        :rtype: bool
-        """
-        return self.__ghosted
-
-    @ghosted.setter
-    @typechecked
-    def ghosted(self, ghosted: bool) -> Key:
-        """Sets whether the key is ghosted.
-
-        :param ghosted: whether the key is ghosted
-        :type ghosted: bool
-        :return: invoker
-        :rtype: Key
-        """
-        self.__ghosted = ghosted
-        return self
-
-    @property
-    def stepped(self) -> bool:
+    def is_stepped(self) -> bool:
         """Gets whether the key is stepped.
 
         :return: whether the key is stepped
         :rtype: bool
         """
-        return self.__stepped
+        return self.__is_stepped
 
-    @stepped.setter
+    @is_stepped.setter
     @typechecked
-    def stepped(self, stepped: bool) -> Key:
+    def is_stepped(self, is_stepped: bool) -> None:
         """Sets whether the key is stepepd.
 
-        :param stepped: whether the key is stepped
-        :type stepped: bool
-        :return: invoker
-        :rtype: Key
+        In kle this typically decrements keys by 0.5 or 0.25, but kle doesn't normalize.
+        the mismatch if it occurs, and therefore can be set without side effects.
+
+        :param is_stepped: whether the key is stepped
+        :type is_stepped: bool
         """
-        self.__stepped = stepped
-        return self
+        self.__is_stepped = is_stepped
 
     @property
-    def nubbed(self) -> bool:
-        """Gets whether the keycap is nubbed.
+    def is_homing(self) -> bool:
+        """Gets whether the key is a homing key.
 
-        :return: whether the keycap is nubbed
+        :return: whether the key is a homing key
         :rtype: bool
         """
-        return self.__nubbed
+        return self.__is_homing
 
-    @nubbed.setter
+    @is_homing.setter
     @typechecked
-    def nubbed(self, nub: bool) -> Key:
-        """Sets whether the keycap is nubbed.
+    def is_homing(self, is_homing: bool) -> None:
+        """Sets whether the keycap is a homing key.
 
-        :param nub: whether the key is nubbed
-        :type nub: bool
-        :return: invoker
-        :rtype: Key
+        :param is_homing: whether the key is a homing key
+        :type is_homing: bool
         """
-        self.__nubbed = nub
-        return self
+        self.__is_homing = is_homing
 
     @property
-    def profile(self) -> str:
-        """Gets keycap profile.
+    def is_decal(self) -> bool:
+        """Gets whether the key is purely decorative.
 
-        :return: keycap profile
+        :return: whether the key is purely decorative
+        :rtype: bool
+        """
+        return self.__is_decal
+
+    @is_decal.setter
+    @typechecked
+    def is_decal(self, is_decal: bool) -> None:
+        """Sets whether the key is purely decorative.
+
+        In KLE this typically disables is_ghosted, stepped, homing but doesn't normalize.
+        the mismatch if it occurs, and therefore can be set without side effects.
+
+        :param is_decal: whether the key is purely decorative
+        :type is_decal: bool
+        """
+        self.__is_decal = is_decal
+
+    @property
+    def profile_and_row(self) -> str:
+        """Gets keycap profile and row.
+
+        e.g. "DCS R1"
+
+        :return: keycap profile and row
         :rtype: str
         """
-        return self.__profile
+        return self.__profile_and_row
 
-    @profile.setter
+    @profile_and_row.setter
     @typechecked
-    def profile(self, profile: str) -> Key:
-        """Sets keycap profile.
+    def profile_and_row(self, profile_and_row: str) -> None:
+        """Sets keycap profile and row.
 
-        :param profile: keycap profile
-        :type profile: str
-        :return: invoker
-        :rtype: Key
+        :param profile_and_row: keycap profile and row
+        :type profile_and_row_and_row: str
         """
-        self.__profile = profile
-        return self
+        self.__profile_and_row = profile_and_row
 
     @property
     def switch_mount(self) -> str:
-        """Gets switch mount.
+        """Gets switch mounting type.
 
-        :return: switch mount
+        e.g. "CherryMX", "Alps", etc (based on pin cutouts).
+
+        :return: switch mount type
         :rtype: str
         """
         return self.__switch_mount
 
     @switch_mount.setter
     @typechecked
-    def switch_mount(self, switch_mount: str) -> Key:
-        """Sets switch mount.
+    def switch_mount(self, switch_mount: str) -> None:
+        """Sets switch mount type.
 
-        :param switch_mount: switch mount
+        :param switch_mount: switch mount type
         :type switch_mount: str
-        :return: invoker
-        :rtype: Key
         """
         self.__switch_mount = switch_mount
-        return self
 
     @property
     def switch_brand(self) -> str:
@@ -543,16 +519,13 @@ class Key:
 
     @switch_brand.setter
     @typechecked
-    def switch_brand(self, switch_brand: str) -> Key:
+    def switch_brand(self, switch_brand: str) -> None:
         """Sets switch brand.
 
         :param switch_brand: switch brand
         :type switch_brand: str
-        :return: invoker
-        :rtype: Key
         """
         self.__switch_brand = switch_brand
-        return self
 
     @property
     def switch_type(self) -> str:
@@ -565,13 +538,10 @@ class Key:
 
     @switch_type.setter
     @typechecked
-    def switch_type(self, switch_type: str) -> Key:
+    def switch_type(self, switch_type: str) -> None:
         """Sets switch type.
 
         :param switch_type: switch type
         :type switch_type: str
-        :return: invoker
-        :rtype: Key
         """
         self.__switch_type = switch_type
-        return self

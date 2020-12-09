@@ -8,20 +8,39 @@ class Metadata:
     """Class storing Keyboard's Metadata."""
 
     def __init__(self):
-        self.__author: str = ""
-        self.__background_color: str = "#eeeeee"
-        self.__background: Background = Background()
-        self.__name: str = ""
-        self.__notes: str = ""
-        self.__radii: str = ""
-        self.__css: str = ""
-        self.__switch_mount: str = ""
-        self.__switch_brand: str = ""
-        self.__switch_type: str = ""
-        self.__include_pcb: bool = False
-        self.__pcb: bool = False
-        self.__include_plate: bool = False
-        self.__plate: bool = False
+        self.name: str = ""
+        self.author: str = ""
+        self.notes: str = ""
+        self.background: Background = Background()
+        self.background_color: str = "#eeeeee"
+        self.radii: str = ""
+        self.css: str = ""
+        self.switch_mount: str = ""
+        self.switch_brand: str = ""
+        self.switch_type: str = ""
+        self.is_switches_pcb_mounted: bool = False
+        self.include_switches_pcb_mounted: bool = False
+        self.is_switches_plate_mounted: bool = False
+        self.include_switches_plate_mounted: bool = False
+
+    @property
+    def name(self) -> str:
+        """Gets name of the keyboard.
+
+        :return: name of the keyboard
+        :rtype: str
+        """
+        return self.__name
+
+    @name.setter
+    @typechecked
+    def name(self, name: str) -> None:
+        """Sets name of the keyboard.
+
+        :param name: name of the keyboard
+        :type name: str
+        """
+        self.__name = name
 
     @property
     def author(self) -> str:
@@ -43,25 +62,23 @@ class Metadata:
         self.__author = author
 
     @property
-    def background_color(self) -> str:
-        """Get author name.
+    def notes(self) -> str:
+        """Gets notes.
 
-        :return: get author name
+        :return: notes
         :rtype: str
         """
-        return self.__background_color
+        return self.__notes
 
-    @background_color.setter
+    @notes.setter
     @typechecked
-    def background_color(self, background_color: str) -> None:
-        """Sets background color.
+    def notes(self, notes: str) -> None:
+        """Sets notes.
 
-        :param background_color: background color
-        :type background_color: str
-        :return: invoker
-        :rtype: Metadata
+        :param notes: notes
+        :type notes: str
         """
-        self.__background_color = background_color
+        self.__notes = notes
 
     @property
     def background(self) -> Background:
@@ -79,52 +96,27 @@ class Metadata:
 
         :param background: background of the keyboard
         :type background: Background
-        :return: invoker
-        :rtype: Metadata
         """
         self.__background = background
 
     @property
-    def name(self) -> str:
-        """Gets name of the keyboard.
+    def background_color(self) -> str:
+        """Gets background color.
 
-        :return: name of the keyboard
+        :return: background color
         :rtype: str
         """
-        return self.__name
+        return self.__background_color
 
-    @name.setter
+    @background_color.setter
     @typechecked
-    def name(self, name: str) -> None:
-        """Sets name of the keyboard.
+    def background_color(self, background_color: str) -> None:
+        """Sets background color.
 
-        :param name: name of the keyboard
-        :type name: str
-        :return: invoker
-        :rtype: Metadata
+        :param background_color: background color
+        :type background_color: str
         """
-        self.__name = name
-
-    @property
-    def notes(self) -> str:
-        """Gets notes.
-
-        :return: notes
-        :rtype: str
-        """
-        return self.__notes
-
-    @notes.setter
-    @typechecked
-    def notes(self, notes: str) -> None:
-        """Sets notes.
-
-        :param notes: notes
-        :type notes: str
-        :return: invoker
-        :rtype: Metadata
-        """
-        self.__notes = notes
+        self.__background_color = background_color
 
     @property
     def radii(self) -> str:
@@ -142,8 +134,6 @@ class Metadata:
 
         :param radii: radius CSS size value
         :type radii: str
-        :return: invoker
-        :rtype: Metadata
         """
         self.__radii = radii
 
@@ -163,8 +153,6 @@ class Metadata:
 
         :param css: CSS stylesheet
         :type css: str
-        :return: invoker
-        :rtype: Metadata
         """
         self.__css = css
 
@@ -184,8 +172,6 @@ class Metadata:
 
         :param switch_mount: switch mount
         :type switch_mount: str
-        :return: invoker
-        :rtype: Metadata
         """
         self.__switch_mount = switch_mount
 
@@ -205,8 +191,6 @@ class Metadata:
 
         :param switch_brand: switch  brand
         :type switch_brand: str
-        :return: invoker
-        :rtype: Metadata
         """
         self.__switch_brand = switch_brand
 
@@ -226,90 +210,83 @@ class Metadata:
 
         :param switch_type: switch type
         :type switch_type: str
-        :return: invoker
-        :rtype: Metadata
         """
         self.__switch_type = switch_type
 
     @property
-    def include_pcb(self) -> bool:
-        """Gets whether to include default pcb setting in json.
-
-        :return: whether to include default pcb setting in json
-        :rtype: bool
-        """
-        return self.__include_pcb
-
-    @include_pcb.setter
-    @typechecked
-    def include_pcb(self, include_pcb: bool) -> None:
-        """Sets whether to include default pcb setting in json.
-
-        :param include_pcb: whether to include default pcb setting in json
-        :type include_pcb: bool
-        :return: invoker
-        :rtype: Metadata
-        """
-        self.__include_pcb = include_pcb
-
-    @property
-    def pcb(self) -> bool:
+    def is_switches_pcb_mounted(self) -> bool:
         """Gets whether the switches are pcb mounted.
 
         :return: whether switches are pcb mounted
         :rtype: bool
         """
-        return self.__pcb
+        return self.__is_switches_pcb_mounted
 
-    @pcb.setter
+    @is_switches_pcb_mounted.setter
     @typechecked
-    def pcb(self, pcb: bool) -> None:
+    def is_switches_pcb_mounted(self, is_switches_pcb_mounted: bool) -> None:
         """Sets whether switches are pcb mounted.
 
-        :param pcb: whether switches are pcb mounted
-        :type pcb: bool
-        :return: invoker
-        :rtype: Metadata
+        :param is_switches_pcb_mounted: whether switches are pcb mounted
+        :type is_switches_pcb_mounted: bool
         """
-        self.__pcb = pcb
+        self.__is_switches_pcb_mounted = is_switches_pcb_mounted
 
     @property
-    def include_plate(self) -> bool:
-        """Sets whether to include default plate setting in json.
-        :return: whether to include default plate setting in json
+    def include_switches_pcb_mounted(self) -> bool:
+        """Gets whether to force include switch pcb mounting in json.
+
+        :return: whether to force include switch pcb mounting in json
         :rtype: bool
         """
-        return self.__include_plate
+        return self.__include_switches_pcb_mounted
 
-    @include_plate.setter
+    @include_switches_pcb_mounted.setter
     @typechecked
-    def include_plate(self, include_plate: bool) -> None:
-        """Sets whether to include default plate setting in json.
+    def include_switches_pcb_mounted(self, include_switches_pcb_mounted: bool) -> None:
+        """Sets whether to force include switch pcb mounting in json.
 
-        :param include_plate: whether to include default plate setting in json
-        :type include_plate: bool
-        :return: invoker
-        :rtype: Metadata
+        :param include_switches_pcb_mounted: whether to include switch pcb mounting in json
+        :type include_switches_pcb_mounted: bool
         """
-        self.__include_plate = include_plate
+        self.__include_switches_pcb_mounted = include_switches_pcb_mounted
 
     @property
-    def plate(self) -> bool:
+    def is_switches_plate_mounted(self) -> bool:
         """Gets whether switches are plate mounted.
 
         :return: whether switches are plate mounted
         :rtype: bool
         """
-        return self.__plate
+        return self.__is_switches_plate_mounted
 
-    @plate.setter
+    @is_switches_plate_mounted.setter
     @typechecked
-    def plate(self, plate: bool) -> None:
+    def is_switches_plate_mounted(self, is_switches_plate_mounted: bool) -> None:
         """Sets whether switches are plate mounted.
 
-        :param plate: whether switches are plate mounted
-        :type plate: bool
-        :return: invoker
-        :rtype: Metadata
+        :param is_switches_plate_mounted: whether switches are plate mounted
+        :type is_switches_plate_mounted: bool
         """
-        self.__plate = plate
+        self.__is_switches_plate_mounted = is_switches_plate_mounted
+
+    @property
+    def include_switches_plate_mounted(self) -> bool:
+        """Sets whether to force include switch plate mounting in json.
+
+        :return: whether to force include switch plate mounting in json
+        :rtype: bool
+        """
+        return self.__include_switches_plate_mounted
+
+    @include_switches_plate_mounted.setter
+    @typechecked
+    def include_switches_plate_mounted(
+        self, include_switches_plate_mounted: bool
+    ) -> None:
+        """Sets whether to force include switch plate mounting in json.
+
+        :param include_switches_plate_mounted: whether to force include switch plate mounting in json
+        :type include_switches_plate_mounted: bool
+        """
+        self.__include_switches_plate_mounted = include_switches_plate_mounted

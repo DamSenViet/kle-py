@@ -20,20 +20,19 @@ class Background:
 
     @name.setter
     @typechecked
-    def name(self, name: str) -> Background:
+    def name(self, name: str) -> None:
         """Sets name.
 
         :param name: name
         :type name: str
-        :return: invoker
-        :rtype: Background
         """
         self.__name = name
-        return self
 
     @property
     def style(self) -> str:
         """Gets CSS style rule.
+
+        No validation is applied, KLE doesn't validate the CSS rule.
 
         :return: CSS style rule
         :rtype: str
@@ -42,13 +41,10 @@ class Background:
 
     @style.setter
     @typechecked
-    def style(self, style: str) -> Background:
+    def style(self, style: str) -> None:
         """Sets CSS style rule.
 
         :param style: CSS style rule
         :type style: str
-        :return: invoker
-        :rtype: Background
         """
         self.__style = style
-        return self

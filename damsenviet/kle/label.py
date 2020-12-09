@@ -8,9 +8,9 @@ class Label:
 
     def __init__(self):
         """Instantiates a Label."""
-        self.__text: str = ""
-        self.__color: str = ""
-        self.__size: Union[int, float] = 0
+        self.text: str = ""
+        self.color: str = ""
+        self.size: Union[int, float] = 0
 
     def __str__(self):
         d = dict()
@@ -30,16 +30,13 @@ class Label:
 
     @text.setter
     @typechecked
-    def text(self, text: str) -> Label:
+    def text(self, text: str) -> None:
         """Sets text content.
 
         :param text: text content
         :type text: str
-        :return: invoker
-        :rtype: Label
         """
         self.__text = text
-        return self
 
     @property
     def color(self) -> str:
@@ -52,16 +49,13 @@ class Label:
 
     @color.setter
     @typechecked
-    def color(self, color: str) -> Label:
+    def color(self, color: str) -> None:
         """Sets font color.
 
         :param color: font color
         :type color: str
-        :return: invoker
-        :rtype: Label
         """
         self.__color = color
-        return self
 
     @property
     def size(self) -> Union[int, float]:
@@ -74,13 +68,10 @@ class Label:
 
     @size.setter
     @typechecked
-    def size(self, size: Union[int, float]) -> Label:
+    def size(self, size: Union[int, float]) -> None:
         """Sets font size.
 
         :param size: font size
         :type size: Union[int, float]
-        :return: invoker
-        :rtype: Label
         """
         self.__size = size
-        return self

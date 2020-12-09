@@ -39,8 +39,8 @@ class Keyboard:
 
     def __init__(self):
         """Initializes a Keyboard."""
-        self.__metadata: Metadata = Metadata()
-        self.__keys: List[Key] = []
+        self.metadata: Metadata = Metadata()
+        self.keys: List[Key] = []
 
     @property
     def metadata(self) -> Metadata:
@@ -58,8 +58,6 @@ class Keyboard:
 
         :param metadata: metadata reference
         :type metadata: Metadata
-        :return: invoker
-        :rtype: Keyboard
         """
         self.__metadata = metadata
 
@@ -80,8 +78,6 @@ class Keyboard:
 
         :param keys: list of Key references
         :type keys: List[Key]
-        :return: invoker
-        :rtype: Keyboard
         """
         self.__keys = keys
 
@@ -173,9 +169,9 @@ class Keyboard:
                         current.y2 = Decimal(0)
                         current.width2 = Decimal(0)
                         current.height2 = Decimal(0)
-                        current.nubbed = False
-                        current.stepped = False
-                        current.decal = False
+                        current.is_homing = False
+                        current.is_stepped = False
+                        current.is_decal = False
                     elif type(item) is dict:
                         key_changes = item
                         if k != 0 and (
@@ -321,18 +317,26 @@ class Keyboard:
             self.metadata.css,
             default_metadata.css,
         )
-        if self.metadata.include_plate or self.metadata.plate != default_metadata.plate:
+        if (
+            self.metadata.include_switches_plate_mounted
+            or self.metadata.is_switches_plate_mounted
+            != default_metadata.is_switches_plate_mounted
+        ):
             record_change(
                 metadata_changes,
                 "plate",
-                self.metadata.plate,
+                self.metadata.is_switches_plate_mounted,
                 None,
             )
-        if self.metadata.include_pcb or self.metadata.pcb != default_metadata.pcb:
+        if (
+            self.metadata.include_switches_pcb_mounted
+            or self.metadata.is_switches_pcb_mounted
+            != default_metadata.is_switches_pcb_mounted
+        ):
             record_change(
                 metadata_changes,
                 "pcb",
-                self.metadata.pcb,
+                self.metadata.is_switches_pcb_mounted,
                 None,
             )
         if len(metadata_changes) > 0:
@@ -441,17 +445,17 @@ class Keyboard:
                 "\n".join(aligned_text_color).rstrip(),
                 current_labels_color,
             )
-            current.ghosted = record_change(
+            current.is_ghosted = record_change(
                 key_changes,
                 "g",
-                key.ghosted,
-                current.ghosted,
+                key.is_ghosted,
+                current.is_ghosted,
             )
-            current.profile = record_change(
+            current.profile_and_row = record_change(
                 key_changes,
                 "p",
-                key.profile,
-                current.profile,
+                key.profile_and_row,
+                current.profile_and_row,
             )
             current.switch_mount = record_change(
                 key_changes,
@@ -523,9 +527,9 @@ class Keyboard:
             record_change(key_changes, "h2", key.height2, key.height)
             record_change(key_changes, "x2", key.x2, Decimal(0.0))
             record_change(key_changes, "y2", key.y2, Decimal(0.0))
-            record_change(key_changes, "n", key.nubbed, False)
-            record_change(key_changes, "l", key.stepped, False)
-            record_change(key_changes, "d", key.decal, False)
+            record_change(key_changes, "n", key.is_homing, False)
+            record_change(key_changes, "l", key.is_stepped, False)
+            record_change(key_changes, "d", key.is_decal, False)
             if len(key_changes) > 0:
                 row.append(key_changes)
             row.append("\n".join(aligned_text_labels).rstrip())

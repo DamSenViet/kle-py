@@ -137,11 +137,11 @@ def playback_metadata_changes(metadata: Metadata, metadata_changes: Dict) -> Non
     if "css" in metadata_changes:
         metadata.css = metadata_changes["css"]
     if "pcb" in metadata_changes:
-        metadata.pcb = metadata_changes["pcb"]
-        metadata.include_pcb = True
+        metadata.is_switches_pcb_mounted = metadata_changes["pcb"]
+        metadata.include_switches_pcb_mounted = True
     if "plate" in metadata_changes:
-        metadata.plate = metadata_changes["plate"]
-        metadata.include_plate = True
+        metadata.is_switches_plate_mounted = metadata_changes["plate"]
+        metadata.include_switches_plate_mounted = True
 
 
 @typechecked
@@ -194,7 +194,7 @@ def playback_key_changes(
         for i in range(len(key_changes["fa"]), 12):
             key.labels[i].size = 0
     if "p" in key_changes:
-        key.profile = key_changes["p"]
+        key.profile_and_row = key_changes["p"]
     if "c" in key_changes:
         key.color = key_changes["c"]
     if "t" in key_changes:
@@ -222,13 +222,13 @@ def playback_key_changes(
     if "h2" in key_changes:
         key.height2 = Decimal(key_changes["h2"])
     if "n" in key_changes:
-        key.nubbed = key_changes["n"]
+        key.is_homing = key_changes["n"]
     if "l" in key_changes:
-        key.stepped = key_changes["l"]
+        key.is_stepped = key_changes["l"]
     if "d" in key_changes:
-        key.decal = key_changes["d"]
+        key.is_decal = key_changes["d"]
     if "g" in key_changes:
-        key.ghosted = key_changes["g"]
+        key.is_ghosted = key_changes["g"]
     if "sm" in key_changes:
         key.switch_mount = key_changes["sm"]
     if "sb" in key_changes:
