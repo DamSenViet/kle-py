@@ -4,13 +4,10 @@ from typing import (
     Dict,
 )
 
-from typeguard import typechecked
-
 
 class DeserializeException(Exception):
-    """Class for all exceptions encountered during deserialization."""
+    """Exceptions encountered during deserialization."""
 
-    @typechecked
     def __init__(
         self,
         message: str,
@@ -21,16 +18,14 @@ class DeserializeException(Exception):
             None,
             Dict,
             List,
-        ] = None,
+        ],
     ):
-        """Construct a `DeserializeException`.
+        """Initializes a DeserializeException.
 
-        :param message: A message indicating a processing error during
-            deserialization of the KLE file.
+        :param message: the error message
         :type message: str
-        :param payload: The offending payload during deserialization, defaults
-            to `None`.
-        :type payload: Union[dict, list, None], optional
+        :param payload: the offending json payload, defaults to None
+        :type payload: Union[ int, float, str, None, Dict, List, ], optional
         """
         super().__init__(message)
         self.payload: Union[

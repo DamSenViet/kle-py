@@ -1,4 +1,5 @@
 from __future__ import annotations
+from damsenviet.kle.utils import autorepr
 from decimal import Decimal
 from typing import (
     Union,
@@ -38,58 +39,34 @@ class Key:
         self.switch_type: str = ""
 
     def __str__(self) -> str:
-        d = dict()
-        d["color"] = self.color
-        d["labels"] = self.labels
-        d["default_text_color"] = self.default_text_color
-        d["default_text_size"] = self.default_text_size
-        d["x"] = float(self.x)
-        d["y"] = float(self.y)
-        d["width"] = float(self.width)
-        d["height"] = float(self.height)
-        d["x2"] = float(self.x2)
-        d["y2"] = float(self.y2)
-        d["width2"] = float(self.width2)
-        d["height2"] = float(self.height2)
-        d["rotation_x"] = float(self.rotation_x)
-        d["rotation_y"] = float(self.rotation_y)
-        d["rotation_angle"] = float(self.rotation_angle)
-        d["is_ghosted"] = self.is_ghosted
-        d["is_stepped"] = self.is_stepped
-        d["is_homing"] = self.is_homing
-        d["is_decal"] = self.is_decal
-        d["profile_and_row"] = self.profile_and_row
-        d["switch_mount"] = self.switch_mount
-        d["switch_brand"] = self.switch_brand
-        d["switch_type"] = self.switch_type
-        return str(d)
+        return repr(self)
 
     def __repr__(self) -> str:
-        d = dict()
-        d["color"] = self.color
-        d["labels"] = self.labels
-        d["default_text_color"] = self.default_text_color
-        d["default_text_size"] = self.default_text_size
-        d["x"] = float(self.x)
-        d["y"] = float(self.y)
-        d["width"] = float(self.width)
-        d["height"] = float(self.height)
-        d["x2"] = float(self.x2)
-        d["y2"] = float(self.y2)
-        d["width2"] = float(self.width2)
-        d["height2"] = float(self.height2)
-        d["rotation_x"] = float(self.rotation_x)
-        d["rotation_y"] = float(self.rotation_y)
-        d["rotation_angle"] = float(self.rotation_angle)
-        d["is_ghosted"] = self.is_ghosted
-        d["is_stepped"] = self.is_stepped
-        d["is_homing"] = self.is_homing
-        d["is_decal"] = self.is_decal
-        d["profile_and_row"] = self.profile_and_row
-        d["switch_mount"] = self.switch_mount
-        d["switch_brand"] = self.switch_brand
-        d["switch_type"] = self.switch_type
-        return f"Key(**{repr(d)})"
+        attributes = dict()
+        attributes["color"] = self.color
+        attributes["labels"] = self.labels
+        attributes["default_text_color"] = self.default_text_color
+        attributes["default_text_size"] = self.default_text_size
+        attributes["x"] = self.x
+        attributes["y"] = self.y
+        attributes["width"] = self.width
+        attributes["height"] = self.height
+        attributes["x2"] = self.x2
+        attributes["y2"] = self.y2
+        attributes["width2"] = self.width2
+        attributes["height2"] = self.height2
+        attributes["rotation_x"] = self.rotation_x
+        attributes["rotation_y"] = self.rotation_y
+        attributes["rotation_angle"] = self.rotation_angle
+        attributes["is_ghosted"] = self.is_ghosted
+        attributes["is_stepped"] = self.is_stepped
+        attributes["is_homing"] = self.is_homing
+        attributes["is_decal"] = self.is_decal
+        attributes["profile_and_row"] = self.profile_and_row
+        attributes["switch_mount"] = self.switch_mount
+        attributes["switch_brand"] = self.switch_brand
+        attributes["switch_type"] = self.switch_type
+        return autorepr(self, attributes)
 
     @property
     def color(self) -> str:

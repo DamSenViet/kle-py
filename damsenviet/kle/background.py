@@ -1,13 +1,27 @@
 from __future__ import annotations
 from typeguard import typechecked
 
+from .utils import autorepr
+
 
 class Background:
     """Class storing Metadata's Background."""
 
-    def __init__(self):
-        self.__name: str = ""
-        self.__style: str = ""
+    def __init__(self, name: str = "", style: str = ""):
+        self.name: str = name
+        self.style: str = style
+
+    def __str__(self) -> str:
+        return repr(self)
+
+    def __repr__(self) -> str:
+        return autorepr(
+            self,
+            {
+                "name": self.name,
+                "style": self.style,
+            },
+        )
 
     @property
     def name(self) -> str:

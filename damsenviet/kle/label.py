@@ -2,22 +2,35 @@ from __future__ import annotations
 from typing import Union
 from typeguard import typechecked
 
+from .utils import autorepr
+
 
 class Label:
     """Class storing Key's Label."""
 
-    def __init__(self):
+    def __init__(
+        self,
+        text: str = "",
+        color: str = "#000000",
+        size: Union[int, float] = 3,
+    ):
         """Instantiates a Label."""
-        self.text: str = ""
-        self.color: str = "#000000"
-        self.size: Union[int, float] = 3
+        self.text: str = text
+        self.color: str = color
+        self.size: Union[int, float] = size
 
-    def __str__(self):
-        d = dict()
-        d["text"] = self.__text
-        d["color"] = self.__color
-        d["size"] = self.__size
-        return str(d)
+    def __str__(self) -> str:
+        return repr(self)
+
+    def __repr__(self) -> str:
+        return autorepr(
+            self,
+            {
+                "text": self.text,
+                "color": self.color,
+                "size": self.size,
+            },
+        )
 
     @property
     def text(self) -> str:
