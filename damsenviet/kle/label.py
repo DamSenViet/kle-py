@@ -56,8 +56,10 @@ class Label:
         :param color: font color
         :type color: str
         """
-        if color == "":
-            raise TypeError("cannot be empty")
+        # KLE can't enforce invariants when loading
+        # but this is true assuming no breach of contract
+        # if color == "":
+        #     raise TypeError("cannot be empty")
         self.__color = color
 
     @property
@@ -77,6 +79,8 @@ class Label:
         :param size: font size scale
         :type size: Union[int, float]
         """
-        if size < 0.5:
-            raise TypeError("not at least 0.5")
+        # KLE can't enforce invariants when loading
+        # but this is true assuming no breach of contract
+        # if size < 0.5:
+        #     raise TypeError("not at least 0.5")
         self.__size = size
