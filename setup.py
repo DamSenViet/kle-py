@@ -1,12 +1,22 @@
+from os import path
 import setuptools as st
+
+long_description: str
+with open(path.join(path.abspath(path.dirname(__file__)), "README.md")) as file:
+    long_description = file.read()
 
 st.setup(
     version="0.0.0",
     name="damsenviet.kle",
-    description="A deserializer for KLE formatted json files.",
-    keywords="keyboard layout editor serial",
+    description="A Python library for interacting with KLE data structures and files.",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/DamSenViet/kle-py",
     download_url="https://github.com/DamSenViet/kle-py/tarball/0.0.0",
+    project_urls={
+        "Source": "https://github.com/DamSenViet/kle-py",
+        "Documentation": "https://damsenviet.github.io/kle-py/",
+    },
     author="DamSenViet",
     license="MIT",
     namespace_packages=["damsenviet"],
@@ -27,6 +37,7 @@ st.setup(
         ],
     },
     python_requires=">=3.7",
+    keywords="keyboard layout editor serial",
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
