@@ -1,9 +1,4 @@
 from __future__ import annotations
-from copy import deepcopy
-from decimal import (
-    Decimal,
-    getcontext,
-)
 from typing import (
     cast,
     Any,
@@ -12,16 +7,22 @@ from typing import (
     List,
     Dict,
 )
+from copy import deepcopy
+from decimal import Decimal
 from typeguard import typechecked
 
 from .metadata import Metadata
 from .background import Background
 from .key import Key
 from .exceptions import DeserializeException
-from .utils import T, S, autorepr
+from .utils import (
+    T,
+    S,
+    autorepr,
+    with_precision,
+)
 
 Keyboard_JSON = List[Union[Dict, List[Union[str, Dict]]]]
-getcontext().prec = 64
 
 # fmt: off
 label_map = [
@@ -446,6 +447,7 @@ class Keyboard:
         self.__keys = keys
 
     @classmethod
+    @with_precision(64)
     def from_json(cls, keyboard_json: Keyboard_JSON) -> Keyboard:
         """Deserializes a KLE json array into a keyboard.
 
@@ -600,6 +602,7 @@ class Keyboard:
             current.x = Decimal(current.rotation_x)
         return keyboard
 
+    @with_precision(64)
     def to_json(self) -> Keyboard_JSON:
         """Serializes the Keyboard to a KLE formatted json.
 

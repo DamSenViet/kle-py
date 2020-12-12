@@ -5,6 +5,10 @@ from typing import (
     List,
     Dict,
 )
+from decimal import localcontext
+from functools import wraps
+
+from typeguard import typechecked
 
 T = TypeVar("T")
 S = TypeVar("S")
@@ -55,3 +59,25 @@ def autorepr(self: Any, attributes: Dict[str, Any]):
         key_eq_val_strs.append(f"{key}={repr(value)}")
     serial: str = ", ".join(key_eq_val_strs)
     return f"{self.__class__.__name__}({serial})"
+
+
+@typechecked
+def with_precision(precision: int):
+    """Makes function run in a copy of the context using specific Decimal precision.
+
+    :param precision: the Decimal precision
+    :type precision: int
+    :return: wrapped function
+    :rtype: Callable
+    """
+
+    def decorator(function):
+        @wraps(function)
+        def wrapped(*args, **kwargs):
+            with localcontext() as ctx:
+                ctx.prec = precision
+                return function(*args, **kwargs)
+
+        return wrapped
+
+    return decorator
