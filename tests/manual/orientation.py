@@ -11,7 +11,13 @@ import damsenviet.kle as kle
 FORMATS = ["Middle Center", "Top Left", "Top Center"]
 
 
-def rotate(x, y, origin_x, origin_y, degrees):
+def rotate(
+    x: float,
+    y: float,
+    origin_x: float,
+    origin_y: float,
+    angle: float,
+):
     rel_x = x - origin_x
     rel_y = y - origin_y
     new_x = (
