@@ -30,9 +30,8 @@ This quick start demo demonstrates parsing a KLE formatted json file.
 
 ``` py
 import os
-import path
 import json
-import damsenviet.kle as kle
+from damsenviet.kle import Keyboard
 
 # relative to this file
 json_relative_file_path = "./keyboard.json"
@@ -43,10 +42,11 @@ json_absolute_file_path = os.path.abspath(
     )
 )
 
-keyboard = kle.Keyboard.from_json(
-  json.load(json_absolute_file_path)
+keyboard = Keyboard.from_json(
+    json.load(json_absolute_file_path)
 )
 
 for key in keyboard.keys:
-  print(key)
+    for label in key.labels:
+        pass
 ```

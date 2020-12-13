@@ -19,6 +19,7 @@ kle-py
    :caption: Contents:
    
    Guide <guide>
+   Documentation <documentation>
    API <api/damsenviet.kle>
 
 
