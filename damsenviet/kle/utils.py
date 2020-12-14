@@ -5,28 +5,14 @@ from typing import (
     List,
     Dict,
 )
-from mpmath import mp
 from functools import wraps
-
+from mpmath import mp
 from typeguard import typechecked
+
+from .exceptions import IllegalValueException
 
 T = TypeVar("T")
 S = TypeVar("S")
-
-
-class IllegalValueException(Exception):
-    """Class for encountering illegal arguments."""
-
-    def __init__(
-        self,
-        message: str,
-    ):
-        """Initializes an IllegalArgumentException.
-
-        :param message: A message indicating an illegal argument.
-        :type message: str
-        """
-        super().__init__(message)
 
 
 def expect(
@@ -41,9 +27,9 @@ def expect(
     :type value_name: str
     :param value: any value
     :type value: T
-    :param condition_description: [description]
+    :param condition_description: a description of condition
     :type condition_description: str
-    :param condition: [description]
+    :param condition: a callback that returns a boolean value
     :type condition: Callable[[T], bool]
     :return: None
     :rtype: None
