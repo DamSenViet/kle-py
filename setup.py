@@ -23,6 +23,8 @@ st.setup(
     packages=st.find_packages(),
     install_requires=[
         "typeguard>=2.10.0",
+        "mpmath>=1.1.0",
+        "tinycss2>=1.1.0",
     ],
     extras_require={
         "dev": [
