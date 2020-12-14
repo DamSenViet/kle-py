@@ -5,7 +5,7 @@ from typing import (
     List,
     Dict,
 )
-from decimal import localcontext
+from mpmath import mp
 from functools import wraps
 
 from typeguard import typechecked
@@ -63,9 +63,9 @@ def autorepr(self: Any, attributes: Dict[str, Any]):
 
 @typechecked
 def with_precision(precision: int):
-    """Makes function run in a copy of the context using specific Decimal precision.
+    """Temporarily modifies the precision of mpmath.
 
-    :param precision: the Decimal precision
+    :param precision: the mpf precision
     :type precision: int
     :return: wrapped function
     :rtype: Callable
@@ -74,9 +74,11 @@ def with_precision(precision: int):
     def decorator(function):
         @wraps(function)
         def wrapped(*args, **kwargs):
-            with localcontext() as ctx:
-                ctx.prec = precision
-                return function(*args, **kwargs)
+            old_precision = mp.dps
+            mp.dps = precision
+            result = function(*args, **kwargs)
+            mp.dps = old_precision
+            return result
 
         return wrapped
 

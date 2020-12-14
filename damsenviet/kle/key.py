@@ -1,10 +1,10 @@
 from __future__ import annotations
 from damsenviet.kle.utils import autorepr
-from decimal import Decimal
 from typing import (
     Union,
     List,
 )
+from mpmath import mpf
 from typeguard import typechecked
 
 from .label import Label
@@ -18,17 +18,17 @@ class Key:
         self.labels: List[Label] = [Label() for i in range(12)]
         self.default_text_color: str = "#000000"
         self.default_text_size: str = 3
-        self.x: Decimal = Decimal(str(0.0))
-        self.y: Decimal = Decimal(str(0.0))
-        self.width: Decimal = Decimal(str(1.0))
-        self.height: Decimal = Decimal(str(1.0))
-        self.x2: Decimal = Decimal(str(0.0))
-        self.y2: Decimal = Decimal(str(0.0))
-        self.width2: Decimal = Decimal(str(1.0))
-        self.height2: Decimal = Decimal(str(1.0))
-        self.rotation_x: Decimal = Decimal(str(0.0))
-        self.rotation_y: Decimal = Decimal(str(0.0))
-        self.rotation_angle: Decimal = Decimal(str(0.0))
+        self.x: mpf = mpf(str(0.0))
+        self.y: mpf = mpf(str(0.0))
+        self.width: mpf = mpf(str(1.0))
+        self.height: mpf = mpf(str(1.0))
+        self.x2: mpf = mpf(str(0.0))
+        self.y2: mpf = mpf(str(0.0))
+        self.width2: mpf = mpf(str(1.0))
+        self.height2: mpf = mpf(str(1.0))
+        self.rotation_x: mpf = mpf(str(0.0))
+        self.rotation_y: mpf = mpf(str(0.0))
+        self.rotation_angle: mpf = mpf(str(0.0))
         self.is_ghosted: bool = False
         self.is_stepped: bool = False
         self.is_homing: bool = False
@@ -153,211 +153,211 @@ class Key:
         self.__default_text_size = default_text_size
 
     @property
-    def x(self) -> Decimal:
+    def x(self) -> mpf:
         """Gets x position of raised primary shape.
 
         :return: x posiiton of raised primary shape
-        :rtype: Decimal
+        :rtype: mpf
         """
         return self.__x
 
     @x.setter
     @typechecked
-    def x(self, x: Decimal) -> None:
+    def x(self, x: mpf) -> None:
         """Sets x position of raised primary shape in key units.
 
         :param x: x position of raised primary shape in key units
-        :type x: Decimal
+        :type x: mpf
         """
         self.__x = x
 
     @property
-    def y(self) -> Decimal:
+    def y(self) -> mpf:
         """Gets y position of raised primary shape in key units.
 
         :return: y position of raised primary shape in key units
-        :rtype: Decimal
+        :rtype: mpf
         """
         return self.__y
 
     @y.setter
     @typechecked
-    def y(self, y: Decimal) -> None:
+    def y(self, y: mpf) -> None:
         """Sets y position of raised primary shape in key units.
 
         :param y: y position of raised primary shape in key units
-        :type y: Decimal
+        :type y: mpf
         """
         self.__y = y
 
     @property
-    def width(self) -> Decimal:
+    def width(self) -> mpf:
         """Gets width of raised primary shape in key units .
 
         :return: width of raised primary shape in key units
-        :rtype: Decimal
+        :rtype: mpf
         """
         return self.__width
 
     @width.setter
     @typechecked
-    def width(self, width: Decimal) -> None:
+    def width(self, width: mpf) -> None:
         """Sets width of raised primary shape in key units.
 
         :param width: width of raised primary shape in key units
-        :type width: Decimal
+        :type width: mpf
         """
         self.__width = width
 
     @property
-    def height(self) -> Decimal:
+    def height(self) -> mpf:
         """Gets height of raised primary shape in key units.
 
         :return: height of raised primary shape in key units
-        :rtype: Decimal
+        :rtype: mpf
         """
         return self.__height
 
     @height.setter
     @typechecked
-    def height(self, height: Decimal) -> None:
+    def height(self, height: mpf) -> None:
         """Sets height of raised primary shape in key units.
 
         :param height: height of raised primary shape in key units
-        :type height: Decimal
+        :type height: mpf
         """
         self.__height = height
 
     @property
-    def x2(self) -> Decimal:
+    def x2(self) -> mpf:
         """Gets x position offset of the lowered secondary shape in key units.
 
         :return: x position offset of the lowered secondary shape in key units
-        :rtype: Decimal
+        :rtype: mpf
         """
         return self.__x2
 
     @x2.setter
     @typechecked
-    def x2(self, x2: Decimal) -> None:
+    def x2(self, x2: mpf) -> None:
         """Sets x position offset of the lowered secondary shape in key units.
 
         :param x2: x position offset of the lowered secondary shape in key units
-        :type x2: Decimal
+        :type x2: mpf
         """
         self.__x2 = x2
 
     @property
-    def y2(self) -> Decimal:
+    def y2(self) -> mpf:
         """Gets y position offset of lowered secondary shape in key units.
 
         :return: y position offset of lowered secondary shape in key units
-        :rtype: Decimal
+        :rtype: mpf
         """
         return self.__y2
 
     @y2.setter
     @typechecked
-    def y2(self, y2: Decimal) -> None:
+    def y2(self, y2: mpf) -> None:
         """Sets y position offset of lowered secondary shape in key units.
 
         :param y2: y position offset of lowered secondary shape in key units
-        :type y2: Decimal
+        :type y2: mpf
         """
         self.__y2 = y2
 
     @property
-    def width2(self) -> Decimal:
+    def width2(self) -> mpf:
         """Gets width of lowered secondary shape in key units.
 
         :return: width of lowered secondary shape in key units
-        :rtype: Decimal
+        :rtype: mpf
         """
         return self.__width2
 
     @width2.setter
     @typechecked
-    def width2(self, width2: Decimal) -> None:
+    def width2(self, width2: mpf) -> None:
         """Sets width of lowered secondary shape in key units.
 
         :param width2: width of lowered secondary shape in key units
-        :type width2: Decimal
+        :type width2: mpf
         """
         self.__width2 = width2
 
     @property
-    def height2(self) -> Decimal:
+    def height2(self) -> mpf:
         """Gets height of lowered secondary shape in key units.
 
         :return: height of lowered secondary shape in key units
-        :rtype: Decimal
+        :rtype: mpf
         """
         return self.__height2
 
     @height2.setter
     @typechecked
-    def height2(self, height2: Decimal) -> None:
+    def height2(self, height2: mpf) -> None:
         """Sets height of lowered secondary shape in key units.
 
         :param height2: height of lowered secondary shape in key units
-        :type height2: Decimal
+        :type height2: mpf
         """
         self.__height2 = height2
 
     @property
-    def rotation_x(self) -> Decimal:
+    def rotation_x(self) -> mpf:
         """Gets x position of rotation origin in key units.
 
         :return: x position of rotation origin in key units
-        :rtype: Decimal
+        :rtype: mpf
         """
         return self.__rotation_x
 
     @rotation_x.setter
     @typechecked
-    def rotation_x(self, rotation_x: Decimal) -> None:
+    def rotation_x(self, rotation_x: mpf) -> None:
         """Sets x position of rotation origin in key units.
 
         :param rotation_x: x position of rotation origin in key units
-        :type rotation_x: Decimal
+        :type rotation_x: mpf
         """
         self.__rotation_x = rotation_x
 
     @property
-    def rotation_y(self) -> Decimal:
+    def rotation_y(self) -> mpf:
         """Gets y position of rotation origin in key units.
 
         :return: y position of rotation origin in key units
-        :rtype: Decimal
+        :rtype: mpf
         """
         return self.__rotation_y
 
     @rotation_y.setter
     @typechecked
-    def rotation_y(self, rotation_y: Decimal) -> None:
+    def rotation_y(self, rotation_y: mpf) -> None:
         """Sets y position of rotation origin in key units.
 
         :param rotation_y: y position of rotation origin in key units
-        :type rotation_y: Decimal
+        :type rotation_y: mpf
         """
         self.__rotation_y = rotation_y
 
     @property
-    def rotation_angle(self) -> Decimal:
+    def rotation_angle(self) -> mpf:
         """Gets rotation angle in degrees.
 
         :return: rotation angle in degrees
-        :rtype: Decimal
+        :rtype: mpf
         """
         return self.__rotation_angle
 
     @rotation_angle.setter
     @typechecked
-    def rotation_angle(self, rotation_angle: Decimal) -> None:
+    def rotation_angle(self, rotation_angle: mpf) -> None:
         """Sets rotation angle in degrees.
 
         :param rotation_angle: rotation angle in degrees
-        :type rotation_angle: Decimal
+        :type rotation_angle: mpf
         """
         self.__rotation_angle = rotation_angle
 

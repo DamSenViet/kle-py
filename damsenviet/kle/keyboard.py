@@ -8,7 +8,7 @@ from typing import (
     Dict,
 )
 from copy import deepcopy
-from decimal import Decimal
+from mpmath import mpf
 from typeguard import typechecked
 
 from .metadata import Metadata
@@ -155,9 +155,9 @@ def _playback_key_changes(
     current_labels_color: List[str],
     current_labels_size: List[Union[int, float]],
     alignment: int,
-    cluster_rotation_x: Decimal,
-    cluster_rotation_y: Decimal,
-) -> Tuple[List[str], List[Union[int, float]], int, Decimal, Decimal]:
+    cluster_rotation_x: mpf,
+    cluster_rotation_y: mpf,
+) -> Tuple[List[str], List[Union[int, float]], int, mpf, mpf]:
     """Playback the changes into the key.
 
     :param key: the recording key
@@ -171,22 +171,22 @@ def _playback_key_changes(
     :param alignment: the tracked text alignment
     :type alignment: int
     :param cluster_rotation_x: the tracked rotation origin x
-    :type cluster_rotation_x: Decimal
+    :type cluster_rotation_x: mpf
     :param cluster_rotation_y: the tracked rotation origin y
-    :type cluster_rotation_y: Decimal
+    :type cluster_rotation_y: mpf
     :return: current_labels_color, current_labels_size, align, cluster_rotation_x, cluster_rotation_y
-    :rtype: Tuple[List[str], List[Union[int, float]], int, Decimal, Decimal]
+    :rtype: Tuple[List[str], List[Union[int, float]], int, mpf, mpf]
     """
     if "r" in key_changes:
-        key.rotation_angle = Decimal(str(key_changes["r"]))
+        key.rotation_angle = mpf(str(key_changes["r"]))
     if "rx" in key_changes:
-        key.rotation_x = Decimal(str(key_changes["rx"]))
-        cluster_rotation_x = Decimal(str(key_changes["rx"]))
+        key.rotation_x = mpf(str(key_changes["rx"]))
+        cluster_rotation_x = mpf(str(key_changes["rx"]))
         key.x = cluster_rotation_x
         key.y = cluster_rotation_y
     if "ry" in key_changes:
-        key.rotation_y = Decimal(str(key_changes["ry"]))
-        cluster_rotation_y = Decimal(str(key_changes["ry"]))
+        key.rotation_y = mpf(str(key_changes["ry"]))
+        cluster_rotation_y = mpf(str(key_changes["ry"]))
         key.x = cluster_rotation_x
         key.y = cluster_rotation_y
     if "a" in key_changes:
@@ -214,23 +214,23 @@ def _playback_key_changes(
         for i, color in enumerate(_unaligned(labels_color, alignment, "")):
             current_labels_color[i] = color
     if "x" in key_changes:
-        key.x = key.x + Decimal(str(key_changes["x"]))
+        key.x = key.x + mpf(str(key_changes["x"]))
     if "y" in key_changes:
-        key.y = key.y + Decimal(str(key_changes["y"]))
+        key.y = key.y + mpf(str(key_changes["y"]))
     if "w" in key_changes:
-        key.width = Decimal(str(key_changes["w"]))
-        key.width2 = Decimal(str(key_changes["w"]))
+        key.width = mpf(str(key_changes["w"]))
+        key.width2 = mpf(str(key_changes["w"]))
     if "h" in key_changes:
-        key.height = Decimal(str(key_changes["h"]))
-        key.height2 = Decimal(str(key_changes["h"]))
+        key.height = mpf(str(key_changes["h"]))
+        key.height2 = mpf(str(key_changes["h"]))
     if "x2" in key_changes:
-        key.x2 = Decimal(str(key_changes["x2"]))
+        key.x2 = mpf(str(key_changes["x2"]))
     if "y2" in key_changes:
-        key.y2 = Decimal(str(key_changes["y2"]))
+        key.y2 = mpf(str(key_changes["y2"]))
     if "w2" in key_changes:
-        key.width2 = Decimal(str(key_changes["w2"]))
+        key.width2 = mpf(str(key_changes["w2"]))
     if "h2" in key_changes:
-        key.height2 = Decimal(str(key_changes["h2"]))
+        key.height2 = mpf(str(key_changes["h2"]))
     if "n" in key_changes:
         key.is_homing = key_changes["n"]
     if "l" in key_changes:
@@ -257,13 +257,13 @@ def _playback_key_changes(
 @typechecked
 def _key_sort_criteria(
     key: Key,
-) -> Tuple[Decimal, Decimal, Decimal, Decimal, Decimal]:
+) -> Tuple[mpf, mpf, mpf, mpf, mpf]:
     """A helper to sort keys into the KLE order before serialization.
 
     :param key: the key to compare
     :type key: Key
     :return: the multidimensional ordering for comparison
-    :rtype: Tuple[ Decimal, Decimal, Decimal, Decimal, Decimal, ]
+    :rtype: Tuple[ mpf, mpf, mpf, mpf, mpf, ]
     """
     return (
         (key.rotation_angle + 360) % 360,
@@ -290,9 +290,9 @@ def _record_change(changes: Dict, name: str, val: T, default_val: S) -> T:
     :rtype: T
     """
     if val != default_val:
-        if type(val) is Decimal:
+        if type(val) is mpf:
             # determine if you can use an in there
-            if val % Decimal(str(1.0)) == Decimal(str(0.0)):
+            if val % mpf(str(1.0)) == mpf(str(0.0)):
                 changes[name] = int(val)
             else:
                 changes[name] = float(val)
@@ -447,12 +447,18 @@ class Keyboard:
         self.__keys = keys
 
     @classmethod
-    @with_precision(64)
-    def from_json(cls, keyboard_json: Keyboard_JSON) -> Keyboard:
+    @with_precision(17)
+    def from_json(
+        cls,
+        keyboard_json: Keyboard_JSON,
+        normalize: bool = False,
+    ) -> Keyboard:
         """Deserializes a KLE json array into a keyboard.
 
         :param keyboard_json: the KLE formatted json
         :type keyboard_json: List[Union[Dict, List[Union[str, Dict]]]]
+        :param normalize: whether to normalize invalid values, silences errors when True
+        :type normalize: bool
         :raises DeserializeException: keyboard_json is not an array
         :raises DeserializeException: rotation changes not at beginning of row
         :raises DeserializeException: metadata specified but not as first item
@@ -477,8 +483,8 @@ class Keyboard:
         alignment: int = 4
         # keys are row separated by clusters
         # track rotation info for reset x/y positions
-        cluster_rotation_x: Decimal = Decimal(str(0.0))
-        cluster_rotation_y: Decimal = Decimal(str(0.0))
+        cluster_rotation_x: mpf = mpf(str(0.0))
+        cluster_rotation_y: mpf = mpf(str(0.0))
 
         # for object in list
         for r in range(len(keyboard_json)):
@@ -532,13 +538,13 @@ class Keyboard:
                         keyboard.keys.append(new_key)
 
                         # adjustments for the next key
-                        current.x = current.x + Decimal(current.width)
-                        current.width = Decimal(str(1.0))
-                        current.height = Decimal(str(1.0))
-                        current.x2 = Decimal(str(0.0))
-                        current.y2 = Decimal(str(0.0))
-                        current.width2 = Decimal(str(0.0))
-                        current.height2 = Decimal(str(0.0))
+                        current.x = current.x + mpf(current.width)
+                        current.width = mpf(str(1.0))
+                        current.height = mpf(str(1.0))
+                        current.x2 = mpf(str(0.0))
+                        current.y2 = mpf(str(0.0))
+                        current.width2 = mpf(str(0.0))
+                        current.height2 = mpf(str(0.0))
                         current.is_homing = False
                         current.is_stepped = False
                         current.is_decal = False
@@ -584,7 +590,7 @@ class Keyboard:
                             message=message,
                             payload=item,
                         )
-                current.y = current.y + Decimal(str(1.0))
+                current.y = current.y + mpf(str(1.0))
             elif type(keyboard_json[r]) is dict:
                 metadata_changes = keyboard_json[r]
                 if r != 0:
@@ -599,10 +605,10 @@ class Keyboard:
                     f"{type(keyboard_json[r]).__name__}"
                 )
                 raise DeserializeException(message=message, payload=keyboard_json[r])
-            current.x = Decimal(str(current.rotation_x))
+            current.x = mpf(str(current.rotation_x))
         return keyboard
 
-    @with_precision(64)
+    @with_precision(17)
     def to_json(self) -> Keyboard_JSON:
         """Serializes the Keyboard to a KLE formatted json.
 
@@ -618,9 +624,9 @@ class Keyboard:
         current_labels_color: List[str] = current.default_text_color
         # allows for non-KLE defaults for label initializer, can maintain value invariants
         current_labels_size: List[Union[int, float]] = [0 for label in current.labels]
-        cluster_rotation_angle: Decimal = Decimal(str(0.0))
-        cluster_rotation_x: Decimal = Decimal(str(0.0))
-        cluster_rotation_y: Decimal = Decimal(str(0.0))
+        cluster_rotation_angle: mpf = mpf(str(0.0))
+        cluster_rotation_x: mpf = mpf(str(0.0))
+        cluster_rotation_y: mpf = mpf(str(0.0))
 
         metadata_changes: Dict = dict()
         default_metadata: Metadata = Metadata()
@@ -719,7 +725,7 @@ class Keyboard:
 
         is_new_row: bool = True
         # will be incremented on first row
-        current.y = current.y - Decimal(str(1.0))
+        current.y = current.y - mpf(str(1.0))
 
         sorted_keys: List[Key] = list(sorted(self.__keys, key=_key_sort_criteria))
         for key in sorted_keys:
@@ -748,7 +754,7 @@ class Keyboard:
                 is_new_row = True
 
             if is_new_row:
-                current.y = current.y + Decimal(str(1.0))
+                current.y = current.y + mpf(str(1.0))
 
                 # set up for the new row
                 # y is reset if either rx or ry are changed
@@ -789,7 +795,7 @@ class Keyboard:
                 key_changes,
                 "y",
                 key.y - current.y,
-                Decimal(str(0.0)),
+                mpf(str(0.0)),
             )
             current.x = (
                 current.x
@@ -797,7 +803,7 @@ class Keyboard:
                     key_changes,
                     "x",
                     key.x - current.x,
-                    Decimal(str(0.0)),
+                    mpf(str(0.0)),
                 )
                 + key.width
             )
@@ -899,12 +905,12 @@ class Keyboard:
                             _reduced_text_sizes(aligned_text_size),
                             [],
                         )
-            _record_change(key_changes, "w", key.width, Decimal(str(1.0)))
-            _record_change(key_changes, "h", key.height, Decimal(str(1.0)))
+            _record_change(key_changes, "w", key.width, mpf(str(1.0)))
+            _record_change(key_changes, "h", key.height, mpf(str(1.0)))
             _record_change(key_changes, "w2", key.width2, key.width)
             _record_change(key_changes, "h2", key.height2, key.height)
-            _record_change(key_changes, "x2", key.x2, Decimal(str(0.0)))
-            _record_change(key_changes, "y2", key.y2, Decimal(str(0.0)))
+            _record_change(key_changes, "x2", key.x2, mpf(str(0.0)))
+            _record_change(key_changes, "y2", key.y2, mpf(str(0.0)))
             _record_change(key_changes, "n", key.is_homing, False)
             _record_change(key_changes, "l", key.is_stepped, False)
             _record_change(key_changes, "d", key.is_decal, False)
