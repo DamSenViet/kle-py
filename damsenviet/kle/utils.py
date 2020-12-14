@@ -74,6 +74,8 @@ def with_precision(precision: int):
     def decorator(function):
         @wraps(function)
         def wrapped(*args, **kwargs):
+            # mp.dps is decimal significant places
+            # mp.prec is the number of precision bits
             old_precision = mp.dps
             mp.dps = precision
             result = function(*args, **kwargs)
@@ -83,3 +85,8 @@ def with_precision(precision: int):
         return wrapped
 
     return decorator
+
+
+# number of decimal places to keep
+# https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number
+kle_precision = 17

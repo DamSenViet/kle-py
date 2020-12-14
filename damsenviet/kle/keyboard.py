@@ -20,6 +20,7 @@ from .utils import (
     S,
     autorepr,
     with_precision,
+    kle_precision,
 )
 
 Keyboard_JSON = List[Union[Dict, List[Union[str, Dict]]]]
@@ -447,7 +448,7 @@ class Keyboard:
         self.__keys = keys
 
     @classmethod
-    @with_precision(17)
+    @with_precision(kle_precision)
     def from_json(
         cls,
         keyboard_json: Keyboard_JSON,
@@ -608,7 +609,7 @@ class Keyboard:
             current.x = mpf(str(current.rotation_x))
         return keyboard
 
-    @with_precision(17)
+    @with_precision(kle_precision)
     def to_json(self) -> Keyboard_JSON:
         """Serializes the Keyboard to a KLE formatted json.
 
