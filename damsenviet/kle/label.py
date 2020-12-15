@@ -101,6 +101,16 @@ class Label:
         """
         # KLE can't enforce invariants when loading
         # but this is true assuming no breach of contract
-        # if size < 0.5:
-        #     raise TypeError("not at least 0.5")
+        expect(
+            "size",
+            size,
+            "at least 1",
+            lambda size: size >= 1,
+        )
+        expect(
+            "size",
+            size,
+            "less than 10",
+            lambda size: size < 10,
+        )
         self.__size = size

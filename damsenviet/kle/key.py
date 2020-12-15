@@ -164,6 +164,18 @@ class Key:
         :param default_text_size: the default text size
         :type default_text_size: Union[int, float]
         """
+        expect(
+            "default_text_size",
+            default_text_size,
+            "at least 1",
+            lambda size: size >= 1,
+        )
+        expect(
+            "default_text_size",
+            default_text_size,
+            "less than 10",
+            lambda size: size < 10,
+        )
         self.__default_text_size = default_text_size
 
     @property
