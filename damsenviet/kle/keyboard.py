@@ -134,11 +134,11 @@ def _playback_metadata_changes(metadata: Metadata, metadata_changes: Dict) -> No
     if "radii" in metadata_changes:
         metadata.radii = metadata_changes["radii"]
     if "switchMount" in metadata_changes:
-        metadata.switch_mount = metadata_changes["switchMount"]
+        metadata.switch.mount = metadata_changes["switchMount"]
     if "switchBrand" in metadata_changes:
-        metadata.switch_brand = metadata_changes["switchBrand"]
+        metadata.switch.brand = metadata_changes["switchBrand"]
     if "switchType" in metadata_changes:
-        metadata.switch_type = metadata_changes["switchType"]
+        metadata.switch.type = metadata_changes["switchType"]
     if "css" in metadata_changes:
         metadata.css = metadata_changes["css"]
     if "pcb" in metadata_changes:
@@ -241,11 +241,11 @@ def _playback_key_changes(
     if "g" in key_changes:
         key.is_ghosted = key_changes["g"]
     if "sm" in key_changes:
-        key.switch_mount = key_changes["sm"]
+        key.switch.mount = key_changes["sm"]
     if "sb" in key_changes:
-        key.switch_brand = key_changes["sb"]
+        key.switch.mount = key_changes["sb"]
     if "st" in key_changes:
-        key.switch_type = key_changes["st"]
+        key.switch.mount = key_changes["st"]
     return (
         current_labels_color,
         current_labels_size,
@@ -680,20 +680,20 @@ class Keyboard:
         _record_change(
             metadata_changes,
             "switchMount",
-            self.metadata.switch_mount,
-            default_metadata.switch_mount,
+            self.metadata.switch.mount,
+            default_metadata.switch.mount,
         )
         _record_change(
             metadata_changes,
             "switchBrand",
-            self.metadata.switch_brand,
-            default_metadata.switch_brand,
+            self.metadata.switch.brand,
+            default_metadata.switch.brand,
         )
         _record_change(
             metadata_changes,
             "switchType",
-            self.metadata.switch_type,
-            default_metadata.switch_type,
+            self.metadata.switch.type,
+            default_metadata.switch.type,
         )
         _record_change(
             metadata_changes,
@@ -842,23 +842,23 @@ class Keyboard:
                 key.profile_and_row,
                 current.profile_and_row,
             )
-            current.switch_mount = _record_change(
+            current.switch.mount = _record_change(
                 key_changes,
                 "sm",
-                key.switch_mount,
-                current.switch_mount,
+                key.switch.mount,
+                current.switch.mount,
             )
-            current.switch_brand = _record_change(
+            current.switch.brand = _record_change(
                 key_changes,
                 "sb",
-                key.switch_brand,
-                current.switch_brand,
+                key.switch.brand,
+                current.switch.brand,
             )
-            current.switch_type = _record_change(
+            current.switch.type = _record_change(
                 key_changes,
                 "st",
-                key.switch_type,
-                current.switch_type,
+                key.switch.type,
+                current.switch.type,
             )
             align = _record_change(
                 key_changes,

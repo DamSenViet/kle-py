@@ -1,5 +1,4 @@
 from __future__ import annotations
-from damsenviet.kle.utils import autorepr
 from typing import (
     Union,
     List,
@@ -8,6 +7,8 @@ from mpmath import mpf
 from typeguard import typechecked
 
 from .label import Label
+from .switch import Switch
+from .utils import autorepr
 
 
 class Key:
@@ -34,9 +35,7 @@ class Key:
         self.is_homing: bool = False
         self.is_decal: bool = False
         self.profile_and_row: str = ""
-        self.switch_mount: str = ""
-        self.switch_brand: str = ""
-        self.switch_type: str = ""
+        self.switch = Switch("", "", "")
 
     def __str__(self) -> str:
         return repr(self)
@@ -63,9 +62,7 @@ class Key:
         attributes["is_homing"] = self.is_homing
         attributes["is_decal"] = self.is_decal
         attributes["profile_and_row"] = self.profile_and_row
-        attributes["switch_mount"] = self.switch_mount
-        attributes["switch_brand"] = self.switch_brand
-        attributes["switch_type"] = self.switch_type
+        attributes["switch"] = self.switch
         return autorepr(self, attributes)
 
     @property
@@ -465,60 +462,20 @@ class Key:
         self.__profile_and_row = profile_and_row
 
     @property
-    def switch_mount(self) -> str:
-        """Gets switch mounting type.
-
-        e.g. "CherryMX", "Alps", etc (based on pin cutouts).
-
-        :return: switch mount type
-        :rtype: str
-        """
-        return self.__switch_mount
-
-    @switch_mount.setter
     @typechecked
-    def switch_mount(self, switch_mount: str) -> None:
-        """Sets switch mount type.
+    def switch(self) -> Switch:
+        """Gets switch.
 
-        :param switch_mount: switch mount type
-        :type switch_mount: str
+        :return: switch
+        :rtype: Switch
         """
-        self.__switch_mount = switch_mount
+        return self.__switch
 
-    @property
-    def switch_brand(self) -> str:
-        """Gets switch brand.
+    @switch.setter
+    def switch(self, switch: Switch) -> None:
+        """Sets switch.
 
-        :return: switch brand
-        :rtype: str
+        :param switch: switch
+        :type switch: Switch
         """
-        return self.__switch_brand
-
-    @switch_brand.setter
-    @typechecked
-    def switch_brand(self, switch_brand: str) -> None:
-        """Sets switch brand.
-
-        :param switch_brand: switch brand
-        :type switch_brand: str
-        """
-        self.__switch_brand = switch_brand
-
-    @property
-    def switch_type(self) -> str:
-        """Gets switch type.
-
-        :return: switch type
-        :rtype: str
-        """
-        return self.__switch_type
-
-    @switch_type.setter
-    @typechecked
-    def switch_type(self, switch_type: str) -> None:
-        """Sets switch type.
-
-        :param switch_type: switch type
-        :type switch_type: str
-        """
-        self.__switch_type = switch_type
+        self.__switch = switch
