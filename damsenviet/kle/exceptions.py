@@ -1,4 +1,5 @@
 from typing import (
+    Any,
     Union,
     List,
     Dict,
@@ -16,6 +17,7 @@ class IllegalValueException(Exception):
     def __init__(
         self,
         message: str,
+        value: Any,
     ):
         """Initializes an IllegalArgumentException.
 
@@ -23,6 +25,7 @@ class IllegalValueException(Exception):
         :type message: str
         """
         super().__init__(message)
+        self.value = value
 
 
 class DeserializeException(Exception):

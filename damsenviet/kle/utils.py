@@ -88,9 +88,9 @@ def expect(
     :return: None
     :rtype: None
     """
-    message = f"expected {value_name} to {condition_description}"
+    message = f"expected {value_name} {repr(value)} to {condition_description}"
     if not condition(value):
-        raise IllegalValueException(message)
+        raise IllegalValueException(message, value)
 
 
 def is_valid_css_stylesheet(css: str) -> bool:
