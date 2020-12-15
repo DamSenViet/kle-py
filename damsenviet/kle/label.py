@@ -1,12 +1,13 @@
 from __future__ import annotations
 from typing import Union
 from typeguard import typechecked
-
 from .utils import (
     autorepr,
     expect,
     is_valid_css_color,
 )
+
+__all__ = ["Label"]
 
 
 class Label:

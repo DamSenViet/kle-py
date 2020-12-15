@@ -5,7 +5,6 @@ from typing import (
 )
 from mpmath import mpf
 from typeguard import typechecked
-
 from .label import Label
 from .switch import Switch
 from .utils import (
@@ -13,6 +12,8 @@ from .utils import (
     expect,
     is_valid_css_color,
 )
+
+__all__ = ["Key"]
 
 
 class Key:

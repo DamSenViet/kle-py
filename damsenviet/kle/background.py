@@ -1,7 +1,12 @@
 from __future__ import annotations
 from typeguard import typechecked
+from .utils import (
+    autorepr,
+    expect,
+    is_valid_css_declaration,
+)
 
-from .utils import autorepr, expect, is_valid_css_declaration
+__all__ = ["Background"]
 
 
 class Background:

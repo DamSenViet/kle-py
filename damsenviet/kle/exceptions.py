@@ -4,6 +4,11 @@ from typing import (
     Dict,
 )
 
+__all__ = [
+    "IllegalValueException",
+    "DeserializeException",
+]
+
 
 class IllegalValueException(Exception):
     """Exceptions for encountering illegal values."""

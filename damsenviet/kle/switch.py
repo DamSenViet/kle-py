@@ -1,8 +1,12 @@
 from typeguard import typechecked
+from .utils import (
+    autorepr,
+    expect,
+)
 
-from .utils import autorepr, expect
+__all__ = ["Switch"]
 
-_switches_data = {
+switches_json = {
     "cherry": {
         "mount": "cherry",
         "name": "Cherry MX Mount",
@@ -453,7 +457,7 @@ class Switch:
                 value_name="mount",
                 value=mount,
                 condition_description="be a valid mount",
-                condition=lambda mount: mount in _switches_data,
+                condition=lambda mount: mount in switches_json,
             )
         self.__mount = mount
         self.brand = ""
@@ -483,7 +487,7 @@ class Switch:
                 value_name="brand",
                 value=brand,
                 condition_description="be a valid brand in the mount",
-                condition=lambda brand: brand in _switches_data[self.mount]["brands"],
+                condition=lambda brand: brand in switches_json[self.mount]["brands"],
             )
         self.__brand = brand
         self.type = ""
@@ -512,6 +516,6 @@ class Switch:
                 value=type,
                 condition_description="be a valid type in the brand",
                 condition=lambda type: type
-                in _switches_data[self.mount]["brands"][self.brand]["switches"],
+                in switches_json[self.mount]["brands"][self.brand]["switches"],
             )
         self.__type = type

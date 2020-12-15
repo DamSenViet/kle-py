@@ -1,6 +1,5 @@
 from __future__ import annotations
 from typeguard import typechecked
-
 from .background import Background
 from .switch import Switch
 from .utils import (
@@ -10,6 +9,8 @@ from .utils import (
     is_valid_css_color,
     is_valid_css_component_value_list,
 )
+
+__all__ = ["Metadata"]
 
 
 class Metadata:
