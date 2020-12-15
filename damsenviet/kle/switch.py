@@ -1,4 +1,4 @@
-from typing import Union
+from typeguard import typechecked
 
 from .utils import autorepr, expect
 
@@ -392,43 +392,28 @@ _switches_data = {
 
 
 class Switch:
-    """Class storing an incremental switch."""
+    """Class storing incremental Switch."""
 
     def __init__(
         self,
-        mount: Union[None, str] = None,
-        brand: Union[None, str] = None,
-        type: Union[None, str] = None,
+        mount: str = "",
+        brand: str = "",
+        type: str = "",
     ) -> None:
         """Instantiates a switch.
 
-        :param mount: the switch mount, defaults to None
-        :type mount: Union[None, str], optional
-        :param brand: the switch brand of a switch mount, defaults to None
-        :type brand: Union[None, str], optional
-        :param type: the switch type of a switch brand, defaults to None
-        :type type: Union[None, str], optional
+        :param mount: the switch mount, defaults to ""
+        :type mount: str, optional
+        :param brand: the switch brand of a switch mount, defaults to ""
+        :type brand: str, optional
+        :param type: the switch type part id of a switch brand, defaults to ""
+        :type type: str, optional
         """
-        self.mount = None
-        self.brand = None
-        self.type = None
-        expect(
-            value_name="mount",
-            value=mount,
-            condition_description="be a valid mount",
-            condition=lambda mount: mount in _switches_data,
-        )
-        if mount is None or mount not in _switches_data:
-            raise TypeError()
+        self.__mount = ""
+        self.__brand = ""
+        self.__type = ""
         self.mount = mount
-        if brand is None or brand not in _switches_data[mount]["brands"]:
-            raise TypeError()
         self.brand = brand
-        if (
-            type is None
-            or type not in _switches_data[mount]["brands"][brand]["switches"]
-        ):
-            raise TypeError()
         self.type = type
 
     def __str__(self) -> str:
@@ -443,3 +428,90 @@ class Switch:
                 "type": self.type,
             },
         )
+
+    @property
+    def mount(self) -> str:
+        """Gets switch mount.
+
+        :return: switch mount
+        :rtype: str
+        """
+        return self.__mount
+
+    @mount.setter
+    @typechecked
+    def mount(self, mount: str) -> None:
+        """Sets switch mount.
+
+        :param mount: switch mount
+        :type mount: str
+        """
+        if mount == self.mount:
+            return
+        if mount != "":
+            expect(
+                value_name="mount",
+                value=mount,
+                condition_description="be a valid mount",
+                condition=lambda mount: mount in _switches_data,
+            )
+        self.__mount = mount
+        self.brand = ""
+        self.type = ""
+
+    @property
+    def brand(self) -> str:
+        """Gets switch brand.
+
+        :return: switch brand
+        :rtype: str
+        """
+        return self.__brand
+
+    @brand.setter
+    @typechecked
+    def brand(self, brand: str) -> None:
+        """Sets switch brand.
+
+        :param brand: switch brand
+        :type brand: str
+        """
+        if brand == self.brand:
+            return
+        if brand != "":
+            expect(
+                value_name="brand",
+                value=brand,
+                condition_description="be a valid brand in the mount",
+                condition=lambda brand: brand in _switches_data[self.mount]["brands"],
+            )
+        self.__brand = brand
+        self.type = ""
+
+    @property
+    def type(self) -> str:
+        """Gets switch type part id.
+
+        :return: switch type part id
+        :rtype: str
+        """
+        return self.__type
+
+    @type.setter
+    def type(self, type: str) -> None:
+        """Sets switch type part id.
+
+        :param type: switch type
+        :type type: str
+        """
+        if type == self.type:
+            return
+        if type != "":
+            expect(
+                value_name="type",
+                value=type,
+                condition_description="be a valid type in the brand",
+                condition=lambda type: type
+                in _switches_data[self.mount]["brands"][self.brand]["switches"],
+            )
+        self.__type = type
