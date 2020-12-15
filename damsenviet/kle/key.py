@@ -8,7 +8,11 @@ from typeguard import typechecked
 
 from .label import Label
 from .switch import Switch
-from .utils import autorepr
+from .utils import (
+    autorepr,
+    expect,
+    is_valid_css_color,
+)
 
 
 class Key:
@@ -67,9 +71,9 @@ class Key:
 
     @property
     def color(self) -> str:
-        """Gets fill color.
+        """Gets cap css color.
 
-        :return: fill color
+        :return: cap css color
         :rtype: str
         """
         return self.__color
@@ -77,11 +81,17 @@ class Key:
     @color.setter
     @typechecked
     def color(self, color: str) -> None:
-        """Sets fill color.
+        """Sets cap css color.
 
-        :param color: fill color
+        :param color: cap css color
         :type color: str
         """
+        expect(
+            "color",
+            color,
+            "be a valid css color",
+            is_valid_css_color,
+        )
         self.__color = color
 
     @property
@@ -117,13 +127,19 @@ class Key:
     @default_text_color.setter
     @typechecked
     def default_text_color(self, default_text_color: str) -> None:
-        """Sets default text color.
+        """Sets default css text color.
 
         Used to optimize the json size.
 
-        :param default_text_color: default text color
+        :param default_text_color: default css text color
         :type default_text_color: str
         """
+        expect(
+            "default_text_color",
+            default_text_color,
+            "be a valid css color",
+            is_valid_css_color,
+        )
         self.__default_text_color = default_text_color
 
     @property

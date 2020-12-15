@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typeguard import typechecked
 
-from .utils import autorepr
+from .utils import autorepr, expect, is_valid_css_declaration
 
 
 class Background:
@@ -44,11 +44,9 @@ class Background:
 
     @property
     def style(self) -> str:
-        """Gets CSS style rule.
+        """Gets CSS style declaration.
 
-        No validation is applied, KLE doesn't validate the CSS rule.
-
-        :return: CSS style rule
+        :return: CSS style declaration
         :rtype: str
         """
         return self.__style
@@ -56,9 +54,15 @@ class Background:
     @style.setter
     @typechecked
     def style(self, style: str) -> None:
-        """Sets CSS style rule.
+        """Sets CSS declaration.
 
-        :param style: CSS style rule
+        :param style: CSS declaration
         :type style: str
         """
+        expect(
+            "style",
+            style,
+            "to be a valid css declaration",
+            is_valid_css_declaration,
+        )
         self.__style = style

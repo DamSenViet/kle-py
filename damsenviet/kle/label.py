@@ -2,7 +2,11 @@ from __future__ import annotations
 from typing import Union
 from typeguard import typechecked
 
-from .utils import autorepr
+from .utils import (
+    autorepr,
+    expect,
+    is_valid_css_color,
+)
 
 
 class Label:
@@ -53,9 +57,9 @@ class Label:
 
     @property
     def color(self) -> str:
-        """Gets font color.
+        """Gets css font color.
 
-        :return: font color
+        :return: css font color
         :rtype: str
         """
         return self.__color
@@ -64,15 +68,17 @@ class Label:
     @color.setter
     @typechecked
     def color(self, color: str) -> None:
-        """Sets font color.
+        """Sets css font color.
 
-        :param color: font color
+        :param color: css font color
         :type color: str
         """
-        # KLE can't enforce invariants when loading
-        # but this is true assuming no breach of contract
-        # if color == "":
-        #     raise TypeError("cannot be empty")
+        expect(
+            "color",
+            color,
+            "be a valid css color",
+            is_valid_css_color,
+        )
         self.__color = color
 
     @property

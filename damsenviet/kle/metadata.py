@@ -3,7 +3,13 @@ from typeguard import typechecked
 
 from .background import Background
 from .switch import Switch
-from .utils import autorepr
+from .utils import (
+    autorepr,
+    expect,
+    is_valid_css_stylesheet,
+    is_valid_css_color,
+    is_valid_css_component_value_list,
+)
 
 
 class Metadata:
@@ -138,13 +144,19 @@ class Metadata:
         :param background_color: background color
         :type background_color: str
         """
+        expect(
+            "background_color",
+            background_color,
+            "be a valid css color",
+            is_valid_css_color,
+        )
         self.__background_color = background_color
 
     @property
     def radii(self) -> str:
-        """Gets radius CSS size value.
+        """Gets radius CSS component values.
 
-        :return: radius CSS size value.
+        :return: radius CSS component values
         :rtype: str
         """
         return self.__radii
@@ -152,11 +164,17 @@ class Metadata:
     @radii.setter
     @typechecked
     def radii(self, radii: str) -> None:
-        """Sets radius CSS size value.
+        """Sets radius CSS component values.
 
-        :param radii: radius CSS size value
+        :param radii: radius CSS component values
         :type radii: str
         """
+        expect(
+            "radii",
+            radii,
+            "be a valid list of css component values",
+            is_valid_css_component_value_list,
+        )
         self.__radii = radii
 
     @property
@@ -176,6 +194,12 @@ class Metadata:
         :param css: CSS stylesheet
         :type css: str
         """
+        expect(
+            "css",
+            css,
+            "to be valid CSS",
+            is_valid_css_stylesheet,
+        )
         self.__css = css
 
     @property
