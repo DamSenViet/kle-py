@@ -26,6 +26,7 @@ from .exceptions import IllegalValueException
 
 __all__ = [""]
 
+
 T = TypeVar("T")
 S = TypeVar("S")
 
@@ -38,9 +39,10 @@ def autorepr(self: Any, attributes: Dict[str, Any]):
     return f"{self.__class__.__name__}({serial})"
 
 
-# number of decimal places to keep
-# https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number
-kle_precision = 17
+# JSON numbers is IEEE-754 (double precision)
+# https://mpmath.org/doc/current/technical.html#double-precision-emulation
+# mp.dps = 15 when mp.prec = 53
+kle_precision = 15
 
 
 @typechecked
