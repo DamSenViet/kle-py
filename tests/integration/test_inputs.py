@@ -23,13 +23,40 @@ def test_inputs(file_name):
     keyboard_json = json.load(input_file)
     keyboard = kle.Keyboard.from_json(keyboard_json)
     input_file.close()
-    # write output
+    # write output and formatted input file for debugging
     output_file_path = os.path.join(outputs_dir, file_name)
+    tokens = file_name.split(".")
+    formatted_input_path = os.path.join(
+        outputs_dir,
+        tokens[0] + "-formatted." + ".".join(tokens[1:]),
+    )
+    formatted_input_file = open(formatted_input_path, "w")
     output_file = open(output_file_path, "w")
     json.dump(
-        keyboard.to_json(), output_file, sort_keys=False, indent=2, ensure_ascii=False
+        keyboard.to_json(),
+        output_file,
+        sort_keys=False,
+        indent=2,
+        ensure_ascii=False,
     )
+    json.dump(
+        keyboard_json,
+        formatted_input_file,
+        sort_keys=False,
+        indent=2,
+        ensure_ascii=False,
+    )
+    formatted_input_file.close()
     output_file.close()
+    # compare text versions
     assert json.dumps(
-        keyboard_json, sort_keys=True, indent=2, ensure_ascii=True
-    ) == json.dumps(keyboard.to_json(), sort_keys=True, indent=2, ensure_ascii=True)
+        keyboard_json,
+        sort_keys=True,
+        indent=2,
+        ensure_ascii=True,
+    ) == json.dumps(
+        keyboard.to_json(),
+        sort_keys=True,
+        indent=2,
+        ensure_ascii=True,
+    )
