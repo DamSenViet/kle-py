@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import (
+    TypeVar,
     cast,
     Any,
     Union,
@@ -15,8 +16,6 @@ from .background import Background
 from .key import Key
 from .exceptions import DeserializeException
 from .utils import (
-    T,
-    S,
     autorepr,
     with_precision,
     kle_precision,
@@ -26,6 +25,9 @@ __all__ = ["Keyboard"]
 
 
 Keyboard_JSON = List[Union[Dict, List[Union[str, Dict]]]]
+T = TypeVar("T")
+S = TypeVar("S")
+
 
 # fmt: off
 label_map = [
@@ -60,7 +62,11 @@ disallowed_alignnment_for_labels = [
 
 
 @typechecked
-def unaligned(aligned_items: List, alignment: int, default_val: Any) -> List:
+def unaligned(
+    aligned_items: List,
+    alignment: int,
+    default_val: Any,
+) -> List:
     """Returns the unaligned ordering of aligned items.
 
     :param items: The aligned_items to be unaligned.
@@ -110,7 +116,10 @@ def compare_text_sizes(
 
 
 @typechecked
-def playback_metadata_changes(metadata: Metadata, metadata_changes: Dict) -> None:
+def playback_metadata_changes(
+    metadata: Metadata,
+    metadata_changes: Dict,
+) -> None:
     """Playback the changes into the metadata.
 
     :param metadata: metadata
@@ -281,7 +290,12 @@ def key_sort_criteria(
 
 
 @typechecked
-def record_change(changes: Dict, name: str, val: T, default_val: S) -> T:
+def record_change(
+    changes: Dict,
+    name: str,
+    val: T,
+    default_val: S,
+) -> T:
     """Registers the change if value is not equal to default.
 
     :param changes: the existing changes
