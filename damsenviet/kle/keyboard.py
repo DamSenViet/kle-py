@@ -125,10 +125,13 @@ def playback_metadata_changes(metadata: Metadata, metadata_changes: Dict) -> Non
     if "backcolor" in metadata_changes:
         metadata.background_color = metadata_changes["backcolor"]
     if "background" in metadata_changes:
+        name: str = ""
+        style: str = ""
         if "name" in metadata_changes["background"]:
-            metadata.background.name = metadata_changes["background"]["name"]
+            name = metadata_changes["background"]["name"]
         if "style" in metadata_changes["background"]:
-            metadata.background.style = metadata_changes["background"]["style"]
+            style = metadata_changes["background"]["style"]
+        metadata.background = Background(name, style)
     if "name" in metadata_changes:
         metadata.name = metadata_changes["name"]
     if "notes" in metadata_changes:
@@ -656,22 +659,23 @@ class Keyboard:
             self.metadata.notes,
             default_metadata.notes,
         )
-        background_changes: Dict = dict()
-        default_background: Background = Background()
-        record_change(
-            background_changes,
-            "name",
-            self.metadata.background.name,
-            default_background.name,
-        )
-        record_change(
-            background_changes,
-            "style",
-            self.__metadata.background.style,
-            default_background.style,
-        )
-        if len(background_changes) > 0:
-            record_change(metadata_changes, "background", background_changes, None)
+        if self.metadata.background is not None:
+            background_changes: Dict = dict()
+            # force background properties to be included
+            record_change(
+                background_changes,
+                "name",
+                self.metadata.background.name,
+                "",
+            )
+            record_change(
+                background_changes,
+                "style",
+                self.__metadata.background.style,
+                "",
+            )
+            if len(background_changes) > 0:
+                record_change(metadata_changes, "background", background_changes, None)
         record_change(
             metadata_changes,
             "radii",

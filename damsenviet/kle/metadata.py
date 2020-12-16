@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Union
 from typeguard import typechecked
 from .background import Background
 from .switch import Switch
@@ -20,7 +21,7 @@ class Metadata:
         self.name: str = ""
         self.author: str = ""
         self.notes: str = ""
-        self.background: Background = Background()
+        self.background: Background = None
         self.background_color: str = "#eeeeee"
         self.radii: str = ""
         self.css: str = ""
@@ -110,7 +111,7 @@ class Metadata:
         self.__notes = notes
 
     @property
-    def background(self) -> Background:
+    def background(self) -> Union[None, Background]:
         """Gets background of the keyboard.
 
         :return: background of the keyboard
@@ -120,7 +121,10 @@ class Metadata:
 
     @background.setter
     @typechecked
-    def background(self, background: Background) -> None:
+    def background(
+        self,
+        background: Union[None, Background],
+    ) -> Union[None, Background]:
         """Sets background of the keyboard.
 
         :param background: background of the keyboard
