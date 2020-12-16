@@ -454,19 +454,12 @@ class Keyboard:
     def from_json(
         cls,
         keyboard_json: Keyboard_JSON,
-        normalize: bool = False,
     ) -> Keyboard:
-        """Deserializes a KLE json array into a keyboard.
+        """Deserializes a KLE json into a Keyboard.
 
         :param keyboard_json: the KLE formatted json
         :type keyboard_json: List[Union[Dict, List[Union[str, Dict]]]]
-        :param normalize: whether to normalize invalid values, silences errors when True
-        :type normalize: bool
-        :raises DeserializeException: keyboard_json is not an array
-        :raises DeserializeException: rotation changes not at beginning of row
-        :raises DeserializeException: metadata specified but not as first item
-        :raises DeserializeException: item not expected type
-        :return: the Keyboard
+        :return: a Keyboard
         :rtype: Keyboard
         """
         if type(keyboard_json) != list:
@@ -602,6 +595,9 @@ class Keyboard:
                         keyboard_json[r],
                     )
                 playback_metadata_changes(keyboard.metadata, metadata_changes)
+                current.switch.mount = keyboard.metadata.switch.mount
+                current.switch.brand = keyboard.metadata.switch.brand
+                current.switch.type = keyboard.metadata.switch.type
             else:
                 message = (
                     "encountered unexpected type of "
@@ -623,6 +619,9 @@ class Keyboard:
         keyboard_json: Keyboard_JSON = list()
         row: List[Union[str, Dict]] = list()
         current: Key = Key()
+        current.switch.mount = self.metadata.switch.mount
+        current.switch.brand = self.metadata.switch.brand
+        current.switch.type = self.metadata.switch.type
         align: int = 4
         current_labels_color: List[str] = current.default_text_color
         # allows for non-KLE defaults for label initializer, can maintain value invariants

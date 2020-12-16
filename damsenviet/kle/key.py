@@ -491,7 +491,6 @@ class Key:
         self.__profile_and_row = profile_and_row
 
     @property
-    @typechecked
     def switch(self) -> Switch:
         """Gets switch.
 
@@ -501,6 +500,7 @@ class Key:
         return self.__switch
 
     @switch.setter
+    @typechecked
     def switch(self, switch: Switch) -> None:
         """Sets switch.
 

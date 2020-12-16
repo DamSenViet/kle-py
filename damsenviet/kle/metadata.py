@@ -204,7 +204,6 @@ class Metadata:
         self.__css = css
 
     @property
-    @typechecked
     def switch(self) -> Switch:
         """Gets switch.
 
@@ -214,6 +213,7 @@ class Metadata:
         return self.__switch
 
     @switch.setter
+    @typechecked
     def switch(self, switch: Switch) -> None:
         """Sets switch.
 
