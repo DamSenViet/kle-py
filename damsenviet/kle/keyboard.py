@@ -15,11 +15,7 @@ from .metadata import Metadata
 from .background import Background
 from .key import Key
 from .exceptions import DeserializeException
-from .utils import (
-    autorepr,
-    with_precision,
-    kle_precision,
-)
+from .utils import autorepr
 
 __all__ = ["Keyboard"]
 
@@ -467,7 +463,6 @@ class Keyboard:
         self.__keys = keys
 
     @classmethod
-    @with_precision(kle_precision)
     def from_json(
         cls,
         keyboard_json: Keyboard_JSON,
@@ -624,7 +619,6 @@ class Keyboard:
             current.x = mpf(str(current.rotation_x))
         return keyboard
 
-    @with_precision(kle_precision)
     def to_json(self) -> Keyboard_JSON:
         """Serializes the Keyboard to a KLE formatted json.
 

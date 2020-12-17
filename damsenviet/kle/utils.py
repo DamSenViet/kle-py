@@ -6,9 +6,10 @@ from typing import (
     List,
     Dict,
 )
-from functools import wraps
+from contextlib import ContextDecorator
 from tinycss2 import (
     parse_stylesheet,
+    parse_one_declaration,
     parse_component_value_list,
 )
 from tinycss2.color3 import parse_color
@@ -19,19 +20,26 @@ from tinycss2.ast import (
     WhitespaceToken,
     ParseError,
 )
-from mpmath import mp
-from tinycss2.parser import parse_one_declaration
-from typeguard import typechecked
+from mpmath import mp, MPContext
 from .exceptions import IllegalValueException
 
-__all__ = [""]
+__all__ = ["kle_dps", "like_kle"]
 
 
 T = TypeVar("T")
 S = TypeVar("S")
 
 
-def autorepr(self: Any, attributes: Dict[str, Any]):
+def autorepr(self: object, attributes: Dict[str, Any]) -> str:
+    """A utility function to easily replace __repr__.
+
+    :param self: any instance of a class
+    :type self: object
+    :param attributes: a mapping of name to values to display
+    :type attributes: Dict[str, Any]
+    :return: a string representing the object
+    :rtype: str
+    """
     key_eq_val_strs: List[str] = []
     for key, value in attributes.items():
         key_eq_val_strs.append(f"{key}={repr(value)}")
@@ -39,36 +47,46 @@ def autorepr(self: Any, attributes: Dict[str, Any]):
     return f"{self.__class__.__name__}({serial})"
 
 
-# JSON numbers is IEEE-754 (double precision)
-# https://mpmath.org/doc/current/technical.html#double-precision-emulation
-# mp.dps = 15 when mp.prec = 53
-kle_precision = 15
+kle_dps: int = 15
+"""The mpmath dps to use to maintain the identical KLE precision.
+
+JSON number format is double-precision (binary64) IEEE-754.
+mp.dps = 15 when mp.prec = 53 is IEEE-754 double-precision.
+
+https://mpmath.org/doc/current/technical.html#double-precision-emulation
+"""
 
 
-@typechecked
-def with_precision(precision: int):
-    """Temporarily modifies the precision of mpmath.
+# decorator factory
+class like_kle(ContextDecorator):
+    """Temporarily modifies the mp context to match KLE computation precision."""
 
-    :param precision: the mpf precision
-    :type precision: int
-    :return: wrapped function
-    :rtype: Callable
-    """
+    def __init__(self, dps: int = kle_dps) -> None:
+        """We gottem son
 
-    def decorator(function):
-        @wraps(function)
-        def wrapped(*args, **kwargs):
-            # mp.dps is decimal significant places
-            # mp.prec is the number of precision bits
-            old_precision = mp.dps
-            mp.dps = precision
-            result = function(*args, **kwargs)
-            mp.dps = old_precision
-            return result
+        :param dps: [description], defaults to kle_dps
+        :type dps: int, optional
+        """
+        self.target_dps = dps
+        self.source_dps = None
 
-        return wrapped
+    def __enter__(self) -> MPContext:
+        """Modifies the mp context to target settings upon entry.
 
-    return decorator
+        :return: the global mp context
+        :rtype: MPContext
+        """
+        self.source_dps = mp.dps
+        mp.dps = self.target_dps
+        return mp
+
+    def __exit__(
+        self,
+        *exc,
+    ) -> bool:
+        """Resets the mp context to before changes upon exit."""
+        mp.dps = self.source_dps
+        return False
 
 
 def expect(

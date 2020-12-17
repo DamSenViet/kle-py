@@ -1,8 +1,10 @@
 import os
 import json
 import pytest
-import damsenviet.kle as kle
-
+from damsenviet.kle import (
+    Keyboard,
+    like_kle,
+)
 
 inputs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "inputs"))
 outputs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "outputs"))
@@ -16,12 +18,13 @@ for file_name in os.listdir(inputs_dir):
 
 
 @pytest.mark.parametrize("file_name", file_names)
-def test_inputs(file_name):
+@like_kle()
+def test_inputs(file_name: str):
     # read input
     input_file_path = os.path.join(inputs_dir, file_name)
     input_file = open(input_file_path, "r")
     keyboard_json = json.load(input_file)
-    keyboard = kle.Keyboard.from_json(keyboard_json)
+    keyboard = Keyboard.from_json(keyboard_json)
     input_file.close()
     # write output and formatted input file for debugging
     output_file_path = os.path.join(outputs_dir, file_name)
