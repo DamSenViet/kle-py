@@ -104,13 +104,7 @@ class Label:
         expect(
             "size",
             size,
-            "at least 1",
-            lambda size: size >= 1,
-        )
-        expect(
-            "size",
-            size,
-            "less than 10",
-            lambda size: size < 10,
+            "at least 1 and no more than 9",
+            lambda size: size >= 1 and size <= 9,
         )
         self.__size = size

@@ -549,10 +549,11 @@ class Keyboard:
                         current.x = current.x + mpf(current.width)
                         current.width = mpf(str(1.0))
                         current.height = mpf(str(1.0))
+                        # width2 and height2 defers to width and height when 0
+                        current.width2 = mpf(current.width)
+                        current.height2 = mpf(current.height)
                         current.x2 = mpf(str(0.0))
                         current.y2 = mpf(str(0.0))
-                        current.width2 = mpf(str(0.0))
-                        current.height2 = mpf(str(0.0))
                         current.is_homing = False
                         current.is_stepped = False
                         current.is_decal = False

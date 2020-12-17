@@ -167,14 +167,8 @@ class Key:
         expect(
             "default_text_size",
             default_text_size,
-            "at least 1",
-            lambda size: size >= 1,
-        )
-        expect(
-            "default_text_size",
-            default_text_size,
-            "less than 10",
-            lambda size: size < 10,
+            "be at least 1 and no more than 9",
+            lambda size: size >= 1 and size <= 9,
         )
         self.__default_text_size = default_text_size
 
@@ -233,6 +227,12 @@ class Key:
         :param width: width of raised primary shape in key units
         :type width: mpf
         """
+        expect(
+            "width",
+            width,
+            "be at least 0.5",
+            lambda width: width >= 0.5,
+        )
         self.__width = width
 
     @property
@@ -252,6 +252,12 @@ class Key:
         :param height: height of raised primary shape in key units
         :type height: mpf
         """
+        expect(
+            "height",
+            height,
+            "be at least 0.5",
+            lambda height: height >= 0.5,
+        )
         self.__height = height
 
     @property
@@ -309,6 +315,12 @@ class Key:
         :param width2: width of lowered secondary shape in key units
         :type width2: mpf
         """
+        expect(
+            "width2",
+            width2,
+            "be at least 0.5",
+            lambda width2: width2 >= 0.5,
+        )
         self.__width2 = width2
 
     @property
@@ -328,6 +340,12 @@ class Key:
         :param height2: height of lowered secondary shape in key units
         :type height2: mpf
         """
+        expect(
+            "height2",
+            height2,
+            "be at least 0.5",
+            lambda height2: height2 >= 0.5,
+        )
         self.__height2 = height2
 
     @property
@@ -347,6 +365,12 @@ class Key:
         :param rotation_x: x position of rotation origin in key units
         :type rotation_x: mpf
         """
+        expect(
+            "rotation_x",
+            rotation_x,
+            "be at least 0",
+            lambda rotation_x: rotation_x >= 0,
+        )
         self.__rotation_x = rotation_x
 
     @property
@@ -366,6 +390,12 @@ class Key:
         :param rotation_y: y position of rotation origin in key units
         :type rotation_y: mpf
         """
+        expect(
+            "rotation_y",
+            rotation_y,
+            "be at least 0",
+            lambda rotation_y: rotation_y >= 0,
+        )
         self.__rotation_y = rotation_y
 
     @property
@@ -385,6 +415,12 @@ class Key:
         :param rotation_angle: rotation angle in degrees
         :type rotation_angle: mpf
         """
+        expect(
+            "rotation_angle",
+            rotation_angle,
+            "be at least -180 and no more than 180",
+            lambda rotation_angle: rotation_angle >= -180 and rotation_angle <= 180,
+        )
         self.__rotation_angle = rotation_angle
 
     @property
