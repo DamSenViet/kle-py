@@ -3,7 +3,6 @@ from typing import (
     Union,
     List,
 )
-from mpmath import mpf
 from typeguard import typechecked
 from .label import Label
 from .switch import Switch
@@ -24,17 +23,17 @@ class Key:
         self.labels: List[Label] = [Label() for i in range(12)]
         self.default_text_color: str = "#000000"
         self.default_text_size: str = 3
-        self.x: mpf = mpf(str(0.0))
-        self.y: mpf = mpf(str(0.0))
-        self.width: mpf = mpf(str(1.0))
-        self.height: mpf = mpf(str(1.0))
-        self.x2: mpf = mpf(str(0.0))
-        self.y2: mpf = mpf(str(0.0))
-        self.width2: mpf = mpf(str(1.0))
-        self.height2: mpf = mpf(str(1.0))
-        self.rotation_x: mpf = mpf(str(0.0))
-        self.rotation_y: mpf = mpf(str(0.0))
-        self.rotation_angle: mpf = mpf(str(0.0))
+        self.x: float = float(str(0.0))
+        self.y: float = float(str(0.0))
+        self.width: float = float(str(1.0))
+        self.height: float = float(str(1.0))
+        self.x2: float = float(str(0.0))
+        self.y2: float = float(str(0.0))
+        self.width2: float = float(str(1.0))
+        self.height2: float = float(str(1.0))
+        self.rotation_x: float = float(str(0.0))
+        self.rotation_y: float = float(str(0.0))
+        self.rotation_angle: float = float(str(0.0))
         self.is_ghosted: bool = False
         self.is_stepped: bool = False
         self.is_homing: bool = False
@@ -173,59 +172,59 @@ class Key:
         self.__default_text_size = default_text_size
 
     @property
-    def x(self) -> mpf:
+    def x(self) -> float:
         """Gets x position of raised primary shape.
 
         :return: x posiiton of raised primary shape
-        :rtype: mpf
+        :rtype: float
         """
         return self.__x
 
     @x.setter
     @typechecked
-    def x(self, x: mpf) -> None:
+    def x(self, x: float) -> None:
         """Sets x position of raised primary shape in key units.
 
         :param x: x position of raised primary shape in key units
-        :type x: mpf
+        :type x: float
         """
         self.__x = x
 
     @property
-    def y(self) -> mpf:
+    def y(self) -> float:
         """Gets y position of raised primary shape in key units.
 
         :return: y position of raised primary shape in key units
-        :rtype: mpf
+        :rtype: float
         """
         return self.__y
 
     @y.setter
     @typechecked
-    def y(self, y: mpf) -> None:
+    def y(self, y: float) -> None:
         """Sets y position of raised primary shape in key units.
 
         :param y: y position of raised primary shape in key units
-        :type y: mpf
+        :type y: float
         """
         self.__y = y
 
     @property
-    def width(self) -> mpf:
+    def width(self) -> float:
         """Gets width of raised primary shape in key units .
 
         :return: width of raised primary shape in key units
-        :rtype: mpf
+        :rtype: float
         """
         return self.__width
 
     @width.setter
     @typechecked
-    def width(self, width: mpf) -> None:
+    def width(self, width: float) -> None:
         """Sets width of raised primary shape in key units.
 
         :param width: width of raised primary shape in key units
-        :type width: mpf
+        :type width: float
         """
         expect(
             "width",
@@ -236,21 +235,21 @@ class Key:
         self.__width = width
 
     @property
-    def height(self) -> mpf:
+    def height(self) -> float:
         """Gets height of raised primary shape in key units.
 
         :return: height of raised primary shape in key units
-        :rtype: mpf
+        :rtype: float
         """
         return self.__height
 
     @height.setter
     @typechecked
-    def height(self, height: mpf) -> None:
+    def height(self, height: float) -> None:
         """Sets height of raised primary shape in key units.
 
         :param height: height of raised primary shape in key units
-        :type height: mpf
+        :type height: float
         """
         expect(
             "height",
@@ -261,59 +260,59 @@ class Key:
         self.__height = height
 
     @property
-    def x2(self) -> mpf:
+    def x2(self) -> float:
         """Gets x position offset of the lowered secondary shape in key units.
 
         :return: x position offset of the lowered secondary shape in key units
-        :rtype: mpf
+        :rtype: float
         """
         return self.__x2
 
     @x2.setter
     @typechecked
-    def x2(self, x2: mpf) -> None:
+    def x2(self, x2: float) -> None:
         """Sets x position offset of the lowered secondary shape in key units.
 
         :param x2: x position offset of the lowered secondary shape in key units
-        :type x2: mpf
+        :type x2: float
         """
         self.__x2 = x2
 
     @property
-    def y2(self) -> mpf:
+    def y2(self) -> float:
         """Gets y position offset of lowered secondary shape in key units.
 
         :return: y position offset of lowered secondary shape in key units
-        :rtype: mpf
+        :rtype: float
         """
         return self.__y2
 
     @y2.setter
     @typechecked
-    def y2(self, y2: mpf) -> None:
+    def y2(self, y2: float) -> None:
         """Sets y position offset of lowered secondary shape in key units.
 
         :param y2: y position offset of lowered secondary shape in key units
-        :type y2: mpf
+        :type y2: float
         """
         self.__y2 = y2
 
     @property
-    def width2(self) -> mpf:
+    def width2(self) -> float:
         """Gets width of lowered secondary shape in key units.
 
         :return: width of lowered secondary shape in key units
-        :rtype: mpf
+        :rtype: float
         """
         return self.__width2
 
     @width2.setter
     @typechecked
-    def width2(self, width2: mpf) -> None:
+    def width2(self, width2: float) -> None:
         """Sets width of lowered secondary shape in key units.
 
         :param width2: width of lowered secondary shape in key units
-        :type width2: mpf
+        :type width2: float
         """
         expect(
             "width2",
@@ -324,21 +323,21 @@ class Key:
         self.__width2 = width2
 
     @property
-    def height2(self) -> mpf:
+    def height2(self) -> float:
         """Gets height of lowered secondary shape in key units.
 
         :return: height of lowered secondary shape in key units
-        :rtype: mpf
+        :rtype: float
         """
         return self.__height2
 
     @height2.setter
     @typechecked
-    def height2(self, height2: mpf) -> None:
+    def height2(self, height2: float) -> None:
         """Sets height of lowered secondary shape in key units.
 
         :param height2: height of lowered secondary shape in key units
-        :type height2: mpf
+        :type height2: float
         """
         expect(
             "height2",
@@ -349,21 +348,21 @@ class Key:
         self.__height2 = height2
 
     @property
-    def rotation_x(self) -> mpf:
+    def rotation_x(self) -> float:
         """Gets x position of rotation origin in key units.
 
         :return: x position of rotation origin in key units
-        :rtype: mpf
+        :rtype: float
         """
         return self.__rotation_x
 
     @rotation_x.setter
     @typechecked
-    def rotation_x(self, rotation_x: mpf) -> None:
+    def rotation_x(self, rotation_x: float) -> None:
         """Sets x position of rotation origin in key units.
 
         :param rotation_x: x position of rotation origin in key units
-        :type rotation_x: mpf
+        :type rotation_x: float
         """
         expect(
             "rotation_x",
@@ -374,21 +373,21 @@ class Key:
         self.__rotation_x = rotation_x
 
     @property
-    def rotation_y(self) -> mpf:
+    def rotation_y(self) -> float:
         """Gets y position of rotation origin in key units.
 
         :return: y position of rotation origin in key units
-        :rtype: mpf
+        :rtype: float
         """
         return self.__rotation_y
 
     @rotation_y.setter
     @typechecked
-    def rotation_y(self, rotation_y: mpf) -> None:
+    def rotation_y(self, rotation_y: float) -> None:
         """Sets y position of rotation origin in key units.
 
         :param rotation_y: y position of rotation origin in key units
-        :type rotation_y: mpf
+        :type rotation_y: float
         """
         expect(
             "rotation_y",
@@ -399,21 +398,21 @@ class Key:
         self.__rotation_y = rotation_y
 
     @property
-    def rotation_angle(self) -> mpf:
+    def rotation_angle(self) -> float:
         """Gets rotation angle in degrees.
 
         :return: rotation angle in degrees
-        :rtype: mpf
+        :rtype: float
         """
         return self.__rotation_angle
 
     @rotation_angle.setter
     @typechecked
-    def rotation_angle(self, rotation_angle: mpf) -> None:
+    def rotation_angle(self, rotation_angle: float) -> None:
         """Sets rotation angle in degrees.
 
         :param rotation_angle: rotation angle in degrees
-        :type rotation_angle: mpf
+        :type rotation_angle: float
         """
         expect(
             "rotation_angle",

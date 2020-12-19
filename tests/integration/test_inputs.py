@@ -1,10 +1,8 @@
 import os
 import json
 import pytest
-from damsenviet.kle import (
-    Keyboard,
-    like_kle,
-)
+from damsenviet.kle import Keyboard
+
 
 inputs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "inputs"))
 outputs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "outputs"))
@@ -18,7 +16,6 @@ for file_name in os.listdir(inputs_dir):
 
 
 @pytest.mark.parametrize("file_name", file_names)
-@like_kle()
 def test_inputs(file_name: str):
     # read input
     input_file_path = os.path.join(inputs_dir, file_name)

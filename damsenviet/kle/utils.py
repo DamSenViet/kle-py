@@ -6,7 +6,6 @@ from typing import (
     List,
     Dict,
 )
-from contextlib import ContextDecorator
 from tinycss2 import (
     parse_stylesheet,
     parse_one_declaration,
@@ -20,7 +19,6 @@ from tinycss2.ast import (
     WhitespaceToken,
     ParseError,
 )
-from mpmath import mp, MPContext
 from .exceptions import IllegalValueException
 
 __all__ = ["kle_dps", "like_kle"]
@@ -45,48 +43,6 @@ def autorepr(self: object, attributes: Dict[str, Any]) -> str:
         key_eq_val_strs.append(f"{key}={repr(value)}")
     serial: str = ", ".join(key_eq_val_strs)
     return f"{self.__class__.__name__}({serial})"
-
-
-kle_dps: int = 15
-"""The mpmath dps to use to maintain the identical KLE precision.
-
-JSON number format is double-precision (binary64) IEEE-754.
-mp.dps = 15 when mp.prec = 53 is IEEE-754 double-precision.
-
-https://mpmath.org/doc/current/technical.html#double-precision-emulation
-"""
-
-
-# decorator factory
-class like_kle(ContextDecorator):
-    """Temporarily modifies the mp context to match KLE computation precision."""
-
-    def __init__(self, dps: int = kle_dps) -> None:
-        """We gottem son
-
-        :param dps: [description], defaults to kle_dps
-        :type dps: int, optional
-        """
-        self.target_dps = dps
-        self.source_dps = None
-
-    def __enter__(self) -> MPContext:
-        """Modifies the mp context to target settings upon entry.
-
-        :return: the global mp context
-        :rtype: MPContext
-        """
-        self.source_dps = mp.dps
-        mp.dps = self.target_dps
-        return mp
-
-    def __exit__(
-        self,
-        *exc,
-    ) -> bool:
-        """Resets the mp context to before changes upon exit."""
-        mp.dps = self.source_dps
-        return False
 
 
 def expect(

@@ -8,10 +8,6 @@ from .exceptions import (
     IllegalValueException,
     DeserializeException,
 )
-from .utils import (
-    kle_dps,
-    like_kle,
-)
 
 __all__ = [
     "Keyboard",
@@ -22,6 +18,4 @@ __all__ = [
     "Label",
     "IllegalValueException",
     "DeserializeException",
-    "kle_dps",
-    "like_kle",
 ]

@@ -23,7 +23,6 @@ st.setup(
     packages=st.find_packages(),
     install_requires=[
         "typeguard>=2.10.0",
-        "mpmath>=1.1.0",
         "tinycss2>=1.1.0",
     ],
     extras_require={
@@ -41,7 +40,9 @@ st.setup(
     python_requires=">=3.7",
     keywords="keyboard layout editor serial",
     classifiers=[
-        "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
 )
