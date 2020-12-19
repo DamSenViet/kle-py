@@ -233,14 +233,14 @@ def playback_key_changes(
     if "h" in key_changes:
         key.height = float(str(key_changes["h"]))
         key.height2 = float(str(key_changes["h"]))
-    if "x2" in key_changes:
-        key.x2 = float(str(key_changes["x2"]))
-    if "y2" in key_changes:
-        key.y2 = float(str(key_changes["y2"]))
-    if "w2" in key_changes:
-        key.width2 = float(str(key_changes["w2"]))
     if "h2" in key_changes:
         key.height2 = float(str(key_changes["h2"]))
+    if "w2" in key_changes:
+        key.width2 = float(str(key_changes["w2"]))
+    if "y2" in key_changes:
+        key.y2 = float(str(key_changes["y2"]))
+    if "x2" in key_changes:
+        key.x2 = float(str(key_changes["x2"]))
     if "n" in key_changes:
         key.is_homing = key_changes["n"]
     if "l" in key_changes:
@@ -506,14 +506,6 @@ class Keyboard:
                         labels: str = item
                         # create copy of key data
                         new_key: Key = deepcopy(current)
-                        if new_key.width2 != 0:
-                            new_key.width2 = current.width2
-                        else:
-                            new_key.width2 = current.width
-                        if new_key.height2 != 0:
-                            new_key.height2 = current.height2
-                        else:
-                            new_key.height2 = current.height
                         for i, text in enumerate(
                             unaligned(
                                 labels.split("\n"),
@@ -546,13 +538,13 @@ class Keyboard:
 
                         # adjustments for the next key
                         current.x = current.x + float(current.width)
-                        current.width = float(str(1.0))
-                        current.height = float(str(1.0))
+                        current.width = 1.0
+                        current.height = 1.0
                         # width2 and height2 defers to width and height when 0
-                        current.width2 = float(current.width)
-                        current.height2 = float(current.height)
-                        current.x2 = float(str(0.0))
-                        current.y2 = float(str(0.0))
+                        current.x2 = 0.0
+                        current.y2 = 0.0
+                        current.width2 = current.width
+                        current.height2 = current.height
                         current.is_homing = False
                         current.is_stepped = False
                         current.is_decal = False

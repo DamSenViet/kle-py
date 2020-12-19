@@ -19,6 +19,28 @@ class Key:
     """Class storing Key."""
 
     def __init__(self):
+        self.__color: str = "#cccccc"
+        self.__labels: List[Label] = [Label() for i in range(12)]
+        self.__default_text_color: str = "#000000"
+        self.__default_text_size: str = 3
+        self.__x: float = float(str(0.0))
+        self.__y: float = float(str(0.0))
+        self.__width: float = float(str(1.0))
+        self.__height: float = float(str(1.0))
+        self.__x2: float = float(str(0.0))
+        self.__y2: float = float(str(0.0))
+        self.__width2: float = float(str(1.0))
+        self.__height2: float = float(str(1.0))
+        self.__rotation_x: float = float(str(0.0))
+        self.__rotation_y: float = float(str(0.0))
+        self.__rotation_angle: float = float(str(0.0))
+        self.__is_ghosted: bool = False
+        self.__is_stepped: bool = False
+        self.__is_homing: bool = False
+        self.__is_decal: bool = False
+        self.__profile_and_row: str = ""
+        self.__switch = Switch("", "", "")
+
         self.color: str = "#cccccc"
         self.labels: List[Label] = [Label() for i in range(12)]
         self.default_text_color: str = "#000000"
@@ -276,6 +298,12 @@ class Key:
         :param x2: x position offset of the lowered secondary shape in key units
         :type x2: float
         """
+        expect(
+            "abs(x2)",
+            abs(x2),
+            "be no more than abs(width - width2)",
+            lambda x2: abs(x2) <= abs(self.width - self.width2),
+        )
         self.__x2 = x2
 
     @property
@@ -295,6 +323,12 @@ class Key:
         :param y2: y position offset of lowered secondary shape in key units
         :type y2: float
         """
+        expect(
+            "abs(y2)",
+            abs(y2),
+            "be no more than abs(height - height2)",
+            lambda y2: abs(y2) <= abs(self.height - self.height2),
+        )
         self.__y2 = y2
 
     @property
@@ -320,6 +354,12 @@ class Key:
             "be at least 0.5",
             lambda width2: width2 >= 0.5,
         )
+        expect(
+            "width2",
+            width2,
+            "be at least abs(x2)",
+            lambda width2: width2 >= abs(self.x2),
+        )
         self.__width2 = width2
 
     @property
@@ -344,6 +384,12 @@ class Key:
             height2,
             "be at least 0.5",
             lambda height2: height2 >= 0.5,
+        )
+        expect(
+            "height2",
+            height2,
+            "be at least abs(y2)",
+            lambda height2: height2 >= abs(self.y2),
         )
         self.__height2 = height2
 
