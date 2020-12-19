@@ -188,15 +188,15 @@ def playback_key_changes(
     :rtype: Tuple[List[str], List[Union[int, float]], int, float, float]
     """
     if "r" in key_changes:
-        key.rotation_angle = float(str(key_changes["r"]))
+        key.rotation_angle = key_changes["r"]
     if "rx" in key_changes:
-        key.rotation_x = float(str(key_changes["rx"]))
-        cluster_rotation_x = float(str(key_changes["rx"]))
+        key.rotation_x = key_changes["rx"]
+        cluster_rotation_x = key_changes["rx"]
         key.x = cluster_rotation_x
         key.y = cluster_rotation_y
     if "ry" in key_changes:
-        key.rotation_y = float(str(key_changes["ry"]))
-        cluster_rotation_y = float(str(key_changes["ry"]))
+        key.rotation_y = key_changes["ry"]
+        cluster_rotation_y = key_changes["ry"]
         key.x = cluster_rotation_x
         key.y = cluster_rotation_y
     if "a" in key_changes:
@@ -224,23 +224,23 @@ def playback_key_changes(
         for i, color in enumerate(unaligned(labels_color, alignment, "")):
             current_labels_color[i] = color
     if "x" in key_changes:
-        key.x = key.x + float(str(key_changes["x"]))
+        key.x = key.x + key_changes["x"]
     if "y" in key_changes:
-        key.y = key.y + float(str(key_changes["y"]))
+        key.y = key.y + key_changes["y"]
     if "w" in key_changes:
-        key.width = float(str(key_changes["w"]))
-        key.width2 = float(str(key_changes["w"]))
+        key.width = key_changes["w"]
+        key.width2 = key_changes["w"]
     if "h" in key_changes:
-        key.height = float(str(key_changes["h"]))
-        key.height2 = float(str(key_changes["h"]))
+        key.height = key_changes["h"]
+        key.height2 = key_changes["h"]
     if "h2" in key_changes:
-        key.height2 = float(str(key_changes["h2"]))
+        key.height2 = key_changes["h2"]
     if "w2" in key_changes:
-        key.width2 = float(str(key_changes["w2"]))
+        key.width2 = key_changes["w2"]
     if "y2" in key_changes:
-        key.y2 = float(str(key_changes["y2"]))
+        key.y2 = key_changes["y2"]
     if "x2" in key_changes:
-        key.x2 = float(str(key_changes["x2"]))
+        key.x2 = key_changes["x2"]
     if "n" in key_changes:
         key.is_homing = key_changes["n"]
     if "l" in key_changes:
@@ -307,10 +307,10 @@ def record_change(
     if val != default_val:
         if type(val) is float:
             # determine if you can use an in there
-            if val % float(str(1.0)) == float(str(0.0)):
+            if val % 1.0 == 0.0:
                 changes[name] = int(val)
             else:
-                changes[name] = float(val)
+                changes[name] = val
         else:
             changes[name] = val
     return val
@@ -490,8 +490,8 @@ class Keyboard:
         alignment: int = 4
         # keys are row separated by clusters
         # track rotation info for reset x/y positions
-        cluster_rotation_x: float = float(str(0.0))
-        cluster_rotation_y: float = float(str(0.0))
+        cluster_rotation_x: float = 0.0
+        cluster_rotation_y: float = 0.0
 
         # for object in list
         for r in range(len(keyboard_json)):
@@ -537,7 +537,7 @@ class Keyboard:
                         keyboard.keys.append(new_key)
 
                         # adjustments for the next key
-                        current.x = current.x + float(current.width)
+                        current.x = current.x + current.width
                         current.width = 1.0
                         current.height = 1.0
                         # width2 and height2 defers to width and height when 0
@@ -590,7 +590,7 @@ class Keyboard:
                             message=message,
                             payload=item,
                         )
-                current.y = current.y + float(str(1.0))
+                current.y = current.y + 1.0
             elif type(keyboard_json[r]) is dict:
                 metadata_changes = keyboard_json[r]
                 if r != 0:
@@ -608,7 +608,7 @@ class Keyboard:
                     f"{type(keyboard_json[r]).__name__}"
                 )
                 raise DeserializeException(message=message, payload=keyboard_json[r])
-            current.x = float(str(current.rotation_x))
+            current.x = current.rotation_x
         return keyboard
 
     def to_json(self) -> Keyboard_JSON:
@@ -629,9 +629,9 @@ class Keyboard:
         current_labels_color: List[str] = current.default_text_color
         # allows for non-KLE defaults for label initializer, can maintain value invariants
         current_labels_size: List[Union[int, float]] = [0 for label in current.labels]
-        cluster_rotation_angle: float = float(str(0.0))
-        cluster_rotation_x: float = float(str(0.0))
-        cluster_rotation_y: float = float(str(0.0))
+        cluster_rotation_angle: float = 0.0
+        cluster_rotation_x: float = 0.0
+        cluster_rotation_y: float = 0.0
 
         metadata_changes: Dict = dict()
         default_metadata: Metadata = Metadata()
@@ -731,7 +731,7 @@ class Keyboard:
 
         is_new_row: bool = True
         # will be incremented on first row
-        current.y = current.y - float(str(1.0))
+        current.y = current.y - 1.0
 
         sorted_keys: List[Key] = list(sorted(self.__keys, key=key_sort_criteria))
         for key in sorted_keys:
@@ -760,7 +760,7 @@ class Keyboard:
                 is_new_row = True
 
             if is_new_row:
-                current.y = current.y + float(str(1.0))
+                current.y = current.y + 1.0
 
                 # set up for the new row
                 # y is reset if either rx or ry are changed
@@ -801,7 +801,7 @@ class Keyboard:
                 key_changes,
                 "y",
                 key.y - current.y,
-                float(str(0.0)),
+                0.0,
             )
             current.x = (
                 current.x
@@ -809,7 +809,7 @@ class Keyboard:
                     key_changes,
                     "x",
                     key.x - current.x,
-                    float(str(0.0)),
+                    0.0,
                 )
                 + key.width
             )
@@ -911,12 +911,12 @@ class Keyboard:
                             _reduced_text_sizes(aligned_text_size),
                             [],
                         )
-            record_change(key_changes, "w", key.width, float(str(1.0)))
-            record_change(key_changes, "h", key.height, float(str(1.0)))
+            record_change(key_changes, "w", key.width, 1.0)
+            record_change(key_changes, "h", key.height, 1.0)
             record_change(key_changes, "w2", key.width2, key.width)
             record_change(key_changes, "h2", key.height2, key.height)
-            record_change(key_changes, "x2", key.x2, float(str(0.0)))
-            record_change(key_changes, "y2", key.y2, float(str(0.0)))
+            record_change(key_changes, "x2", key.x2, 0.0)
+            record_change(key_changes, "y2", key.y2, 0.0)
             record_change(key_changes, "n", key.is_homing, False)
             record_change(key_changes, "l", key.is_stepped, False)
             record_change(key_changes, "d", key.is_decal, False)
