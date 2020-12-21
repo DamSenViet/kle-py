@@ -2,7 +2,7 @@ from __future__ import annotations
 from typeguard import typechecked
 from .utils import (
     autorepr,
-    expect,
+    expected,
     is_valid_css_declaration,
 )
 
@@ -184,7 +184,7 @@ class Background:
         :param name: name
         :type name: str
         """
-        expect(
+        expected(
             "name",
             name,
             "be a valid background option name",

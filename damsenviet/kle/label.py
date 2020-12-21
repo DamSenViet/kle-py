@@ -3,7 +3,7 @@ from typing import Union
 from typeguard import typechecked
 from .utils import (
     autorepr,
-    expect,
+    expected,
     is_valid_css_color,
 )
 
@@ -74,7 +74,7 @@ class Label:
         :param color: css font color
         :type color: str
         """
-        expect(
+        expected(
             "color",
             color,
             "be a valid css color",
@@ -101,7 +101,7 @@ class Label:
         """
         # KLE can't enforce invariants when loading
         # but this is true assuming no breach of contract
-        expect(
+        expected(
             "size",
             size,
             "at least 1 and no more than 9",

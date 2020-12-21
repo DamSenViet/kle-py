@@ -8,7 +8,7 @@ from .label import Label
 from .switch import Switch
 from .utils import (
     autorepr,
-    expect,
+    expected,
     is_valid_css_color,
 )
 
@@ -108,7 +108,7 @@ class Key:
         :param color: cap css color
         :type color: str
         """
-        expect(
+        expected(
             "color",
             color,
             "be a valid css color",
@@ -156,7 +156,7 @@ class Key:
         :param default_text_color: default css text color
         :type default_text_color: str
         """
-        expect(
+        expected(
             "default_text_color",
             default_text_color,
             "be a valid css color",
@@ -185,7 +185,7 @@ class Key:
         :param default_text_size: the default text size
         :type default_text_size: Union[int, float]
         """
-        expect(
+        expected(
             "default_text_size",
             default_text_size,
             "be at least 1 and no more than 9",
@@ -248,7 +248,7 @@ class Key:
         :param width: width of raised primary shape in key units
         :type width: float
         """
-        expect(
+        expected(
             "width",
             width,
             "be at least 0.5",
@@ -273,7 +273,7 @@ class Key:
         :param height: height of raised primary shape in key units
         :type height: float
         """
-        expect(
+        expected(
             "height",
             height,
             "be at least 0.5",
@@ -298,7 +298,7 @@ class Key:
         :param x2: x position offset of the lowered secondary shape in key units
         :type x2: float
         """
-        expect(
+        expected(
             "abs(x2)",
             abs(x2),
             "be no more than abs(width - width2)",
@@ -323,7 +323,7 @@ class Key:
         :param y2: y position offset of lowered secondary shape in key units
         :type y2: float
         """
-        expect(
+        expected(
             "abs(y2)",
             abs(y2),
             "be no more than abs(height - height2)",
@@ -348,13 +348,13 @@ class Key:
         :param width2: width of lowered secondary shape in key units
         :type width2: float
         """
-        expect(
+        expected(
             "width2",
             width2,
             "be at least 0.5",
             lambda width2: width2 >= 0.5,
         )
-        expect(
+        expected(
             "width2",
             width2,
             "be at least abs(x2)",
@@ -379,13 +379,13 @@ class Key:
         :param height2: height of lowered secondary shape in key units
         :type height2: float
         """
-        expect(
+        expected(
             "height2",
             height2,
             "be at least 0.5",
             lambda height2: height2 >= 0.5,
         )
-        expect(
+        expected(
             "height2",
             height2,
             "be at least abs(y2)",
@@ -410,7 +410,7 @@ class Key:
         :param rotation_x: x position of rotation origin in key units
         :type rotation_x: float
         """
-        expect(
+        expected(
             "rotation_x",
             rotation_x,
             "be at least 0",
@@ -435,7 +435,7 @@ class Key:
         :param rotation_y: y position of rotation origin in key units
         :type rotation_y: float
         """
-        expect(
+        expected(
             "rotation_y",
             rotation_y,
             "be at least 0",
@@ -460,7 +460,7 @@ class Key:
         :param rotation_angle: rotation angle in degrees
         :type rotation_angle: float
         """
-        expect(
+        expected(
             "rotation_angle",
             rotation_angle,
             "be at least -180 and no more than 180",

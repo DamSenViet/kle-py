@@ -5,7 +5,7 @@ from .background import Background
 from .switch import Switch
 from .utils import (
     autorepr,
-    expect,
+    expected,
     is_valid_css_stylesheet,
     is_valid_css_color,
     is_valid_css_component_value_list,
@@ -149,7 +149,7 @@ class Metadata:
         :param background_color: background color
         :type background_color: str
         """
-        expect(
+        expected(
             "background_color",
             background_color,
             "be a valid css color",
@@ -174,7 +174,7 @@ class Metadata:
         :param radii: radius CSS component values
         :type radii: str
         """
-        expect(
+        expected(
             "radii",
             radii,
             "be a valid list of css component values",
@@ -199,7 +199,7 @@ class Metadata:
         :param css: CSS stylesheet
         :type css: str
         """
-        expect(
+        expected(
             "css",
             css,
             "to be valid CSS",

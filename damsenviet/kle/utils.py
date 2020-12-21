@@ -45,7 +45,7 @@ def autorepr(self: object, attributes: Dict[str, Any]) -> str:
     return f"{self.__class__.__name__}({serial})"
 
 
-def expect(
+def expected(
     value_name: str,
     value: T,
     condition_description: str,

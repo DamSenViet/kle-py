@@ -1,7 +1,7 @@
 from typeguard import typechecked
 from .utils import (
     autorepr,
-    expect,
+    expected,
 )
 
 __all__ = ["Switch"]
@@ -149,7 +149,7 @@ class Switch:
         if mount == self.mount:
             return
         if mount != "":
-            expect(
+            expected(
                 value_name="mount",
                 value=mount,
                 condition_description="be a valid mount",
@@ -179,7 +179,7 @@ class Switch:
         if brand == self.brand:
             return
         if brand != "":
-            expect(
+            expected(
                 value_name="brand",
                 value=brand,
                 condition_description="be a valid brand in the mount",
@@ -207,7 +207,7 @@ class Switch:
         if type == self.type:
             return
         if type != "":
-            expect(
+            expected(
                 value_name="type",
                 value=type,
                 condition_description="be a valid type in the brand",

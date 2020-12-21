@@ -14,7 +14,7 @@ from .metadata import Metadata
 from .background import Background
 from .key import Key
 from .exceptions import DeserializeException
-from .utils import autorepr, expect
+from .utils import autorepr, expected
 
 __all__ = ["Keyboard"]
 
@@ -136,7 +136,7 @@ def playback_metadata_changes(
         if "style" in metadata_changes["background"]:
             style = metadata_changes["background"]["style"]
         metadata.background = Background(name)
-        expect(
+        expected(
             "style",
             style,
             "be exactly the valid background style for the background name",
