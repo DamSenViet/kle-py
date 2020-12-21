@@ -8,6 +8,7 @@ from .utils import (
 
 __all__ = ["Background"]
 
+background_image_root = "http://www.keyboard-layout-editor.com/"
 # fmt: off
 backgrounds_json = [
   { 
@@ -149,8 +150,9 @@ class Background:
     """Class storing Metadata's Background."""
 
     def __init__(self, name: str = "", style: str = ""):
+        self.__name = ""
+        self.__style = ""
         self.name = name
-        self.style = style
 
     def __str__(self) -> str:
         return repr(self)
@@ -166,10 +168,11 @@ class Background:
 
     @property
     def name(self) -> str:
-        """Gets name.
+        """Name of the background option.
 
-        :return: name
-        :rtype: str
+        :getter: gets the name of the background option
+        :setter: sets the name of the background option and the style
+        :type: str
         """
         return self.__name
 
@@ -184,38 +187,17 @@ class Background:
         expect(
             "name",
             name,
-            "be a valid background option",
+            "be a valid background option name",
             lambda name: name in name_to_style,
         )
         self.__name = name
+        self.__style = name_to_style[name]
 
     @property
     def style(self) -> str:
-        """Gets CSS style declaration.
+        """CSS style declaration of background option.
 
-        :return: CSS style declaration
-        :rtype: str
+        :getter: CSS style declaration of background option
+        :type: str
         """
         return self.__style
-
-    @style.setter
-    @typechecked
-    def style(self, style: str) -> None:
-        """Sets CSS declaration.
-
-        :param style: CSS declaration
-        :type style: str
-        """
-        expect(
-            "style",
-            style,
-            "to be a valid css declaration",
-            is_valid_css_declaration,
-        )
-        expect(
-            "style",
-            style,
-            "match style for the background option",
-            lambda style: style == name_to_style[self.name],
-        )
-        self.__style = style
