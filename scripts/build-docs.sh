@@ -7,5 +7,5 @@ cd "$BASEDIR"
 
 cd ./../docs
 rm -rf api _build
-sphinx-apidoc -eM -o api -a ./../damsenviet
+sphinx-apidoc -eMlf -o api -a ./../damsenviet
 make html

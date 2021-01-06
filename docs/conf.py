@@ -33,8 +33,12 @@ extensions = [
     "sphinx.ext.autodoc.typehints",
     "sphinx.ext.autosummary",
     "sphinx.ext.githubpages",
+    "sphinx.ext.intersphinx",
 ]
 
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+}
 
 autodoc_typehints = "description"
 autodoc_member_order = "bysource"
