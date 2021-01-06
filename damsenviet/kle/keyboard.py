@@ -142,7 +142,7 @@ def playback_metadata_changes(
             "be exactly the valid background style for the background name",
             lambda style: style == metadata.background.style,
         )
-        metadata.background = Background(name, style)
+        metadata.background = Background(name)
     if "name" in metadata_changes:
         metadata.name = metadata_changes["name"]
     if "notes" in metadata_changes:
@@ -431,41 +431,33 @@ class Keyboard:
 
     @property
     def metadata(self) -> Metadata:
-        """Gets metadata.
+        """Metadata Information.
 
-        :return: metadata reference
-        :rtype: Metadata
+        :getter: gets metadata
+        :setter: sets metadata
+        :type: Metadata
         """
         return self.__metadata
 
     @metadata.setter
     @typechecked
     def metadata(self, metadata: Metadata) -> None:
-        """Sets metadata.
-
-        :param metadata: metadata reference
-        :type metadata: Metadata
-        """
         self.__metadata = metadata
 
     @property
     @typechecked
     def keys(self) -> List[Key]:
-        """Gets key references.
+        """List of Keys.
 
-        :return: list of Key references
-        :rtype: List[Key]
+        :getter: gets list of Keys
+        :setter: sets list of Keys
+        :type: List[Key]
         """
         return self.__keys
 
     @keys.setter
     @typechecked
     def keys(self, keys: List[Key]) -> None:
-        """Sets keys references.
-
-        :param keys: list of Key references
-        :type keys: List[Key]
-        """
         self.__keys = keys
 
     @classmethod

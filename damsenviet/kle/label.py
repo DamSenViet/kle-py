@@ -39,29 +39,26 @@ class Label:
 
     @property
     def text(self) -> str:
-        """Gets text content.
+        """Text content.
 
-        :return: text content
-        :rtype: str
+        :getter: gets text content
+        :setter: sets text content
+        :type: str
         """
         return self.__text
 
     @text.setter
     @typechecked
     def text(self, text: str) -> None:
-        """Sets text content.
-
-        :param text: text content
-        :type text: str
-        """
         self.__text = text
 
     @property
     def color(self) -> str:
-        """Gets css font color.
+        """CSS font color.
 
-        :return: css font color
-        :rtype: str
+        :getter: gets CSS font color
+        :setter: sets CSS font color
+        :type: str
         """
         return self.__color
 
@@ -69,11 +66,6 @@ class Label:
     @color.setter
     @typechecked
     def color(self, color: str) -> None:
-        """Sets css font color.
-
-        :param color: css font color
-        :type color: str
-        """
         expected(
             "color",
             color,
@@ -84,23 +76,17 @@ class Label:
 
     @property
     def size(self) -> Union[int, float]:
-        """Gets font size scale.
+        """Font size scale.
 
-        :return: font size scale
-        :rtype: Union[int, float]
+        :getter: gets font size scale
+        :setter: sets font size scale
+        :type: Union[int, float]
         """
         return self.__size
 
     @size.setter
     @typechecked
     def size(self, size: Union[int, float]) -> None:
-        """Sets font size scale.
-
-        :param size: font size scale
-        :type size: Union[int, float]
-        """
-        # KLE can't enforce invariants when loading
-        # but this is true assuming no breach of contract
         expected(
             "size",
             size,

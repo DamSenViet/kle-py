@@ -3,7 +3,6 @@ from typeguard import typechecked
 from .utils import (
     autorepr,
     expected,
-    is_valid_css_declaration,
 )
 
 __all__ = ["Background"]
@@ -149,7 +148,7 @@ for category in backgrounds_json:
 class Background:
     """Class storing Metadata's Background."""
 
-    def __init__(self, name: str = "", style: str = ""):
+    def __init__(self, name: str = ""):
         self.__name = ""
         self.__style = ""
         self.name = name
@@ -171,7 +170,7 @@ class Background:
         """Name of the background option.
 
         :getter: gets the name of the background option
-        :setter: sets the name of the background option and the style
+        :setter: sets the name of the background option and style
         :type: str
         """
         return self.__name
@@ -179,11 +178,6 @@ class Background:
     @name.setter
     @typechecked
     def name(self, name: str) -> None:
-        """Sets name.
-
-        :param name: name
-        :type name: str
-        """
         expected(
             "name",
             name,
@@ -197,7 +191,7 @@ class Background:
     def style(self) -> str:
         """CSS style declaration of background option.
 
-        :getter: CSS style declaration of background option
+        :getter: gets CSS style declaration of background option
         :type: str
         """
         return self.__style

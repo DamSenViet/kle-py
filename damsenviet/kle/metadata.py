@@ -55,67 +55,56 @@ class Metadata:
 
     @property
     def name(self) -> str:
-        """Gets name of the keyboard.
+        """Name of the keyboard.
 
-        :return: name of the keyboard
-        :rtype: str
+        :getter: gets name of the keyboard
+        :setter: sets name of the keyboard
+        :type: str
         """
         return self.__name
 
     @name.setter
     @typechecked
     def name(self, name: str) -> None:
-        """Sets name of the keyboard.
-
-        :param name: name of the keyboard
-        :type name: str
-        """
         self.__name = name
 
     @property
     def author(self) -> str:
-        """Gets author name.
+        """Author name.
 
-        :return: author name
-        :rtype: str
+        :getter: gets author name
+        :setter: sets author name
+        :type: str
         """
         return self.__author
 
     @author.setter
     @typechecked
     def author(self, author: str) -> None:
-        """Sets author name.
-
-        :param author: author name
-        :type author: str
-        """
         self.__author = author
 
     @property
     def notes(self) -> str:
-        """Gets notes.
+        """Notes.
 
-        :return: notes
-        :rtype: str
+        :getter: gets notes
+        :setter: sets notes
+        :type: str
         """
         return self.__notes
 
     @notes.setter
     @typechecked
     def notes(self, notes: str) -> None:
-        """Sets notes.
-
-        :param notes: notes
-        :type notes: str
-        """
         self.__notes = notes
 
     @property
     def background(self) -> Union[None, Background]:
-        """Gets background of the keyboard.
+        """Background of the keyboard.
 
-        :return: background of the keyboard
-        :rtype: Background
+        :getter: gets background of the keyboard
+        :setter: sets background of the keyboard
+        :type: Background
         """
         return self.__background
 
@@ -125,30 +114,21 @@ class Metadata:
         self,
         background: Union[None, Background],
     ) -> Union[None, Background]:
-        """Sets background of the keyboard.
-
-        :param background: background of the keyboard
-        :type background: Background
-        """
         self.__background = background
 
     @property
     def background_color(self) -> str:
-        """Gets background color.
+        """Background color.
 
-        :return: background color
-        :rtype: str
+        :getter: gets background color
+        :setter: sets background color
+        :type: str
         """
         return self.__background_color
 
     @background_color.setter
     @typechecked
     def background_color(self, background_color: str) -> None:
-        """Sets background color.
-
-        :param background_color: background color
-        :type background_color: str
-        """
         expected(
             "background_color",
             background_color,
@@ -159,21 +139,17 @@ class Metadata:
 
     @property
     def radii(self) -> str:
-        """Gets radius CSS component values.
+        """Radius CSS component values.
 
-        :return: radius CSS component values
-        :rtype: str
+        :getter: gets radius CSS component values
+        :setter: sets radius CSS component values
+        :type: str
         """
         return self.__radii
 
     @radii.setter
     @typechecked
     def radii(self, radii: str) -> None:
-        """Sets radius CSS component values.
-
-        :param radii: radius CSS component values
-        :type radii: str
-        """
         expected(
             "radii",
             radii,
@@ -184,21 +160,17 @@ class Metadata:
 
     @property
     def css(self) -> str:
-        """Gets CSS stylesheet.
+        """CSS stylesheet.
 
-        :return: CSS stylehseet
-        :rtype: str
+        :getter: gets CSS stylehseet
+        :setter: sets CSS stylehseet
+        :type: str
         """
         return self.__css
 
     @css.setter
     @typechecked
     def css(self, css: str) -> None:
-        """Sets CSS stylesheet
-
-        :param css: CSS stylesheet
-        :type css: str
-        """
         expected(
             "css",
             css,
@@ -209,86 +181,71 @@ class Metadata:
 
     @property
     def switch(self) -> Switch:
-        """Gets switch.
+        """Switch.
 
-        :return: switch
-        :rtype: Switch
+        :getter: gets switch
+        :setter: sets switch
+        :type: Switch
         """
         return self.__switch
 
     @switch.setter
     @typechecked
     def switch(self, switch: Switch) -> None:
-        """Sets switch.
-
-        :param switch: switch
-        :type switch: Switch
-        """
         self.__switch = switch
 
     @property
     def is_switches_pcb_mounted(self) -> bool:
-        """Gets whether the switches are pcb mounted.
+        """Whether the switches are pcb mounted.
 
-        :return: whether switches are pcb mounted
-        :rtype: bool
+        :getter: gets whether switches are pcb mounted
+        :setter: sets whether switches are pcb mounted
+        :type: bool
         """
         return self.__is_switches_pcb_mounted
 
     @is_switches_pcb_mounted.setter
     @typechecked
     def is_switches_pcb_mounted(self, is_switches_pcb_mounted: bool) -> None:
-        """Sets whether switches are pcb mounted.
-
-        :param is_switches_pcb_mounted: whether switches are pcb mounted
-        :type is_switches_pcb_mounted: bool
-        """
         self.__is_switches_pcb_mounted = is_switches_pcb_mounted
 
     @property
     def include_switches_pcb_mounted(self) -> bool:
-        """Gets whether to force include switch pcb mounting in json.
+        """Whether to force include switch pcb mounting in json.
 
-        :return: whether to force include switch pcb mounting in json
-        :rtype: bool
+        :getter: gets whether to force include switch pcb mounting in json
+        :setter: sets whether to force include switch pcb mounting in json
+        :type: bool
         """
         return self.__include_switches_pcb_mounted
 
     @include_switches_pcb_mounted.setter
     @typechecked
     def include_switches_pcb_mounted(self, include_switches_pcb_mounted: bool) -> None:
-        """Sets whether to force include switch pcb mounting in json.
-
-        :param include_switches_pcb_mounted: whether to include switch pcb mounting in json
-        :type include_switches_pcb_mounted: bool
-        """
         self.__include_switches_pcb_mounted = include_switches_pcb_mounted
 
     @property
     def is_switches_plate_mounted(self) -> bool:
-        """Gets whether switches are plate mounted.
+        """Whether switches are plate mounted.
 
-        :return: whether switches are plate mounted
-        :rtype: bool
+        :getter: gets whether switches are plate mounted
+        :setter: sets whether switches are plate mounted
+        :type: bool
         """
         return self.__is_switches_plate_mounted
 
     @is_switches_plate_mounted.setter
     @typechecked
     def is_switches_plate_mounted(self, is_switches_plate_mounted: bool) -> None:
-        """Sets whether switches are plate mounted.
-
-        :param is_switches_plate_mounted: whether switches are plate mounted
-        :type is_switches_plate_mounted: bool
-        """
         self.__is_switches_plate_mounted = is_switches_plate_mounted
 
     @property
     def include_switches_plate_mounted(self) -> bool:
-        """Sets whether to force include switch plate mounting in json.
+        """Whether to force include switch plate mounting in json.
 
-        :return: whether to force include switch plate mounting in json
-        :rtype: bool
+        :getter: gets whether to force include switch plate mounting in json
+        :setter: sets whether to force include switch plate mounting in json
+        :type: bool
         """
         return self.__include_switches_plate_mounted
 
@@ -297,9 +254,4 @@ class Metadata:
     def include_switches_plate_mounted(
         self, include_switches_plate_mounted: bool
     ) -> None:
-        """Sets whether to force include switch plate mounting in json.
-
-        :param include_switches_plate_mounted: whether to force include switch plate mounting in json
-        :type include_switches_plate_mounted: bool
-        """
         self.__include_switches_plate_mounted = include_switches_plate_mounted

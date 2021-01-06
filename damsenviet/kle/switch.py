@@ -131,21 +131,17 @@ class Switch:
 
     @property
     def mount(self) -> str:
-        """Gets switch mount.
+        """Switch mount.
 
-        :return: switch mount
-        :rtype: str
+        :getter: gets switch mount
+        :setter: sets switch mount, resetting brand and type if the mount changed
+        :type: str
         """
         return self.__mount
 
     @mount.setter
     @typechecked
     def mount(self, mount: str) -> None:
-        """Sets switch mount.
-
-        :param mount: switch mount
-        :type mount: str
-        """
         if mount == self.mount:
             return
         if mount != "":
@@ -161,9 +157,10 @@ class Switch:
 
     @property
     def brand(self) -> str:
-        """Gets switch brand.
+        """Switch brand.
 
-        :return: switch brand
+        :getter: gets switch brand
+        :setter: sets switch brand, resetting type if the brand changed
         :rtype: str
         """
         return self.__brand
@@ -171,11 +168,6 @@ class Switch:
     @brand.setter
     @typechecked
     def brand(self, brand: str) -> None:
-        """Sets switch brand.
-
-        :param brand: switch brand
-        :type brand: str
-        """
         if brand == self.brand:
             return
         if brand != "":
@@ -190,20 +182,16 @@ class Switch:
 
     @property
     def type(self) -> str:
-        """Gets switch type part id.
+        """Switch type part id.
 
-        :return: switch type part id
+        :getter: gets switch type part id
+        :setter: gets switch type part id
         :rtype: str
         """
         return self.__type
 
     @type.setter
     def type(self, type: str) -> None:
-        """Sets switch type part id.
-
-        :param type: switch type
-        :type type: str
-        """
         if type == self.type:
             return
         if type != "":
