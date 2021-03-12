@@ -135,14 +135,9 @@ def playback_metadata_changes(
             name = metadata_changes["background"]["name"]
         if "style" in metadata_changes["background"]:
             style = metadata_changes["background"]["style"]
-        metadata.background = Background(name)
-        expected(
-            "style",
-            style,
-            "be exactly the valid background style for the background name",
-            lambda style: style == metadata.background.style,
-        )
-        metadata.background = Background(name)
+        metadata.background = Background()
+        metadata.background.name = name
+        metadata.background.style = style
     if "name" in metadata_changes:
         metadata.name = metadata_changes["name"]
     if "notes" in metadata_changes:
@@ -665,13 +660,13 @@ class Keyboard:
                 background_changes,
                 "name",
                 self.metadata.background.name,
-                "",
+                None,
             )
             record_change(
                 background_changes,
                 "style",
                 self.__metadata.background.style,
-                "",
+                None,
             )
             if len(background_changes) > 0:
                 record_change(metadata_changes, "background", background_changes, None)
