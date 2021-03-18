@@ -12,18 +12,18 @@ class Metadata:
     """Class storing Keyboard's Metadata."""
 
     def __init__(self):
-        self.name: str = ""
-        self.author: str = ""
-        self.notes: str = ""
-        self.background: Background = None
-        self.background_color: str = "#eeeeee"
-        self.radii: str = ""
-        self.css: str = ""
-        self.switch = Switch()
-        self.is_switches_pcb_mounted: bool = False
-        self.include_switches_pcb_mounted: bool = False
-        self.is_switches_plate_mounted: bool = False
-        self.include_switches_plate_mounted: bool = False
+        self.__name: str = ""
+        self.__author: str = ""
+        self.__notes: str = ""
+        self.__background: Background = None
+        self.__background_color: str = "#eeeeee"
+        self.__radii: str = ""
+        self.__css: str = ""
+        self.__switch: Switch = Switch()
+        self.__is_switches_pcb_mounted: bool = False
+        self.__include_switches_pcb_mounted: bool = False
+        self.__is_switches_plate_mounted: bool = False
+        self.__include_switches_plate_mounted: bool = False
 
     def __str__(self):
         return repr(self)

@@ -8,18 +8,10 @@ class Switch:
     """Class storing Switch."""
 
     def __init__(self) -> None:
-        """Instantiates a switch.
-
-        :param mount: the switch mount, defaults to ""
-        :type mount: str, optional
-        :param brand: the switch brand of a switch mount, defaults to ""
-        :type brand: str, optional
-        :param type: the switch type part id of a switch brand, defaults to ""
-        :type type: str, optional
-        """
-        self.__mount = ""
-        self.__brand = ""
-        self.__type = ""
+        """Instantiates a switch."""
+        self.__mount: str = ""
+        self.__brand: str = ""
+        self.__type: str = ""
 
     def __str__(self) -> str:
         return repr(self)

@@ -9,16 +9,11 @@ __all__ = ["Label"]
 class Label:
     """Class storing Key's Label."""
 
-    def __init__(
-        self,
-        text: str = "",
-        color: str = "#000000",
-        size: Union[int, float] = 3,
-    ):
+    def __init__(self):
         """Instantiates a Label."""
-        self.text: str = text
-        self.color: str = color
-        self.size: Union[int, float] = size
+        self.__text: str = ""
+        self.__color: str = "#000000"
+        self.__size: Union[int, float] = 3
 
     def __str__(self) -> str:
         return repr(self)

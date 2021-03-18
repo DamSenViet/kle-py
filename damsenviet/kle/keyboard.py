@@ -408,9 +408,9 @@ def _aligned_key_properties(
 class Keyboard:
     """Class storing Keyboard."""
 
-    def __init__(self, metadata: Metadata = None, keys: List[Key] = None):
-        self.metadata: Metadata = Metadata()
-        self.keys: List[Key] = []
+    def __init__(self):
+        self.__metadata: Metadata = Metadata()
+        self.__keys: List[Key] = []
 
     def __str__(self) -> str:
         return repr(self)

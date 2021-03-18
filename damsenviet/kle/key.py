@@ -35,29 +35,7 @@ class Key:
         self.__is_homing: bool = False
         self.__is_decal: bool = False
         self.__profile_and_row: str = ""
-        self.__switch = Switch()
-
-        self.color: str = "#cccccc"
-        self.labels: List[Label] = [Label() for i in range(12)]
-        self.default_text_color: str = "#000000"
-        self.default_text_size: str = 3
-        self.x: float = 0.0
-        self.y: float = 0.0
-        self.width: float = 1.0
-        self.height: float = 1.0
-        self.x2: float = 0.0
-        self.y2: float = 0.0
-        self.width2: float = 1.0
-        self.height2: float = 1.0
-        self.rotation_x: float = 0.0
-        self.rotation_y: float = 0.0
-        self.rotation_angle: float = 0.0
-        self.is_ghosted: bool = False
-        self.is_stepped: bool = False
-        self.is_homing: bool = False
-        self.is_decal: bool = False
-        self.profile_and_row: str = ""
-        self.switch = Switch()
+        self.__switch: Switch = Switch()
 
     def __str__(self) -> str:
         return repr(self)
