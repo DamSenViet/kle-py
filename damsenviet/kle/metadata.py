@@ -3,13 +3,7 @@ from typing import Union
 from typeguard import typechecked
 from .background import Background
 from .switch import Switch
-from .utils import (
-    autorepr,
-    expected,
-    is_valid_css_stylesheet,
-    is_valid_css_color,
-    is_valid_css_component_value_list,
-)
+from .utils import autorepr
 
 __all__ = ["Metadata"]
 
@@ -25,7 +19,7 @@ class Metadata:
         self.background_color: str = "#eeeeee"
         self.radii: str = ""
         self.css: str = ""
-        self.switch = Switch("", "", "")
+        self.switch = Switch()
         self.is_switches_pcb_mounted: bool = False
         self.include_switches_pcb_mounted: bool = False
         self.is_switches_plate_mounted: bool = False
@@ -118,10 +112,10 @@ class Metadata:
 
     @property
     def background_color(self) -> str:
-        """Background color.
+        """Background CSS color.
 
-        :getter: gets background color
-        :setter: sets background color
+        :getter: gets background CSS color
+        :setter: sets background CSS color
         :type: str
         """
         return self.__background_color
@@ -129,20 +123,14 @@ class Metadata:
     @background_color.setter
     @typechecked
     def background_color(self, background_color: str) -> None:
-        expected(
-            "background_color",
-            background_color,
-            "be a valid css color",
-            is_valid_css_color,
-        )
         self.__background_color = background_color
 
     @property
     def radii(self) -> str:
-        """Radius CSS component values.
+        """Border-Radius CSS component values.
 
-        :getter: gets radius CSS component values
-        :setter: sets radius CSS component values
+        :getter: gets border-radius CSS component values
+        :setter: sets border-radius CSS component values
         :type: str
         """
         return self.__radii
@@ -150,12 +138,6 @@ class Metadata:
     @radii.setter
     @typechecked
     def radii(self, radii: str) -> None:
-        expected(
-            "radii",
-            radii,
-            "be a valid list of css component values",
-            is_valid_css_component_value_list,
-        )
         self.__radii = radii
 
     @property
@@ -171,12 +153,6 @@ class Metadata:
     @css.setter
     @typechecked
     def css(self, css: str) -> None:
-        expected(
-            "css",
-            css,
-            "to be valid CSS",
-            is_valid_css_stylesheet,
-        )
         self.__css = css
 
     @property

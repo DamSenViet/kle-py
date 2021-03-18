@@ -4,10 +4,7 @@ from .background import Background
 from .key import Key
 from .switch import Switch
 from .label import Label
-from .exceptions import (
-    IllegalValueException,
-    DeserializeException,
-)
+from .exceptions import DeserializeException
 
 __all__ = [
     "Keyboard",
@@ -16,6 +13,5 @@ __all__ = [
     "Key",
     "Switch",
     "Label",
-    "IllegalValueException",
     "DeserializeException",
 ]

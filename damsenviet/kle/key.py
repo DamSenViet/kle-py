@@ -6,11 +6,7 @@ from typing import (
 from typeguard import typechecked
 from .label import Label
 from .switch import Switch
-from .utils import (
-    autorepr,
-    expected,
-    is_valid_css_color,
-)
+from .utils import autorepr
 
 __all__ = ["Key"]
 
@@ -39,7 +35,7 @@ class Key:
         self.__is_homing: bool = False
         self.__is_decal: bool = False
         self.__profile_and_row: str = ""
-        self.__switch = Switch("", "", "")
+        self.__switch = Switch()
 
         self.color: str = "#cccccc"
         self.labels: List[Label] = [Label() for i in range(12)]
@@ -61,7 +57,7 @@ class Key:
         self.is_homing: bool = False
         self.is_decal: bool = False
         self.profile_and_row: str = ""
-        self.switch = Switch("", "", "")
+        self.switch = Switch()
 
     def __str__(self) -> str:
         return repr(self)
@@ -104,12 +100,6 @@ class Key:
     @color.setter
     @typechecked
     def color(self, color: str) -> None:
-        expected(
-            "color",
-            color,
-            "be a valid css color",
-            is_valid_css_color,
-        )
         self.__color = color
 
     @property
@@ -129,12 +119,12 @@ class Key:
 
     @property
     def default_text_color(self) -> str:
-        """Default text color.
+        """Default CSS text color.
 
         Used to optimize the json size.
 
-        :getter: gets default text color
-        :setter: sets default text color
+        :getter: gets default CSS text color
+        :setter: sets default CSS text color
         :type: str
         """
         return self.__default_text_color
@@ -142,12 +132,6 @@ class Key:
     @default_text_color.setter
     @typechecked
     def default_text_color(self, default_text_color: str) -> None:
-        expected(
-            "default_text_color",
-            default_text_color,
-            "be a valid css color",
-            is_valid_css_color,
-        )
         self.__default_text_color = default_text_color
 
     @property
@@ -165,12 +149,6 @@ class Key:
     @default_text_size.setter
     @typechecked
     def default_text_size(self, default_text_size: Union[int, float]) -> None:
-        expected(
-            "default_text_size",
-            default_text_size,
-            "be at least 1 and no more than 9",
-            lambda size: size >= 1 and size <= 9,
-        )
         self.__default_text_size = default_text_size
 
     @property
@@ -216,12 +194,6 @@ class Key:
     @width.setter
     @typechecked
     def width(self, width: float) -> None:
-        expected(
-            "width",
-            width,
-            "be at least 0.5",
-            lambda width: width >= 0.5,
-        )
         self.__width = width
 
     @property
@@ -237,12 +209,6 @@ class Key:
     @height.setter
     @typechecked
     def height(self, height: float) -> None:
-        expected(
-            "height",
-            height,
-            "be at least 0.5",
-            lambda height: height >= 0.5,
-        )
         self.__height = height
 
     @property
@@ -258,12 +224,6 @@ class Key:
     @x2.setter
     @typechecked
     def x2(self, x2: float) -> None:
-        expected(
-            "abs(x2)",
-            abs(x2),
-            "be no more than abs(width - width2)",
-            lambda x2: abs(x2) <= abs(self.width - self.width2),
-        )
         self.__x2 = x2
 
     @property
@@ -279,12 +239,6 @@ class Key:
     @y2.setter
     @typechecked
     def y2(self, y2: float) -> None:
-        expected(
-            "abs(y2)",
-            abs(y2),
-            "be no more than abs(height - height2)",
-            lambda y2: abs(y2) <= abs(self.height - self.height2),
-        )
         self.__y2 = y2
 
     @property
@@ -300,18 +254,6 @@ class Key:
     @width2.setter
     @typechecked
     def width2(self, width2: float) -> None:
-        expected(
-            "width2",
-            width2,
-            "be at least 0.5",
-            lambda width2: width2 >= 0.5,
-        )
-        expected(
-            "width2",
-            width2,
-            "be at least abs(x2)",
-            lambda width2: width2 >= abs(self.x2),
-        )
         self.__width2 = width2
 
     @property
@@ -327,18 +269,6 @@ class Key:
     @height2.setter
     @typechecked
     def height2(self, height2: float) -> None:
-        expected(
-            "height2",
-            height2,
-            "be at least 0.5",
-            lambda height2: height2 >= 0.5,
-        )
-        expected(
-            "height2",
-            height2,
-            "be at least abs(y2)",
-            lambda height2: height2 >= abs(self.y2),
-        )
         self.__height2 = height2
 
     @property
@@ -354,12 +284,6 @@ class Key:
     @rotation_x.setter
     @typechecked
     def rotation_x(self, rotation_x: float) -> None:
-        expected(
-            "rotation_x",
-            rotation_x,
-            "be at least 0",
-            lambda rotation_x: rotation_x >= 0,
-        )
         self.__rotation_x = rotation_x
 
     @property
@@ -375,12 +299,6 @@ class Key:
     @rotation_y.setter
     @typechecked
     def rotation_y(self, rotation_y: float) -> None:
-        expected(
-            "rotation_y",
-            rotation_y,
-            "be at least 0",
-            lambda rotation_y: rotation_y >= 0,
-        )
         self.__rotation_y = rotation_y
 
     @property
@@ -396,12 +314,6 @@ class Key:
     @rotation_angle.setter
     @typechecked
     def rotation_angle(self, rotation_angle: float) -> None:
-        expected(
-            "rotation_angle",
-            rotation_angle,
-            "be at least -180 and no more than 180",
-            lambda rotation_angle: rotation_angle >= -180 and rotation_angle <= 180,
-        )
         self.__rotation_angle = rotation_angle
 
     @property

@@ -41,7 +41,7 @@ class Background:
 
     @property
     def style(self) -> str:
-        """Background CSS style declaration (unvalidated).
+        """Background CSS style declaration.
 
         :getter: gets CSS style declaration of the background
         :setter: sets CSS style declaration of the background

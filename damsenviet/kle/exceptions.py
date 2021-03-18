@@ -1,31 +1,10 @@
 from typing import (
-    Any,
     Union,
     List,
     Dict,
 )
 
-__all__ = [
-    "IllegalValueException",
-    "DeserializeException",
-]
-
-
-class IllegalValueException(Exception):
-    """Exceptions for encountering illegal values."""
-
-    def __init__(
-        self,
-        message: str,
-        value: Any,
-    ):
-        """Initializes an IllegalArgumentException.
-
-        :param message: A message indicating an illegal argument.
-        :type message: str
-        """
-        super().__init__(message)
-        self.value = value
+__all__ = ["DeserializeException"]
 
 
 class DeserializeException(Exception):

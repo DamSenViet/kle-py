@@ -1,11 +1,7 @@
 from __future__ import annotations
 from typing import Union
 from typeguard import typechecked
-from .utils import (
-    autorepr,
-    expected,
-    is_valid_css_color,
-)
+from .utils import autorepr
 
 __all__ = ["Label"]
 
@@ -54,11 +50,11 @@ class Label:
 
     @property
     def color(self) -> str:
-        """CSS font color.
+        """CSS text color.
 
-        :getter: gets CSS font color
-        :setter: sets CSS font color
-        :type: str
+        :getter: gets CSS text color
+        :setter: sets CSS tex color
+        :type: strt
         """
         return self.__color
 
@@ -66,12 +62,6 @@ class Label:
     @color.setter
     @typechecked
     def color(self, color: str) -> None:
-        expected(
-            "color",
-            color,
-            "be a valid css color",
-            is_valid_css_color,
-        )
         self.__color = color
 
     @property
@@ -87,10 +77,4 @@ class Label:
     @size.setter
     @typechecked
     def size(self, size: Union[int, float]) -> None:
-        expected(
-            "size",
-            size,
-            "at least 1 and no more than 9",
-            lambda size: size >= 1 and size <= 9,
-        )
         self.__size = size

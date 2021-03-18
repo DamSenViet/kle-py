@@ -14,7 +14,7 @@ from .metadata import Metadata
 from .background import Background
 from .key import Key
 from .exceptions import DeserializeException
-from .utils import autorepr, expected
+from .utils import autorepr
 
 __all__ = ["Keyboard"]
 
