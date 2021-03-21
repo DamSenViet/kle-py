@@ -1,16 +1,17 @@
 # kle-py
 
-A Python library for interacting with KLE data structures and files.
+A Python library for interacting with KLE data structures and KLE JSON files.
 
-Originally ported from [keyboard-layout-editor/serial.js](https://github.com/ijprest/keyboard-layout-editor/)
+Originally ported from [keyboard-layout-editor](https://github.com/ijprest/keyboard-layout-editor/)
 with improvements to make the source code increasingly portable across
 different language platforms.
 
 ## Table of Contents
 
-* [Documentation](#documentation)
-* [Installation](#installation)
-* [Quick Start](#quick-start)
+- [Documentation](#documentation)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Contributing](#contributing)
 
 ## Documentation
 
@@ -20,15 +21,15 @@ To view documentation, examples, visit the [documentation site](https://damsenvi
 
 To install and use the library, use the installation method listed below.
 
-``` bash
+```sh
 pip3 install damsenviet.kle
 ```
 
 ## Quick Start
 
-This quick start demo demonstrates parsing a KLE formatted json file.
+This quick start demo demonstrates parsing a KLE JSON file.
 
-``` py
+```python
 import os
 import json
 from damsenviet.kle import Keyboard
@@ -50,3 +51,13 @@ for key in keyboard.keys:
     for label in key.labels:
         pass
 ```
+
+## Contributing
+
+There are many ways to contribute to this project.
+
+- [Creating Issues](./CONTRIBUTING.md#creating-issues)
+- [Contributing Code](./CONTRIBUTING.md#contributing-code)
+- [Sponsoring Developers](./CONTRIBUTING.md#sponsoring-developers)
+
+For more information please see the [contributing guidelines](./CONTRIBUTING.md).
