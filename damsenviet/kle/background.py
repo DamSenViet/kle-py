@@ -30,7 +30,6 @@ class Background:
 
         :getter: gets the name of the background
         :setter: sets the name of the background
-        :type: str
         """
         return self.__name
 
@@ -45,7 +44,6 @@ class Background:
 
         :getter: gets CSS style declaration of the background
         :setter: sets CSS style declaration of the background
-        :type: str
         """
         return self.__style
 

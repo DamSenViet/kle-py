@@ -53,7 +53,6 @@ class Metadata:
 
         :getter: gets name of the keyboard
         :setter: sets name of the keyboard
-        :type: str
         """
         return self.__name
 
@@ -68,7 +67,6 @@ class Metadata:
 
         :getter: gets author name
         :setter: sets author name
-        :type: str
         """
         return self.__author
 
@@ -83,7 +81,6 @@ class Metadata:
 
         :getter: gets notes
         :setter: sets notes
-        :type: str
         """
         return self.__notes
 
@@ -98,7 +95,6 @@ class Metadata:
 
         :getter: gets background of the keyboard
         :setter: sets background of the keyboard
-        :type: Background
         """
         return self.__background
 
@@ -116,7 +112,6 @@ class Metadata:
 
         :getter: gets background CSS color
         :setter: sets background CSS color
-        :type: str
         """
         return self.__background_color
 
@@ -131,7 +126,6 @@ class Metadata:
 
         :getter: gets border-radius CSS component values
         :setter: sets border-radius CSS component values
-        :type: str
         """
         return self.__radii
 
@@ -146,7 +140,6 @@ class Metadata:
 
         :getter: gets CSS stylehseet
         :setter: sets CSS stylehseet
-        :type: str
         """
         return self.__css
 
@@ -161,7 +154,6 @@ class Metadata:
 
         :getter: gets switch
         :setter: sets switch
-        :type: Switch
         """
         return self.__switch
 
@@ -176,7 +168,6 @@ class Metadata:
 
         :getter: gets whether switches are pcb mounted
         :setter: sets whether switches are pcb mounted
-        :type: bool
         """
         return self.__is_switches_pcb_mounted
 
@@ -191,7 +182,6 @@ class Metadata:
 
         :getter: gets whether to force include switch pcb mounting in json
         :setter: sets whether to force include switch pcb mounting in json
-        :type: bool
         """
         return self.__include_switches_pcb_mounted
 
@@ -206,7 +196,6 @@ class Metadata:
 
         :getter: gets whether switches are plate mounted
         :setter: sets whether switches are plate mounted
-        :type: bool
         """
         return self.__is_switches_plate_mounted
 
@@ -221,7 +210,6 @@ class Metadata:
 
         :getter: gets whether to force include switch plate mounting in json
         :setter: sets whether to force include switch plate mounting in json
-        :type: bool
         """
         return self.__include_switches_plate_mounted
 

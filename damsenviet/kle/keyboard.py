@@ -65,11 +65,8 @@ def unaligned(
     """Returns the unaligned ordering of aligned items.
 
     :param items: The aligned_items to be unaligned.
-    :type items: List
     :param align: The alignment option. 0-7
-    :type align: int
     :return: The reordered items.
-    :rtype: list
     """
     unaligned_items = [default_val for i in range(12)]
     for i, aligned_item in enumerate(aligned_items):
@@ -86,13 +83,9 @@ def compare_text_sizes(
     """Determines whether text sizes and ordered version are equal.
 
     :param text_sizes: the text sizes to compare
-    :type text_sizes: Union[int, List[int]]
     :param aligned_text_sizes: the ordered text sizes
-    :type algined_text_sizes: List[Union[int, float]]
     :param aligned_text_labels: the ordered labels
-    :type aligned_text_labels: List[str]
     :return: whether text sizes are equal
-    :rtype: bool
     """
     if type(text_sizes) is int or type(text_sizes) is float:
         text_sizes = [text_sizes] + [0 for i in range(11)]
@@ -118,11 +111,8 @@ def playback_metadata_changes(
     """Playback the changes into the metadata.
 
     :param metadata: metadata
-    :type metadata: Metadata
     :param metadata_changes: the changes
-    :type metadata_changes: Dict
     :return: the metadata
-    :rtype: Metadata
     """
     if "author" in metadata_changes:
         metadata.author = metadata_changes["author"]
@@ -173,21 +163,13 @@ def playback_key_changes(
     """Playback the changes into the key.
 
     :param key: the recording key
-    :type key: Key
     :param key_changes: the changes
-    :type key_changes: Dict
     :param current_labels_color: key's labels' color, default values set to ""
-    :type current_labels_color: List[str]
     :param current_labels_size: key's labels' size, defaults values set to 0
-    :type current_labels_size: List[Union[int, float]]
     :param alignment: the tracked text alignment
-    :type alignment: int
     :param cluster_rotation_x: the tracked rotation origin x
-    :type cluster_rotation_x: float
     :param cluster_rotation_y: the tracked rotation origin y
-    :type cluster_rotation_y: float
     :return: current_labels_color, current_labels_size, align, cluster_rotation_x, cluster_rotation_y
-    :rtype: Tuple[List[str], List[Union[int, float]], int, float, float]
     """
     if "r" in key_changes:
         key.rotation_angle = key_changes["r"]
@@ -273,9 +255,7 @@ def key_sort_criteria(
     """A helper to sort keys into the KLE order before serialization.
 
     :param key: the key to compare
-    :type key: Key
     :return: the multidimensional ordering for comparison
-    :rtype: Tuple[ float, float, float, float, float, ]
     """
     return (
         (key.rotation_angle + 360) % 360,
@@ -296,15 +276,10 @@ def record_change(
     """Registers the change if value is not equal to default.
 
     :param changes: the existing changes
-    :type changes: Dict
     :param name: the property name
-    :type name: str
     :param val: the value
-    :type val: T
     :param default_val: the value to compare against
-    :type default_val: T
     :return: the value
-    :rtype: T
     """
     if val != default_val:
         if type(val) is float:
@@ -323,9 +298,7 @@ def _reduced_text_sizes(text_sizes: List[Union[int, float]]):
     """Returns a copy of text sizes with right zeroes stripped.
 
     :param arr: [description]
-    :type arr: List[Union[int, float]]
     :return: [description]
-    :rtype: [type]
     """
     text_sizes: List[Union[int, float]] = deepcopy(text_sizes)
     while len(text_sizes) > 0 and text_sizes[-1] == 0:
@@ -341,11 +314,8 @@ def _aligned_key_properties(
     """More space efficient text labels, text colors, text sizes.
 
     :param key: the key to compute the reorder of
-    :type key: Key
     :param current: the current key to compare to
-    :type current: Key
     :return: a return dict with reordered version of props stored
-    :rtype: Dict
     """
     # size and colors if match default changed to base values
     key_labels_size = [label.size for label in key.labels]
@@ -430,7 +400,6 @@ class Keyboard:
 
         :getter: gets metadata
         :setter: sets metadata
-        :type: Metadata
         """
         return self.__metadata
 
@@ -446,7 +415,6 @@ class Keyboard:
 
         :getter: gets list of Keys
         :setter: sets list of Keys
-        :type: List[Key]
         """
         return self.__keys
 
@@ -463,9 +431,7 @@ class Keyboard:
         """Deserializes a KLE json into a Keyboard.
 
         :param keyboard_json: the KLE formatted json
-        :type keyboard_json: List[Union[Dict, List[Union[str, Dict]]]]
         :return: a Keyboard
-        :rtype: Keyboard
         """
         if type(keyboard_json) != list:
             raise DeserializeException(
@@ -608,10 +574,7 @@ class Keyboard:
     def to_json(self) -> Keyboard_JSON:
         """Serializes the Keyboard to a KLE formatted json.
 
-        :param keyboard: the keyboard to deserialize
-        :type keyboard: Keyboard
         :return: the KLE formatted json
-        :rtype: List[Union[Dict, List[Union[str, Dict]]]]
         """
         keyboard_json: Keyboard_JSON = list()
         row: List[Union[str, Dict]] = list()

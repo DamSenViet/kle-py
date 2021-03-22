@@ -34,7 +34,6 @@ class Label:
 
         :getter: gets text content
         :setter: sets text content
-        :type: str
         """
         return self.__text
 
@@ -49,7 +48,6 @@ class Label:
 
         :getter: gets CSS text color
         :setter: sets CSS tex color
-        :type: strt
         """
         return self.__color
 
@@ -65,7 +63,6 @@ class Label:
 
         :getter: gets font size scale
         :setter: sets font size scale
-        :type: Union[int, float]
         """
         return self.__size
 

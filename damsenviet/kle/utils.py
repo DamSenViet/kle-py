@@ -5,7 +5,7 @@ from typing import (
     Dict,
 )
 
-__all__ = []
+__all__ = [""]
 
 
 T = TypeVar("T")
@@ -16,11 +16,8 @@ def autorepr(self: object, attributes: Dict[str, Any]) -> str:
     """A utility function to easily replace __repr__.
 
     :param self: any instance of a class
-    :type self: object
     :param attributes: a mapping of name to values to display
-    :type attributes: Dict[str, Any]
     :return: a string representing the object
-    :rtype: str
     """
     key_eq_val_strs: List[str] = []
     for key, value in attributes.items():

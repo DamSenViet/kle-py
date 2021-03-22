@@ -25,9 +25,7 @@ class DeserializeException(Exception):
         """Initializes a DeserializeException.
 
         :param message: the error message
-        :type message: str
         :param payload: the offending json payload, defaults to None
-        :type payload: Union[ int, float, str, None, Dict, List, ], optional
         """
         super().__init__(message)
         self.payload: Union[

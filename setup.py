@@ -34,6 +34,7 @@ st.setup(
             # docs
             "sphinx>=3.3.1",
             "pydata-sphinx-theme>=0.4.1",
+            "sphinx-autodoc-typehints>=1.11.1",
         ],
     },
     python_requires=">=3.7",

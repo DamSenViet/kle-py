@@ -71,7 +71,6 @@ class Key:
 
         :getter: gets keycap CSS color
         :setter: sets keycap CSS color
-        :type: str
         """
         return self.__color
 
@@ -86,7 +85,6 @@ class Key:
 
         :getter: gets the 12 labels
         :setter: sets the 12 labels
-        :type: List[Label]
         """
         return self.__labels
 
@@ -103,7 +101,6 @@ class Key:
 
         :getter: gets default CSS text color
         :setter: sets default CSS text color
-        :type: str
         """
         return self.__default_text_color
 
@@ -120,7 +117,6 @@ class Key:
 
         :getter: gets default text size
         :setter: sets default text size
-        :type: Union[int, float]
         """
         return self.__default_text_size
 
@@ -135,7 +131,6 @@ class Key:
 
         :getter: gets x posiiton of raised primary shape in key units
         :setter: sets x position of raised primary shape in key units
-        :type: float
         """
         return self.__x
 
@@ -150,7 +145,6 @@ class Key:
 
         :getter: gets y position of raised primary shape in key units
         :getter: sets y position of raised primary shape in key units
-        :type: float
         """
         return self.__y
 
@@ -165,7 +159,6 @@ class Key:
 
         :getter: gets width of raised primary shape in key units
         :setter: sets width of raised primary shape in key units
-        :type: float
         """
         return self.__width
 
@@ -180,7 +173,6 @@ class Key:
 
         :getter: gets height of raised primary shape in key units
         :setter: sets height of raised primary shape in key units
-        :type: float
         """
         return self.__height
 
@@ -195,7 +187,6 @@ class Key:
 
         :getter: gets x position offset of the lowered secondary shape in key units
         :setter: sets x position offset of the lowered secondary shape in key units
-        :type: float
         """
         return self.__x2
 
@@ -210,7 +201,6 @@ class Key:
 
         :getter: gets y position offset of lowered secondary shape in key units
         :setter: sets y position offset of lowered secondary shape in key units
-        :type: float
         """
         return self.__y2
 
@@ -225,7 +215,6 @@ class Key:
 
         :getter: gets width of lowered secondary shape in key units
         :setter: sets width of lowered secondary shape in key units
-        :type: float
         """
         return self.__width2
 
@@ -240,7 +229,6 @@ class Key:
 
         :getter: gets height of lowered secondary shape in key units
         :setter: sets height of lowered secondary shape in key units
-        :type: float
         """
         return self.__height2
 
@@ -255,7 +243,6 @@ class Key:
 
         :getter: gets x position of rotation origin in key units
         :setter: sets x position of rotation origin in key units
-        :type: float
         """
         return self.__rotation_x
 
@@ -270,7 +257,6 @@ class Key:
 
         :getter: gets y position of rotation origin in key units
         :setter: sets y position of rotation origin in key units
-        :type: float
         """
         return self.__rotation_y
 
@@ -285,7 +271,6 @@ class Key:
 
         :getter: gets rotation angle in degrees
         :setter: sets rotation angle in degrees
-        :type: float
         """
         return self.__rotation_angle
 
@@ -300,7 +285,6 @@ class Key:
 
         :getter: gets whether the key is rendered partially transparent
         :setter: sets whether the key is rendered partially transparent
-        :type: bool
         """
         return self.__is_ghosted
 
@@ -315,7 +299,6 @@ class Key:
 
         :getter: gets whether the key is stepped
         :setter: sets whether the key is stepped
-        :type: bool
         """
         return self.__is_stepped
 
@@ -330,7 +313,6 @@ class Key:
 
         :getter: gets whether the key is a homing key
         :setter: sets whether the key is a homing key
-        :type: bool
         """
         return self.__is_homing
 
@@ -345,7 +327,6 @@ class Key:
 
         :getter: gets whether the key is purely decorative
         :setter: sets whether the key is purely decorative
-        :type: bool
         """
         return self.__is_decal
 
@@ -360,7 +341,6 @@ class Key:
 
         :getter: gets keycap profile and row
         :setter: sets keycap profile and row
-        :type: str
         """
         return self.__profile_and_row
 
@@ -375,7 +355,6 @@ class Key:
 
         :getter: gets switch
         :setter: sets switch
-        :type: Switch
         """
         return self.__switch
 

@@ -30,7 +30,7 @@ author = "damsenviet"
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
-    "sphinx.ext.autodoc.typehints",
+    "sphinx_autodoc_typehints",
     "sphinx.ext.autosummary",
     "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
@@ -40,7 +40,9 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
 }
 
-autodoc_typehints = "description"
+# autodoc_typehints = "description"
+always_document_param_types = True
+simplify_optional_unions = True
 autodoc_member_order = "bysource"
 autosummary_generate = True
 autosummary_imported_members = False  # default

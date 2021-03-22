@@ -32,7 +32,6 @@ class Switch:
 
         :getter: gets switch mount
         :setter: sets switch mount
-        :type: str
         """
         return self.__mount
 
@@ -47,7 +46,6 @@ class Switch:
 
         :getter: gets switch brand
         :setter: sets switch brand
-        :rtype: str
         """
         return self.__brand
 
@@ -62,7 +60,6 @@ class Switch:
 
         :getter: gets switch type part id
         :setter: gets switch type part id
-        :rtype: str
         """
         return self.__type
 
