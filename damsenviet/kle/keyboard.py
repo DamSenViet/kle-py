@@ -294,11 +294,11 @@ def record_change(
 
 
 @typechecked
-def _reduced_text_sizes(text_sizes: List[Union[int, float]]):
+def reduced_text_sizes(text_sizes: List[Union[int, float]]):
     """Returns a copy of text sizes with right zeroes stripped.
 
-    :param arr: [description]
-    :return: [description]
+    :param text_sizes: an array of text sizes
+    :return: text sizes right stripped
     """
     text_sizes: List[Union[int, float]] = deepcopy(text_sizes)
     while len(text_sizes) > 0 and text_sizes[-1] == 0:
@@ -307,7 +307,7 @@ def _reduced_text_sizes(text_sizes: List[Union[int, float]]):
 
 
 @typechecked
-def _aligned_key_properties(
+def aligned_key_properties(
     key: Key,
     current_labels_size: List[Union[int, float]],
 ) -> Tuple[int, List[str], List[str], List[Union[int, float]]]:
@@ -361,7 +361,7 @@ def _aligned_key_properties(
             if sizes[i] != 0:
                 aligned_text_size[ndx] = sizes[i]
     # clean up
-    for i in range(len(_reduced_text_sizes(aligned_text_size))):
+    for i in range(len(reduced_text_sizes(aligned_text_size))):
         if aligned_text_labels[i] == "":
             aligned_text_size[i] = current_labels_size[i]
         if aligned_text_size == key.default_text_size:
@@ -698,7 +698,7 @@ class Keyboard:
                 aligned_text_labels,
                 aligned_text_color,
                 aligned_text_size,
-            ) = _aligned_key_properties(
+            ) = aligned_key_properties(
                 key,
                 current_labels_size,
             )
@@ -840,7 +840,7 @@ class Keyboard:
             if not compare_text_sizes(
                 current_labels_size, aligned_text_size, aligned_text_labels
             ):
-                if len(_reduced_text_sizes(aligned_text_size)) == 0:
+                if len(reduced_text_sizes(aligned_text_size)) == 0:
                     # force f to be written
                     record_change(
                         key_changes,
@@ -850,14 +850,12 @@ class Keyboard:
                     )
                 else:
                     optimizeF2: bool = not bool(aligned_text_size[0])
-                    for i in range(2, len(_reduced_text_sizes(aligned_text_size))):
+                    for i in range(2, len(reduced_text_sizes(aligned_text_size))):
                         if not optimizeF2:
                             break
                         optimizeF2 = aligned_text_size[i] == aligned_text_size[1]
                     if optimizeF2:
                         f2: Union[int, float] = aligned_text_size[1]
-                        # current.f2 not ever used
-                        # removed current.f2 = serializeProp(props, "f2", f2, -1);
                         record_change(key_changes, "f2", f2, -1)
                         current_labels_size = [0] + [f2 for i in range(11)]
                     else:
@@ -865,7 +863,7 @@ class Keyboard:
                         record_change(
                             key_changes,
                             "fa",
-                            _reduced_text_sizes(aligned_text_size),
+                            reduced_text_sizes(aligned_text_size),
                             [],
                         )
             record_change(key_changes, "w", key.width, 1.0)
