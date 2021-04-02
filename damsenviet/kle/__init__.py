@@ -5,6 +5,7 @@ from .key import Key
 from .switch import Switch
 from .label import Label
 from .exceptions import DeserializeException
+from .utils import json_dump_options
 
 __all__ = [
     "Keyboard",
@@ -14,4 +15,5 @@ __all__ = [
     "Switch",
     "Label",
     "DeserializeException",
+    "json_dump_options",
 ]

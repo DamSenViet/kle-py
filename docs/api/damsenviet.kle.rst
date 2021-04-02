@@ -1,22 +1,31 @@
 damsenviet.kle package
 ======================
 
-.. automodule:: damsenviet.kle
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Submodules
 ----------
 
 .. toctree::
    :maxdepth: 4
 
-   damsenviet.kle.background
-   damsenviet.kle.exceptions
-   damsenviet.kle.key
    damsenviet.kle.keyboard
-   damsenviet.kle.label
    damsenviet.kle.metadata
+   damsenviet.kle.background
+   damsenviet.kle.key
    damsenviet.kle.switch
+   damsenviet.kle.label
+   damsenviet.kle.exceptions
    damsenviet.kle.utils
+
+
+.. automodule:: damsenviet.kle
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. explicitly list those not picked up by automodule
+
+.. automodule:: damsenviet.kle.utils
+   :members: json_dump_options
+   :undoc-members:
+   :show-inheritance:

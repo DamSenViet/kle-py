@@ -1,7 +1,10 @@
 import os
 import json
 import pytest
-from damsenviet.kle import Keyboard
+from damsenviet.kle import (
+    Keyboard,
+    json_dump_options,
+)
 
 
 inputs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "inputs"))
@@ -35,28 +38,17 @@ def test_inputs(file_name: str):
     json.dump(
         keyboard.to_json(),
         output_file,
-        sort_keys=False,
-        indent=2,
-        ensure_ascii=False,
+        **json_dump_options,
     )
     json.dump(
         keyboard_json,
         formatted_input_file,
-        sort_keys=False,
-        indent=2,
-        ensure_ascii=False,
+        **json_dump_options,
     )
     formatted_input_file.close()
     output_file.close()
     # compare text versions
-    assert json.dumps(
-        keyboard_json,
-        sort_keys=True,
-        indent=2,
-        ensure_ascii=True,
-    ) == json.dumps(
+    assert json.dumps(keyboard_json, **json_dump_options,) == json.dumps(
         keyboard.to_json(),
-        sort_keys=True,
-        indent=2,
-        ensure_ascii=True,
+        **json_dump_options,
     )

@@ -37,8 +37,6 @@ if len(sys.argv) >= 3:
 else:
     output = json.dumps(
         keyboard.to_json(),
-        sort_keys=False,
-        indent=2,
-        ensure_ascii=False,
+        **kle.json_dump_options,
     )
     print(output)
