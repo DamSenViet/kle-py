@@ -8,7 +8,7 @@ __all__ = ["DeserializeException"]
 
 
 class DeserializeException(Exception):
-    """Exceptions encountered during deserialization."""
+    """An exception encountered during deserialization."""
 
     def __init__(
         self,

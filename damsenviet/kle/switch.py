@@ -5,10 +5,10 @@ __all__ = ["Switch"]
 
 
 class Switch:
-    """Class storing Switch."""
+    """Switch information."""
 
     def __init__(self) -> None:
-        """Instantiates a switch."""
+        """Initializes a Switch."""
         self.__mount: str = ""
         self.__brand: str = ""
         self.__type: str = ""
@@ -28,11 +28,7 @@ class Switch:
 
     @property
     def mount(self) -> str:
-        """Switch mount.
-
-        :getter: gets switch mount
-        :setter: sets switch mount
-        """
+        """Switch mount."""
         return self.__mount
 
     @mount.setter
@@ -42,11 +38,7 @@ class Switch:
 
     @property
     def brand(self) -> str:
-        """Switch brand.
-
-        :getter: gets switch brand
-        :setter: sets switch brand
-        """
+        """Switch brand."""
         return self.__brand
 
     @brand.setter
@@ -56,11 +48,7 @@ class Switch:
 
     @property
     def type(self) -> str:
-        """Switch type part id.
-
-        :getter: gets switch type part id
-        :setter: gets switch type part id
-        """
+        """Switch type part id."""
         return self.__type
 
     @type.setter

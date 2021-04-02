@@ -7,10 +7,10 @@ __all__ = ["Label"]
 
 
 class Label:
-    """Class storing Key's Label."""
+    """Label information."""
 
     def __init__(self):
-        """Instantiates a Label."""
+        """Initializes a Label."""
         self.__text: str = ""
         self.__color: str = "#000000"
         self.__size: Union[int, float] = 3
@@ -30,11 +30,7 @@ class Label:
 
     @property
     def text(self) -> str:
-        """Text content.
-
-        :getter: gets text content
-        :setter: sets text content
-        """
+        """Text content."""
         return self.__text
 
     @text.setter
@@ -44,11 +40,7 @@ class Label:
 
     @property
     def color(self) -> str:
-        """CSS text color.
-
-        :getter: gets CSS text color
-        :setter: sets CSS tex color
-        """
+        """CSS text color."""
         return self.__color
 
     # any valid css color str value
@@ -59,11 +51,7 @@ class Label:
 
     @property
     def size(self) -> Union[int, float]:
-        """Font size scale.
-
-        :getter: gets font size scale
-        :setter: sets font size scale
-        """
+        """Font size scale."""
         return self.__size
 
     @size.setter

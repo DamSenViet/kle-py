@@ -376,9 +376,10 @@ def aligned_key_properties(
 
 
 class Keyboard:
-    """Class storing Keyboard."""
+    """Keyboard information."""
 
     def __init__(self):
+        """Initializes a Keyboard."""
         self.__metadata: Metadata = Metadata()
         self.__keys: List[Key] = []
 
@@ -396,11 +397,7 @@ class Keyboard:
 
     @property
     def metadata(self) -> Metadata:
-        """Metadata Information.
-
-        :getter: gets metadata
-        :setter: sets metadata
-        """
+        """Metadata Information."""
         return self.__metadata
 
     @metadata.setter
@@ -411,11 +408,7 @@ class Keyboard:
     @property
     @typechecked
     def keys(self) -> List[Key]:
-        """List of Keys.
-
-        :getter: gets list of Keys
-        :setter: sets list of Keys
-        """
+        """List of Keys."""
         return self.__keys
 
     @keys.setter
@@ -428,9 +421,9 @@ class Keyboard:
         cls,
         keyboard_json: Keyboard_JSON,
     ) -> Keyboard:
-        """Deserializes a KLE json into a Keyboard.
+        """Deserializes a KLE JSON into a Keyboard.
 
-        :param keyboard_json: the KLE formatted json
+        :param keyboard_json: the KLE JSON
         :return: a Keyboard
         """
         if type(keyboard_json) != list:
@@ -572,9 +565,9 @@ class Keyboard:
         return keyboard
 
     def to_json(self) -> Keyboard_JSON:
-        """Serializes the Keyboard to a KLE formatted json.
+        """Serializes the Keyboard into a KLE JSON.
 
-        :return: the KLE formatted json
+        :return: the KLE JSON
         """
         keyboard_json: Keyboard_JSON = list()
         row: List[Union[str, Dict]] = list()

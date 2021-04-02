@@ -6,9 +6,10 @@ __all__ = ["Background"]
 
 
 class Background:
-    """Class storing Metadata's Background."""
+    """Background information."""
 
     def __init__(self):
+        """Initializes a Background."""
         self.__name: str = ""
         self.__style: str = ""
 
@@ -26,11 +27,7 @@ class Background:
 
     @property
     def name(self) -> str:
-        """Name of the background option.
-
-        :getter: gets the name of the background
-        :setter: sets the name of the background
-        """
+        """Name of the background option."""
         return self.__name
 
     @name.setter
@@ -40,11 +37,7 @@ class Background:
 
     @property
     def style(self) -> str:
-        """Background CSS style declaration.
-
-        :getter: gets CSS style declaration of the background
-        :setter: sets CSS style declaration of the background
-        """
+        """Background CSS style declaration."""
         return self.__style
 
     @style.setter

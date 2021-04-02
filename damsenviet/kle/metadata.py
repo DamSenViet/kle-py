@@ -9,9 +9,10 @@ __all__ = ["Metadata"]
 
 
 class Metadata:
-    """Class storing Keyboard's Metadata."""
+    """Metadata information."""
 
     def __init__(self):
+        """Initializes a Label."""
         self.__name: str = ""
         self.__author: str = ""
         self.__notes: str = ""
@@ -49,11 +50,7 @@ class Metadata:
 
     @property
     def name(self) -> str:
-        """Name of the keyboard.
-
-        :getter: gets name of the keyboard
-        :setter: sets name of the keyboard
-        """
+        """Keyboard Name."""
         return self.__name
 
     @name.setter
@@ -63,11 +60,7 @@ class Metadata:
 
     @property
     def author(self) -> str:
-        """Author name.
-
-        :getter: gets author name
-        :setter: sets author name
-        """
+        """Author's name."""
         return self.__author
 
     @author.setter
@@ -77,11 +70,7 @@ class Metadata:
 
     @property
     def notes(self) -> str:
-        """Notes.
-
-        :getter: gets notes
-        :setter: sets notes
-        """
+        """Author's Notes."""
         return self.__notes
 
     @notes.setter
@@ -91,11 +80,7 @@ class Metadata:
 
     @property
     def background(self) -> Union[None, Background]:
-        """Background of the keyboard.
-
-        :getter: gets background of the keyboard
-        :setter: sets background of the keyboard
-        """
+        """Background of the keyboard."""
         return self.__background
 
     @background.setter
@@ -108,11 +93,7 @@ class Metadata:
 
     @property
     def background_color(self) -> str:
-        """Background CSS color.
-
-        :getter: gets background CSS color
-        :setter: sets background CSS color
-        """
+        """Background CSS color."""
         return self.__background_color
 
     @background_color.setter
@@ -122,11 +103,7 @@ class Metadata:
 
     @property
     def radii(self) -> str:
-        """Border-Radius CSS component values.
-
-        :getter: gets border-radius CSS component values
-        :setter: sets border-radius CSS component values
-        """
+        """CSS border-radius value."""
         return self.__radii
 
     @radii.setter
@@ -136,11 +113,7 @@ class Metadata:
 
     @property
     def css(self) -> str:
-        """CSS stylesheet.
-
-        :getter: gets CSS stylehseet
-        :setter: sets CSS stylehseet
-        """
+        """CSS stylesheet."""
         return self.__css
 
     @css.setter
@@ -150,11 +123,7 @@ class Metadata:
 
     @property
     def switch(self) -> Switch:
-        """Switch.
-
-        :getter: gets switch
-        :setter: sets switch
-        """
+        """Switch information."""
         return self.__switch
 
     @switch.setter
@@ -164,11 +133,7 @@ class Metadata:
 
     @property
     def is_switches_pcb_mounted(self) -> bool:
-        """Whether the switches are pcb mounted.
-
-        :getter: gets whether switches are pcb mounted
-        :setter: sets whether switches are pcb mounted
-        """
+        """Whether the switches are pcb mounted."""
         return self.__is_switches_pcb_mounted
 
     @is_switches_pcb_mounted.setter
@@ -178,11 +143,7 @@ class Metadata:
 
     @property
     def include_switches_pcb_mounted(self) -> bool:
-        """Whether to force include switch pcb mounting in json.
-
-        :getter: gets whether to force include switch pcb mounting in json
-        :setter: sets whether to force include switch pcb mounting in json
-        """
+        """Whether to force include switch pcb mounting in the KLE JSON."""
         return self.__include_switches_pcb_mounted
 
     @include_switches_pcb_mounted.setter
@@ -192,11 +153,7 @@ class Metadata:
 
     @property
     def is_switches_plate_mounted(self) -> bool:
-        """Whether switches are plate mounted.
-
-        :getter: gets whether switches are plate mounted
-        :setter: sets whether switches are plate mounted
-        """
+        """Whether switches are plate mounted."""
         return self.__is_switches_plate_mounted
 
     @is_switches_plate_mounted.setter
@@ -206,11 +163,7 @@ class Metadata:
 
     @property
     def include_switches_plate_mounted(self) -> bool:
-        """Whether to force include switch plate mounting in json.
-
-        :getter: gets whether to force include switch plate mounting in json
-        :setter: sets whether to force include switch plate mounting in json
-        """
+        """Whether to force include switch plate mounting in the KLE JSON."""
         return self.__include_switches_plate_mounted
 
     @include_switches_plate_mounted.setter

@@ -12,9 +12,10 @@ __all__ = ["Key"]
 
 
 class Key:
-    """Class storing Key."""
+    """Key information."""
 
     def __init__(self):
+        """Initializes a Key."""
         self.__color: str = "#cccccc"
         self.__labels: List[Label] = [Label() for i in range(12)]
         self.__default_text_color: str = "#000000"
@@ -67,11 +68,7 @@ class Key:
 
     @property
     def color(self) -> str:
-        """Keycap CSS color.
-
-        :getter: gets keycap CSS color
-        :setter: sets keycap CSS color
-        """
+        """Keycap CSS color."""
         return self.__color
 
     @color.setter
@@ -81,11 +78,7 @@ class Key:
 
     @property
     def labels(self) -> List[Label]:
-        """The 12 labels.
-
-        :getter: gets the 12 labels
-        :setter: sets the 12 labels
-        """
+        """12 Labels."""
         return self.__labels
 
     @labels.setter
@@ -97,10 +90,7 @@ class Key:
     def default_text_color(self) -> str:
         """Default CSS text color.
 
-        Used to optimize the json size.
-
-        :getter: gets default CSS text color
-        :setter: sets default CSS text color
+        Only used to optimize the KLE JSON size.
         """
         return self.__default_text_color
 
@@ -111,12 +101,9 @@ class Key:
 
     @property
     def default_text_size(self) -> Union[int, float]:
-        """Default text size
+        """Default text size.
 
-        Used to optimize the json size.
-
-        :getter: gets default text size
-        :setter: sets default text size
+        Only used to optimize the KLE JSON size.
         """
         return self.__default_text_size
 
@@ -127,11 +114,7 @@ class Key:
 
     @property
     def x(self) -> float:
-        """X position of raised primary shape in key units.
-
-        :getter: gets x posiiton of raised primary shape in key units
-        :setter: sets x position of raised primary shape in key units
-        """
+        """X position of raised primary shape in key units."""
         return self.__x
 
     @x.setter
@@ -141,11 +124,7 @@ class Key:
 
     @property
     def y(self) -> float:
-        """Y position of raised primary shape in key units.
-
-        :getter: gets y position of raised primary shape in key units
-        :getter: sets y position of raised primary shape in key units
-        """
+        """Y position of raised primary shape in key units."""
         return self.__y
 
     @y.setter
@@ -155,11 +134,7 @@ class Key:
 
     @property
     def width(self) -> float:
-        """Width of raised primary shape in key units.
-
-        :getter: gets width of raised primary shape in key units
-        :setter: sets width of raised primary shape in key units
-        """
+        """Width of raised primary shape in key units."""
         return self.__width
 
     @width.setter
@@ -169,11 +144,7 @@ class Key:
 
     @property
     def height(self) -> float:
-        """Height of raised primary shape in key units.
-
-        :getter: gets height of raised primary shape in key units
-        :setter: sets height of raised primary shape in key units
-        """
+        """Height of raised primary shape in key units."""
         return self.__height
 
     @height.setter
@@ -183,11 +154,7 @@ class Key:
 
     @property
     def x2(self) -> float:
-        """X position offset of the lowered secondary shape in key units.
-
-        :getter: gets x position offset of the lowered secondary shape in key units
-        :setter: sets x position offset of the lowered secondary shape in key units
-        """
+        """X position offset of the lowered secondary shape in key units."""
         return self.__x2
 
     @x2.setter
@@ -197,11 +164,7 @@ class Key:
 
     @property
     def y2(self) -> float:
-        """Y position offset of lowered secondary shape in key units.
-
-        :getter: gets y position offset of lowered secondary shape in key units
-        :setter: sets y position offset of lowered secondary shape in key units
-        """
+        """Y position offset of lowered secondary shape in key units."""
         return self.__y2
 
     @y2.setter
@@ -211,11 +174,7 @@ class Key:
 
     @property
     def width2(self) -> float:
-        """Width of lowered secondary shape in key units.
-
-        :getter: gets width of lowered secondary shape in key units
-        :setter: sets width of lowered secondary shape in key units
-        """
+        """Width of lowered secondary shape in key units."""
         return self.__width2
 
     @width2.setter
@@ -225,11 +184,7 @@ class Key:
 
     @property
     def height2(self) -> float:
-        """Height of lowered secondary shape in key units.
-
-        :getter: gets height of lowered secondary shape in key units
-        :setter: sets height of lowered secondary shape in key units
-        """
+        """Height of lowered secondary shape in key units."""
         return self.__height2
 
     @height2.setter
@@ -239,11 +194,7 @@ class Key:
 
     @property
     def rotation_x(self) -> float:
-        """X position of rotation origin in key units.
-
-        :getter: gets x position of rotation origin in key units
-        :setter: sets x position of rotation origin in key units
-        """
+        """X position of rotation origin in key units."""
         return self.__rotation_x
 
     @rotation_x.setter
@@ -253,11 +204,7 @@ class Key:
 
     @property
     def rotation_y(self) -> float:
-        """Y position of rotation origin in key units.
-
-        :getter: gets y position of rotation origin in key units
-        :setter: sets y position of rotation origin in key units
-        """
+        """Y position of rotation origin in key units."""
         return self.__rotation_y
 
     @rotation_y.setter
@@ -267,11 +214,7 @@ class Key:
 
     @property
     def rotation_angle(self) -> float:
-        """Rotation angle in degrees.
-
-        :getter: gets rotation angle in degrees
-        :setter: sets rotation angle in degrees
-        """
+        """Rotation angle in degrees."""
         return self.__rotation_angle
 
     @rotation_angle.setter
@@ -281,11 +224,7 @@ class Key:
 
     @property
     def is_ghosted(self) -> bool:
-        """Whether the key is rendered partially transparent.
-
-        :getter: gets whether the key is rendered partially transparent
-        :setter: sets whether the key is rendered partially transparent
-        """
+        """Whether the key is rendered partially transparent."""
         return self.__is_ghosted
 
     @is_ghosted.setter
@@ -295,11 +234,7 @@ class Key:
 
     @property
     def is_stepped(self) -> bool:
-        """Whether the key is stepped.
-
-        :getter: gets whether the key is stepped
-        :setter: sets whether the key is stepped
-        """
+        """Whether the key is stepped."""
         return self.__is_stepped
 
     @is_stepped.setter
@@ -309,11 +244,7 @@ class Key:
 
     @property
     def is_homing(self) -> bool:
-        """Whether the key is a homing key.
-
-        :getter: gets whether the key is a homing key
-        :setter: sets whether the key is a homing key
-        """
+        """Whether the key is a homing key."""
         return self.__is_homing
 
     @is_homing.setter
@@ -323,11 +254,7 @@ class Key:
 
     @property
     def is_decal(self) -> bool:
-        """Whether the key is purely decorative.
-
-        :getter: gets whether the key is purely decorative
-        :setter: sets whether the key is purely decorative
-        """
+        """Whether the key is purely decorative."""
         return self.__is_decal
 
     @is_decal.setter
@@ -337,11 +264,7 @@ class Key:
 
     @property
     def profile_and_row(self) -> str:
-        """Keycap profile and row.
-
-        :getter: gets keycap profile and row
-        :setter: sets keycap profile and row
-        """
+        """Keycap profile and row."""
         return self.__profile_and_row
 
     @profile_and_row.setter
@@ -351,11 +274,7 @@ class Key:
 
     @property
     def switch(self) -> Switch:
-        """Switch.
-
-        :getter: gets switch
-        :setter: sets switch
-        """
+        """Switch information."""
         return self.__switch
 
     @switch.setter
