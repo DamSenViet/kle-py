@@ -1,12 +1,10 @@
 damsenviet.kle package
 ======================
 
-Submodules
-----------
-
 .. toctree::
+   :hidden:
    :maxdepth: 4
-
+   
    damsenviet.kle.keyboard
    damsenviet.kle.metadata
    damsenviet.kle.background

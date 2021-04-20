@@ -45,3 +45,11 @@ This quick start demonstrates parsing a KLE JSON file.
       for label in key.labels:
           pass
 
+
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+   :caption: Contents:
+
+   Documentation <documentation>
+   API <api/damsenviet.kle>

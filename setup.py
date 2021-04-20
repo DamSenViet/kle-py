@@ -33,8 +33,8 @@ st.setup(
             "black>=20.8b1",
             # docs
             "sphinx>=3.3.1",
+            "pydata-sphinx-theme>=0.4.1",
             "sphinx-autodoc-typehints>=1.11.1",
-            "sphinx-bootstrap-theme>=0.7.1",
         ],
     },
     python_requires=">=3.7",

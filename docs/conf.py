@@ -10,7 +10,6 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import sphinx_bootstrap_theme
 import os
 import sys
 
@@ -62,9 +61,9 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # a list of builtin themes.
 #
 html_title = "kle-py"
-html_favicon = "_static/logo.svg"
-html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
-html_theme = "bootstrap"
+# html_logo = "_static/logo-text.svg"
+# html_favicon = "_static/logo.svg"
+html_theme = "pydata_sphinx_theme"
 html_context = {
     "github_user": "DamSenViet",
     "github_repo": "kle-py",
@@ -72,18 +71,9 @@ html_context = {
     "doc_path": "docs",
 }
 html_theme_options = {
-    "bootstrap_version": "3",
-    "bootswatch_theme": "paper",
-    "navbar_site_name": "kle-py",
-    "navbar_sidebarrel": False,
-    "navbar_pagenav": False,
-    "navbar_pagenav_name": "Page",
-    "navbar_links": [
-        ("Documentation", "documentation"),
-        ("API", "api/damsenviet.kle"),
-    ],
-    "nosidebar": False,
-    "source_link_position": "footer",
+    "github_url": "https://github.com/DamSenViet/kle-py",
+    "show_prev_next": False,
+    # "use_edit_page_button": True,
 }
 language = "en"
 
