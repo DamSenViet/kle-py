@@ -78,7 +78,14 @@ class Key:
 
     @property
     def labels(self) -> List[Label]:
-        """12 Labels."""
+        """12 Labels.
+
+        Index to position mapping is displayed below.
+
+        .. image:: /_static/label_positions.svg
+            :width: 150
+            :alt: Label Positions
+        """
         return self.__labels
 
     @labels.setter
