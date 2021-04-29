@@ -12,7 +12,7 @@ T = TypeVar("T")
 S = TypeVar("S")
 
 
-def autorepr(self: object, attributes: Dict[str, Any]) -> str:
+def _autorepr(self: object, attributes: Dict[str, Any]) -> str:
     """A utility function to easily replace __repr__.
 
     :param self: any instance of a class

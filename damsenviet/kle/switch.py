@@ -1,5 +1,5 @@
 from typeguard import typechecked
-from .utils import autorepr
+from .utils import _autorepr
 
 __all__ = ["Switch"]
 
@@ -17,7 +17,7 @@ class Switch:
         return repr(self)
 
     def __repr__(self) -> str:
-        return autorepr(
+        return _autorepr(
             self,
             {
                 "mount": self.mount,

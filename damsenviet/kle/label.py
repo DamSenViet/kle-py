@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Union
 from typeguard import typechecked
-from .utils import autorepr
+from .utils import _autorepr
 
 __all__ = ["Label"]
 
@@ -19,7 +19,7 @@ class Label:
         return repr(self)
 
     def __repr__(self) -> str:
-        return autorepr(
+        return _autorepr(
             self,
             {
                 "text": self.text,

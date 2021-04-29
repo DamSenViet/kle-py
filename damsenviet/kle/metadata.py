@@ -3,7 +3,7 @@ from typing import Union
 from typeguard import typechecked
 from .background import Background
 from .switch import Switch
-from .utils import autorepr
+from .utils import _autorepr
 
 __all__ = ["Metadata"]
 
@@ -30,7 +30,7 @@ class Metadata:
         return repr(self)
 
     def __repr__(self):
-        return autorepr(
+        return _autorepr(
             self,
             {
                 "name": self.name,

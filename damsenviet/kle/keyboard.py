@@ -14,7 +14,7 @@ from .metadata import Metadata
 from .background import Background
 from .key import Key
 from .exceptions import DeserializeException
-from .utils import autorepr
+from .utils import _autorepr
 
 __all__ = ["Keyboard"]
 
@@ -25,7 +25,7 @@ S = TypeVar("S")
 
 
 # fmt: off
-label_map = [
+_label_map = [
     # -1 indicates not used
     [0, 6, 2, 8, 9, 11, 3, 5, 1, 4, 7, 10],  # 0 = no centering
     [1, 7, -1, -1, 9, 11, 4, -1, -1, -1, -1, 10],  # 1 = center x
@@ -39,7 +39,7 @@ label_map = [
 ]
 
 
-disallowed_alignnment_for_labels = [
+_disallowed_alignnment_for_labels = [
     [1, 2, 3, 5, 6, 7],  # 0
     [2, 3, 6, 7],  # 1
     [1, 2, 3, 5, 6, 7],  # 2
@@ -70,12 +70,12 @@ def unaligned(
     """
     unaligned_items = [default_val for i in range(12)]
     for i, aligned_item in enumerate(aligned_items):
-        unaligned_items[label_map[alignment][i]] = aligned_item
+        unaligned_items[_label_map[alignment][i]] = aligned_item
     return unaligned_items
 
 
 @typechecked
-def compare_text_sizes(
+def _compare_text_sizes(
     text_sizes: Union[int, float, List[Union[int, float]]],
     aligned_text_sizes: List[Union[int, float]],
     aligned_text_labels: List[str],
@@ -104,7 +104,7 @@ def compare_text_sizes(
 
 
 @typechecked
-def playback_metadata_changes(
+def _playback_metadata_changes(
     metadata: Metadata,
     metadata_changes: Dict,
 ) -> None:
@@ -151,7 +151,7 @@ def playback_metadata_changes(
 
 
 @typechecked
-def playback_key_changes(
+def _playback_key_changes(
     key: Key,
     key_changes: Dict,
     current_labels_color: List[str],
@@ -249,7 +249,7 @@ def playback_key_changes(
 
 
 @typechecked
-def key_sort_criteria(
+def _key_sort_criteria(
     key: Key,
 ) -> Tuple[float, float, float, float, float]:
     """A helper to sort keys into the KLE order before serialization.
@@ -267,7 +267,7 @@ def key_sort_criteria(
 
 
 @typechecked
-def record_change(
+def _record_change(
     changes: Dict,
     name: str,
     val: T,
@@ -294,7 +294,7 @@ def record_change(
 
 
 @typechecked
-def reduced_text_sizes(text_sizes: List[Union[int, float]]):
+def _reduced_text_sizes(text_sizes: List[Union[int, float]]):
     """Returns a copy of text sizes with right zeroes stripped.
 
     :param text_sizes: an array of text sizes
@@ -307,7 +307,7 @@ def reduced_text_sizes(text_sizes: List[Union[int, float]]):
 
 
 @typechecked
-def aligned_key_properties(
+def _aligned_key_properties(
     key: Key,
     current_labels_size: List[Union[int, float]],
 ) -> Tuple[int, List[str], List[str], List[Union[int, float]]]:
@@ -339,7 +339,7 @@ def aligned_key_properties(
         if texts[i] != "":
             try:
                 for alignment in deepcopy(alignments):
-                    if alignment in disallowed_alignnment_for_labels[i]:
+                    if alignment in _disallowed_alignnment_for_labels[i]:
                         alignments.remove(alignment)
             except ValueError:
                 pass
@@ -350,9 +350,9 @@ def aligned_key_properties(
     aligned_text_color = ["" for i in range(12)]
     aligned_text_size = [0 for i in range(12)]
     for i in range(12):
-        if i not in label_map[alignment]:
+        if i not in _label_map[alignment]:
             continue
-        ndx = label_map[alignment].index(i)
+        ndx = _label_map[alignment].index(i)
         if ndx >= 0:
             if texts[i] != "":
                 aligned_text_labels[ndx] = texts[i]
@@ -361,7 +361,7 @@ def aligned_key_properties(
             if sizes[i] != 0:
                 aligned_text_size[ndx] = sizes[i]
     # clean up
-    for i in range(len(reduced_text_sizes(aligned_text_size))):
+    for i in range(len(_reduced_text_sizes(aligned_text_size))):
         if aligned_text_labels[i] == "":
             aligned_text_size[i] = current_labels_size[i]
         if aligned_text_size == key.default_text_size:
@@ -387,7 +387,7 @@ class Keyboard:
         return repr(self)
 
     def __repr__(self) -> str:
-        return autorepr(
+        return _autorepr(
             self,
             {
                 "metadata": self.metadata,
@@ -525,7 +525,7 @@ class Keyboard:
                             alignment,
                             cluster_rotation_x,
                             cluster_rotation_y,
-                        ) = playback_key_changes(
+                        ) = _playback_key_changes(
                             current,
                             key_changes,
                             current_labels_color,
@@ -551,7 +551,7 @@ class Keyboard:
                         "metadata can only be specified as first item",
                         keyboard_json[r],
                     )
-                playback_metadata_changes(keyboard.metadata, metadata_changes)
+                _playback_metadata_changes(keyboard.metadata, metadata_changes)
                 current.switch.mount = keyboard.metadata.switch.mount
                 current.switch.brand = keyboard.metadata.switch.brand
                 current.switch.type = keyboard.metadata.switch.type
@@ -585,25 +585,25 @@ class Keyboard:
 
         metadata_changes: Dict = dict()
         default_metadata: Metadata = Metadata()
-        record_change(
+        _record_change(
             metadata_changes,
             "backcolor",
             self.metadata.background_color,
             default_metadata.background_color,
         )
-        record_change(
+        _record_change(
             metadata_changes,
             "name",
             self.metadata.name,
             default_metadata.name,
         )
-        record_change(
+        _record_change(
             metadata_changes,
             "author",
             self.metadata.author,
             default_metadata.author,
         )
-        record_change(
+        _record_change(
             metadata_changes,
             "notes",
             self.metadata.notes,
@@ -612,45 +612,45 @@ class Keyboard:
         if self.metadata.background is not None:
             background_changes: Dict = dict()
             # force background properties to be included
-            record_change(
+            _record_change(
                 background_changes,
                 "name",
                 self.metadata.background.name,
                 None,
             )
-            record_change(
+            _record_change(
                 background_changes,
                 "style",
                 self.__metadata.background.style,
                 None,
             )
             if len(background_changes) > 0:
-                record_change(metadata_changes, "background", background_changes, None)
-        record_change(
+                _record_change(metadata_changes, "background", background_changes, None)
+        _record_change(
             metadata_changes,
             "radii",
             self.metadata.radii,
             default_metadata.radii,
         )
-        record_change(
+        _record_change(
             metadata_changes,
             "switchMount",
             self.metadata.switch.mount,
             default_metadata.switch.mount,
         )
-        record_change(
+        _record_change(
             metadata_changes,
             "switchBrand",
             self.metadata.switch.brand,
             default_metadata.switch.brand,
         )
-        record_change(
+        _record_change(
             metadata_changes,
             "switchType",
             self.metadata.switch.type,
             default_metadata.switch.type,
         )
-        record_change(
+        _record_change(
             metadata_changes,
             "css",
             self.metadata.css,
@@ -660,7 +660,7 @@ class Keyboard:
             self.metadata.is_switches_plate_mounted
             != default_metadata.is_switches_plate_mounted
         ):
-            record_change(
+            _record_change(
                 metadata_changes,
                 "plate",
                 self.metadata.is_switches_plate_mounted,
@@ -670,7 +670,7 @@ class Keyboard:
             self.metadata.is_switches_pcb_mounted
             != default_metadata.is_switches_pcb_mounted
         ):
-            record_change(
+            _record_change(
                 metadata_changes,
                 "pcb",
                 self.metadata.is_switches_pcb_mounted,
@@ -683,7 +683,7 @@ class Keyboard:
         # will be incremented on first row
         current.y = current.y - 1.0
 
-        sorted_keys: List[Key] = list(sorted(self.__keys, key=key_sort_criteria))
+        sorted_keys: List[Key] = list(sorted(self.__keys, key=_key_sort_criteria))
         for key in sorted_keys:
             key_changes = dict()
             (
@@ -691,7 +691,7 @@ class Keyboard:
                 aligned_text_labels,
                 aligned_text_color,
                 aligned_text_size,
-            ) = aligned_key_properties(
+            ) = _aligned_key_properties(
                 key,
                 current_labels_size,
             )
@@ -729,25 +729,25 @@ class Keyboard:
 
                 is_new_row = False
 
-            current.rotation_angle = record_change(
+            current.rotation_angle = _record_change(
                 key_changes,
                 "r",
                 key.rotation_angle,
                 current.rotation_angle,
             )
-            current.rotation_x = record_change(
+            current.rotation_x = _record_change(
                 key_changes,
                 "rx",
                 key.rotation_x,
                 current.rotation_x,
             )
-            current.rotation_y = record_change(
+            current.rotation_y = _record_change(
                 key_changes,
                 "ry",
                 key.rotation_y,
                 current.rotation_y,
             )
-            current.y = current.y + record_change(
+            current.y = current.y + _record_change(
                 key_changes,
                 "y",
                 key.y - current.y,
@@ -755,7 +755,7 @@ class Keyboard:
             )
             current.x = (
                 current.x
-                + record_change(
+                + _record_change(
                     key_changes,
                     "x",
                     key.x - current.x,
@@ -763,7 +763,7 @@ class Keyboard:
                 )
                 + key.width
             )
-            current.color = record_change(
+            current.color = _record_change(
                 key_changes,
                 "c",
                 key.color,
@@ -779,49 +779,49 @@ class Keyboard:
                         and aligned_text_color[i] != aligned_text_color[0]
                     ):
                         aligned_text_color[i] = key.default_text_color
-            current_labels_color = record_change(
+            current_labels_color = _record_change(
                 key_changes,
                 "t",
                 "\n".join(aligned_text_color).rstrip(),
                 current_labels_color,
             )
-            current.is_ghosted = record_change(
+            current.is_ghosted = _record_change(
                 key_changes,
                 "g",
                 key.is_ghosted,
                 current.is_ghosted,
             )
-            current.profile_and_row = record_change(
+            current.profile_and_row = _record_change(
                 key_changes,
                 "p",
                 key.profile_and_row,
                 current.profile_and_row,
             )
-            current.switch.mount = record_change(
+            current.switch.mount = _record_change(
                 key_changes,
                 "sm",
                 key.switch.mount,
                 current.switch.mount,
             )
-            current.switch.brand = record_change(
+            current.switch.brand = _record_change(
                 key_changes,
                 "sb",
                 key.switch.brand,
                 current.switch.brand,
             )
-            current.switch.type = record_change(
+            current.switch.type = _record_change(
                 key_changes,
                 "st",
                 key.switch.type,
                 current.switch.type,
             )
-            align = record_change(
+            align = _record_change(
                 key_changes,
                 "a",
                 alignment,
                 align,
             )
-            current.default_text_size = record_change(
+            current.default_text_size = _record_change(
                 key_changes,
                 "f",
                 key.default_text_size,
@@ -830,12 +830,12 @@ class Keyboard:
             if "f" in key_changes:
                 current_labels_size = [0 for i in range(12)]
             # if text sizes arent already optimized, optimize it
-            if not compare_text_sizes(
+            if not _compare_text_sizes(
                 current_labels_size, aligned_text_size, aligned_text_labels
             ):
-                if len(reduced_text_sizes(aligned_text_size)) == 0:
+                if len(_reduced_text_sizes(aligned_text_size)) == 0:
                     # force f to be written
-                    record_change(
+                    _record_change(
                         key_changes,
                         "f",
                         key.default_text_size,
@@ -843,31 +843,31 @@ class Keyboard:
                     )
                 else:
                     optimizeF2: bool = not bool(aligned_text_size[0])
-                    for i in range(2, len(reduced_text_sizes(aligned_text_size))):
+                    for i in range(2, len(_reduced_text_sizes(aligned_text_size))):
                         if not optimizeF2:
                             break
                         optimizeF2 = aligned_text_size[i] == aligned_text_size[1]
                     if optimizeF2:
                         f2: Union[int, float] = aligned_text_size[1]
-                        record_change(key_changes, "f2", f2, -1)
+                        _record_change(key_changes, "f2", f2, -1)
                         current_labels_size = [0] + [f2 for i in range(11)]
                     else:
                         current_labels_size = aligned_text_size
-                        record_change(
+                        _record_change(
                             key_changes,
                             "fa",
-                            reduced_text_sizes(aligned_text_size),
+                            _reduced_text_sizes(aligned_text_size),
                             [],
                         )
-            record_change(key_changes, "w", key.width, 1.0)
-            record_change(key_changes, "h", key.height, 1.0)
-            record_change(key_changes, "w2", key.width2, key.width)
-            record_change(key_changes, "h2", key.height2, key.height)
-            record_change(key_changes, "x2", key.x2, 0.0)
-            record_change(key_changes, "y2", key.y2, 0.0)
-            record_change(key_changes, "n", key.is_homing, False)
-            record_change(key_changes, "l", key.is_stepped, False)
-            record_change(key_changes, "d", key.is_decal, False)
+            _record_change(key_changes, "w", key.width, 1.0)
+            _record_change(key_changes, "h", key.height, 1.0)
+            _record_change(key_changes, "w2", key.width2, key.width)
+            _record_change(key_changes, "h2", key.height2, key.height)
+            _record_change(key_changes, "x2", key.x2, 0.0)
+            _record_change(key_changes, "y2", key.y2, 0.0)
+            _record_change(key_changes, "n", key.is_homing, False)
+            _record_change(key_changes, "l", key.is_stepped, False)
+            _record_change(key_changes, "d", key.is_decal, False)
             if len(key_changes) > 0:
                 row.append(key_changes)
             row.append("\n".join(aligned_text_labels).rstrip())

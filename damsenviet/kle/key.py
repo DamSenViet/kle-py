@@ -6,7 +6,7 @@ from typing import (
 from typeguard import typechecked
 from .label import Label
 from .switch import Switch
-from .utils import autorepr
+from .utils import _autorepr
 
 __all__ = ["Key"]
 
@@ -64,7 +64,7 @@ class Key:
         attributes["is_decal"] = self.is_decal
         attributes["profile_and_row"] = self.profile_and_row
         attributes["switch"] = self.switch
-        return autorepr(self, attributes)
+        return _autorepr(self, attributes)
 
     @property
     def color(self) -> str:
