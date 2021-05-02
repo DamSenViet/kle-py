@@ -14,7 +14,7 @@ class Metadata:
         self.__name: str = ""
         self.__author: str = ""
         self.__notes: str = ""
-        self.__background: Background = None
+        self.__background: Background = Background()
         self.__background_color: str = "#eeeeee"
         self.__radii: str = ""
         self.__css: str = ""
@@ -52,7 +52,7 @@ class Metadata:
         self.__notes = notes
 
     @property
-    def background(self) -> Union[None, Background]:
+    def background(self) -> Background:
         """Background of the keyboard."""
         return self.__background
 

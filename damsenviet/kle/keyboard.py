@@ -591,13 +591,13 @@ class Keyboard:
                 background_changes,
                 "name",
                 self.metadata.background.name,
-                None,
+                "",
             )
             _record_change(
                 background_changes,
                 "style",
                 self.__metadata.background.style,
-                None,
+                "",
             )
             if len(background_changes) > 0:
                 _record_change(metadata_changes, "background", background_changes, None)
