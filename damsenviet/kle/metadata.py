@@ -3,7 +3,6 @@ from typing import Union
 from typeguard import typechecked
 from .background import Background
 from .switch import Switch
-from .utils import _autorepr
 
 __all__ = ["Metadata"]
 
@@ -25,28 +24,6 @@ class Metadata:
         self.__include_switches_pcb_mounted: bool = False
         self.__is_switches_plate_mounted: bool = False
         self.__include_switches_plate_mounted: bool = False
-
-    def __str__(self):
-        return repr(self)
-
-    def __repr__(self):
-        return _autorepr(
-            self,
-            {
-                "name": self.name,
-                "author": self.author,
-                "notes": self.notes,
-                "background": self.background,
-                "background_color": self.background_color,
-                "radii": self.radii,
-                "css": self.css,
-                "switch": self.switch,
-                "is_switches_pcb_mounted": self.is_switches_pcb_mounted,
-                "include_switches_pcb_mounted": self.include_switches_pcb_mounted,
-                "is_switches_plate_mounted": self.is_switches_plate_mounted,
-                "include_switches_plate_mounted": self.include_switches_plate_mounted,
-            },
-        )
 
     @property
     def name(self) -> str:

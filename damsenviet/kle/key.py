@@ -6,7 +6,6 @@ from typing import (
 from typeguard import typechecked
 from .label import Label
 from .switch import Switch
-from .utils import _autorepr
 
 __all__ = ["Key"]
 
@@ -37,34 +36,6 @@ class Key:
         self.__is_decal: bool = False
         self.__profile_and_row: str = ""
         self.__switch: Switch = Switch()
-
-    def __str__(self) -> str:
-        return repr(self)
-
-    def __repr__(self) -> str:
-        attributes = dict()
-        attributes["color"] = self.color
-        attributes["labels"] = self.labels
-        attributes["default_text_color"] = self.default_text_color
-        attributes["default_text_size"] = self.default_text_size
-        attributes["x"] = self.x
-        attributes["y"] = self.y
-        attributes["width"] = self.width
-        attributes["height"] = self.height
-        attributes["x2"] = self.x2
-        attributes["y2"] = self.y2
-        attributes["width2"] = self.width2
-        attributes["height2"] = self.height2
-        attributes["rotation_x"] = self.rotation_x
-        attributes["rotation_y"] = self.rotation_y
-        attributes["rotation_angle"] = self.rotation_angle
-        attributes["is_ghosted"] = self.is_ghosted
-        attributes["is_stepped"] = self.is_stepped
-        attributes["is_homing"] = self.is_homing
-        attributes["is_decal"] = self.is_decal
-        attributes["profile_and_row"] = self.profile_and_row
-        attributes["switch"] = self.switch
-        return _autorepr(self, attributes)
 
     @property
     def color(self) -> str:

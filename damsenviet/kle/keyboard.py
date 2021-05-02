@@ -14,7 +14,6 @@ from .metadata import Metadata
 from .background import Background
 from .key import Key
 from .exceptions import DeserializeException
-from .utils import _autorepr
 
 __all__ = ["Keyboard"]
 
@@ -382,18 +381,6 @@ class Keyboard:
         """Initializes a Keyboard."""
         self.__metadata: Metadata = Metadata()
         self.__keys: List[Key] = []
-
-    def __str__(self) -> str:
-        return repr(self)
-
-    def __repr__(self) -> str:
-        return _autorepr(
-            self,
-            {
-                "metadata": self.metadata,
-                "keys": self.keys,
-            },
-        )
 
     @property
     def metadata(self) -> Metadata:

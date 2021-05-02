@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import Union
 from typeguard import typechecked
-from .utils import _autorepr
 
 __all__ = ["Label"]
 
@@ -14,19 +13,6 @@ class Label:
         self.__text: str = ""
         self.__color: str = "#000000"
         self.__size: Union[int, float] = 3
-
-    def __str__(self) -> str:
-        return repr(self)
-
-    def __repr__(self) -> str:
-        return _autorepr(
-            self,
-            {
-                "text": self.text,
-                "color": self.color,
-                "size": self.size,
-            },
-        )
 
     @property
     def text(self) -> str:

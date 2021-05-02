@@ -1,5 +1,4 @@
 from typeguard import typechecked
-from .utils import _autorepr
 
 __all__ = ["Switch"]
 
@@ -12,19 +11,6 @@ class Switch:
         self.__mount: str = ""
         self.__brand: str = ""
         self.__type: str = ""
-
-    def __str__(self) -> str:
-        return repr(self)
-
-    def __repr__(self) -> str:
-        return _autorepr(
-            self,
-            {
-                "mount": self.mount,
-                "brand": self.brand,
-                "type": self.type,
-            },
-        )
 
     @property
     def mount(self) -> str:
