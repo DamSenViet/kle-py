@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typeguard import typechecked
 
 __all__ = ["Background"]
 
@@ -18,7 +17,6 @@ class Background:
         return self.__name
 
     @name.setter
-    @typechecked
     def name(self, name: str) -> None:
         self.__name = name
 
@@ -28,6 +26,5 @@ class Background:
         return self.__style
 
     @style.setter
-    @typechecked
     def style(self, style: str) -> None:
         self.__style = style

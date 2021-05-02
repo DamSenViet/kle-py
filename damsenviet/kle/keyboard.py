@@ -9,7 +9,6 @@ from typing import (
     Dict,
 )
 from copy import deepcopy
-from typeguard import typechecked
 from .metadata import Metadata
 from .background import Background
 from .key import Key
@@ -55,7 +54,6 @@ _disallowed_alignnment_for_labels = [
 # fmt: on
 
 
-@typechecked
 def unaligned(
     aligned_items: List,
     alignment: int,
@@ -73,7 +71,6 @@ def unaligned(
     return unaligned_items
 
 
-@typechecked
 def _compare_text_sizes(
     text_sizes: Union[int, float, List[Union[int, float]]],
     aligned_text_sizes: List[Union[int, float]],
@@ -102,7 +99,6 @@ def _compare_text_sizes(
     return True
 
 
-@typechecked
 def _playback_metadata_changes(
     metadata: Metadata,
     metadata_changes: Dict,
@@ -149,7 +145,6 @@ def _playback_metadata_changes(
         metadata.include_switches_plate_mounted = True
 
 
-@typechecked
 def _playback_key_changes(
     key: Key,
     key_changes: Dict,
@@ -247,7 +242,6 @@ def _playback_key_changes(
     )
 
 
-@typechecked
 def _key_sort_criteria(
     key: Key,
 ) -> Tuple[float, float, float, float, float]:
@@ -265,7 +259,6 @@ def _key_sort_criteria(
     )
 
 
-@typechecked
 def _record_change(
     changes: Dict,
     name: str,
@@ -292,7 +285,6 @@ def _record_change(
     return val
 
 
-@typechecked
 def _reduced_text_sizes(text_sizes: List[Union[int, float]]):
     """Returns a copy of text sizes with right zeroes stripped.
 
@@ -305,7 +297,6 @@ def _reduced_text_sizes(text_sizes: List[Union[int, float]]):
     return text_sizes
 
 
-@typechecked
 def _aligned_key_properties(
     key: Key,
     current_labels_size: List[Union[int, float]],
@@ -388,18 +379,15 @@ class Keyboard:
         return self.__metadata
 
     @metadata.setter
-    @typechecked
     def metadata(self, metadata: Metadata) -> None:
         self.__metadata = metadata
 
     @property
-    @typechecked
     def keys(self) -> List[Key]:
         """List of Keys."""
         return self.__keys
 
     @keys.setter
-    @typechecked
     def keys(self, keys: List[Key]) -> None:
         self.__keys = keys
 

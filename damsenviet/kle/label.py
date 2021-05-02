@@ -1,6 +1,5 @@
 from __future__ import annotations
 from typing import Union
-from typeguard import typechecked
 
 __all__ = ["Label"]
 
@@ -20,7 +19,6 @@ class Label:
         return self.__text
 
     @text.setter
-    @typechecked
     def text(self, text: str) -> None:
         self.__text = text
 
@@ -31,7 +29,6 @@ class Label:
 
     # any valid css color str value
     @color.setter
-    @typechecked
     def color(self, color: str) -> None:
         self.__color = color
 
@@ -41,6 +38,5 @@ class Label:
         return self.__size
 
     @size.setter
-    @typechecked
     def size(self, size: Union[int, float]) -> None:
         self.__size = size

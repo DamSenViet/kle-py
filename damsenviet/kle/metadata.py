@@ -1,6 +1,5 @@
 from __future__ import annotations
 from typing import Union
-from typeguard import typechecked
 from .background import Background
 from .switch import Switch
 
@@ -31,7 +30,6 @@ class Metadata:
         return self.__name
 
     @name.setter
-    @typechecked
     def name(self, name: str) -> None:
         self.__name = name
 
@@ -41,7 +39,6 @@ class Metadata:
         return self.__author
 
     @author.setter
-    @typechecked
     def author(self, author: str) -> None:
         self.__author = author
 
@@ -51,7 +48,6 @@ class Metadata:
         return self.__notes
 
     @notes.setter
-    @typechecked
     def notes(self, notes: str) -> None:
         self.__notes = notes
 
@@ -61,7 +57,6 @@ class Metadata:
         return self.__background
 
     @background.setter
-    @typechecked
     def background(
         self,
         background: Union[None, Background],
@@ -74,7 +69,6 @@ class Metadata:
         return self.__background_color
 
     @background_color.setter
-    @typechecked
     def background_color(self, background_color: str) -> None:
         self.__background_color = background_color
 
@@ -84,7 +78,6 @@ class Metadata:
         return self.__radii
 
     @radii.setter
-    @typechecked
     def radii(self, radii: str) -> None:
         self.__radii = radii
 
@@ -94,7 +87,6 @@ class Metadata:
         return self.__css
 
     @css.setter
-    @typechecked
     def css(self, css: str) -> None:
         self.__css = css
 
@@ -104,7 +96,6 @@ class Metadata:
         return self.__switch
 
     @switch.setter
-    @typechecked
     def switch(self, switch: Switch) -> None:
         self.__switch = switch
 
@@ -114,7 +105,6 @@ class Metadata:
         return self.__is_switches_pcb_mounted
 
     @is_switches_pcb_mounted.setter
-    @typechecked
     def is_switches_pcb_mounted(self, is_switches_pcb_mounted: bool) -> None:
         self.__is_switches_pcb_mounted = is_switches_pcb_mounted
 
@@ -124,7 +114,6 @@ class Metadata:
         return self.__include_switches_pcb_mounted
 
     @include_switches_pcb_mounted.setter
-    @typechecked
     def include_switches_pcb_mounted(self, include_switches_pcb_mounted: bool) -> None:
         self.__include_switches_pcb_mounted = include_switches_pcb_mounted
 
@@ -134,7 +123,6 @@ class Metadata:
         return self.__is_switches_plate_mounted
 
     @is_switches_plate_mounted.setter
-    @typechecked
     def is_switches_plate_mounted(self, is_switches_plate_mounted: bool) -> None:
         self.__is_switches_plate_mounted = is_switches_plate_mounted
 
@@ -144,7 +132,6 @@ class Metadata:
         return self.__include_switches_plate_mounted
 
     @include_switches_plate_mounted.setter
-    @typechecked
     def include_switches_plate_mounted(
         self, include_switches_plate_mounted: bool
     ) -> None:

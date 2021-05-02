@@ -3,7 +3,6 @@ from typing import (
     Union,
     List,
 )
-from typeguard import typechecked
 from .label import Label
 from .switch import Switch
 
@@ -43,7 +42,6 @@ class Key:
         return self.__color
 
     @color.setter
-    @typechecked
     def color(self, color: str) -> None:
         self.__color = color
 
@@ -60,7 +58,6 @@ class Key:
         return self.__labels
 
     @labels.setter
-    @typechecked
     def labels(self, labels: List[Label]) -> None:
         self.__labels = labels
 
@@ -73,7 +70,6 @@ class Key:
         return self.__default_text_color
 
     @default_text_color.setter
-    @typechecked
     def default_text_color(self, default_text_color: str) -> None:
         self.__default_text_color = default_text_color
 
@@ -86,7 +82,6 @@ class Key:
         return self.__default_text_size
 
     @default_text_size.setter
-    @typechecked
     def default_text_size(self, default_text_size: Union[int, float]) -> None:
         self.__default_text_size = default_text_size
 
@@ -96,7 +91,6 @@ class Key:
         return self.__x
 
     @x.setter
-    @typechecked
     def x(self, x: float) -> None:
         self.__x = x
 
@@ -106,7 +100,6 @@ class Key:
         return self.__y
 
     @y.setter
-    @typechecked
     def y(self, y: float) -> None:
         self.__y = y
 
@@ -116,7 +109,6 @@ class Key:
         return self.__width
 
     @width.setter
-    @typechecked
     def width(self, width: float) -> None:
         self.__width = width
 
@@ -126,7 +118,6 @@ class Key:
         return self.__height
 
     @height.setter
-    @typechecked
     def height(self, height: float) -> None:
         self.__height = height
 
@@ -136,7 +127,6 @@ class Key:
         return self.__x2
 
     @x2.setter
-    @typechecked
     def x2(self, x2: float) -> None:
         self.__x2 = x2
 
@@ -146,7 +136,6 @@ class Key:
         return self.__y2
 
     @y2.setter
-    @typechecked
     def y2(self, y2: float) -> None:
         self.__y2 = y2
 
@@ -156,7 +145,6 @@ class Key:
         return self.__width2
 
     @width2.setter
-    @typechecked
     def width2(self, width2: float) -> None:
         self.__width2 = width2
 
@@ -166,7 +154,6 @@ class Key:
         return self.__height2
 
     @height2.setter
-    @typechecked
     def height2(self, height2: float) -> None:
         self.__height2 = height2
 
@@ -176,7 +163,6 @@ class Key:
         return self.__rotation_x
 
     @rotation_x.setter
-    @typechecked
     def rotation_x(self, rotation_x: float) -> None:
         self.__rotation_x = rotation_x
 
@@ -186,7 +172,6 @@ class Key:
         return self.__rotation_y
 
     @rotation_y.setter
-    @typechecked
     def rotation_y(self, rotation_y: float) -> None:
         self.__rotation_y = rotation_y
 
@@ -196,7 +181,6 @@ class Key:
         return self.__rotation_angle
 
     @rotation_angle.setter
-    @typechecked
     def rotation_angle(self, rotation_angle: float) -> None:
         self.__rotation_angle = rotation_angle
 
@@ -206,7 +190,6 @@ class Key:
         return self.__is_ghosted
 
     @is_ghosted.setter
-    @typechecked
     def is_ghosted(self, is_ghosted: bool) -> None:
         self.__is_ghosted = is_ghosted
 
@@ -216,7 +199,6 @@ class Key:
         return self.__is_stepped
 
     @is_stepped.setter
-    @typechecked
     def is_stepped(self, is_stepped: bool) -> None:
         self.__is_stepped = is_stepped
 
@@ -226,7 +208,6 @@ class Key:
         return self.__is_homing
 
     @is_homing.setter
-    @typechecked
     def is_homing(self, is_homing: bool) -> None:
         self.__is_homing = is_homing
 
@@ -236,7 +217,6 @@ class Key:
         return self.__is_decal
 
     @is_decal.setter
-    @typechecked
     def is_decal(self, is_decal: bool) -> None:
         self.__is_decal = is_decal
 
@@ -246,7 +226,6 @@ class Key:
         return self.__profile_and_row
 
     @profile_and_row.setter
-    @typechecked
     def profile_and_row(self, profile_and_row: str) -> None:
         self.__profile_and_row = profile_and_row
 
@@ -256,6 +235,5 @@ class Key:
         return self.__switch
 
     @switch.setter
-    @typechecked
     def switch(self, switch: Switch) -> None:
         self.__switch = switch

@@ -21,9 +21,7 @@ st.setup(
     license="MIT",
     namespace_packages=["damsenviet"],
     packages=st.find_packages(),
-    install_requires=[
-        "typeguard>=2.10.0",
-    ],
+    install_requires=[],
     extras_require={
         "dev": [
             # test dependencies

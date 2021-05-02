@@ -1,5 +1,3 @@
-from typeguard import typechecked
-
 __all__ = ["Switch"]
 
 
@@ -18,7 +16,6 @@ class Switch:
         return self.__mount
 
     @mount.setter
-    @typechecked
     def mount(self, mount: str) -> None:
         self.__mount = mount
 
@@ -28,7 +25,6 @@ class Switch:
         return self.__brand
 
     @brand.setter
-    @typechecked
     def brand(self, brand: str) -> None:
         self.__brand = brand
 
