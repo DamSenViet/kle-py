@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="53" viewBox="0 0 50 53">
+  <g id="Group_1100" data-name="Group 1100" transform="translate(-182 -423)">
+    <g id="K" transform="translate(182 423)">
+      <g id="Walls" fill="#e4e5ec" stroke="#a4a8b5" stroke-width="1">
+        <rect width="50" height="53" rx="3" stroke="none"/>
+        <rect x="0.5" y="0.5" width="49" height="52" rx="2.5" fill="none"/>
+      </g>
+      <rect id="Top" width="39.5" height="37.821" rx="2" transform="translate(5 3.789)" fill="#fff"/>
+    </g>
+    <text id="_0" data-name="0" transform="translate(191 437)" fill="#a4a8b5" font-size="8" font-family="RobotoMono-Regular, Roboto Mono" letter-spacing="-0.005em"><tspan x="-2.4" y="0">0</tspan></text>
+    <text id="_1" data-name="1" transform="translate(207 437)" fill="#a4a8b5" font-size="8" font-family="RobotoMono-Regular, Roboto Mono" letter-spacing="-0.005em"><tspan x="-2.4" y="0">1</tspan></text>
+    <text id="_2" data-name="2" transform="translate(223 437)" fill="#a4a8b5" font-size="8" font-family="RobotoMono-Regular, Roboto Mono" letter-spacing="-0.005em"><tspan x="-2.4" y="0">2</tspan></text>
+    <text id="_3" data-name="3" transform="translate(191 449)" fill="#a4a8b5" font-size="8" font-family="RobotoMono-Regular, Roboto Mono" letter-spacing="-0.005em"><tspan x="-2.4" y="0">3</tspan></text>
+    <text id="_4" data-name="4" transform="translate(207 449)" fill="#a4a8b5" font-size="8" font-family="RobotoMono-Regular, Roboto Mono" letter-spacing="-0.005em"><tspan x="-2.4" y="0">4</tspan></text>
+    <text id="_5" data-name="5" transform="translate(223 449)" fill="#a4a8b5" font-size="8" font-family="RobotoMono-Regular, Roboto Mono" letter-spacing="-0.005em"><tspan x="-2.4" y="0">5</tspan></text>
+    <text id="_6" data-name="6" transform="translate(191 461)" fill="#a4a8b5" font-size="8" font-family="RobotoMono-Regular, Roboto Mono" letter-spacing="-0.005em"><tspan x="-2.4" y="0">6</tspan></text>
+    <text id="_7" data-name="7" transform="translate(207 461)" fill="#a4a8b5" font-size="8" font-family="RobotoMono-Regular, Roboto Mono" letter-spacing="-0.005em"><tspan x="-2.4" y="0">7</tspan></text>
+    <text id="_8" data-name="8" transform="translate(223 461)" fill="#a4a8b5" font-size="8" font-family="RobotoMono-Regular, Roboto Mono" letter-spacing="-0.005em"><tspan x="-2.4" y="0">8</tspan></text>
+    <text id="_9" data-name="9" transform="translate(191 473)" fill="#a4a8b5" font-size="8" font-family="RobotoMono-Regular, Roboto Mono" letter-spacing="-0.005em"><tspan x="-2.4" y="0">9</tspan></text>
+    <text id="_10" data-name="10" transform="translate(207 473)" fill="#a4a8b5" font-size="8" font-family="RobotoMono-Regular, Roboto Mono" letter-spacing="-0.005em"><tspan x="-4.781" y="0">10</tspan></text>
+    <text id="_11" data-name="11" transform="translate(227 473)" fill="#a4a8b5" font-size="8" font-family="RobotoMono-Regular, Roboto Mono" letter-spacing="-0.005em"><tspan x="-9.562" y="0">11</tspan></text>
+  </g>
+</svg>
