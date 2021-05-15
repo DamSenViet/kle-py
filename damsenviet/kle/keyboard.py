@@ -54,7 +54,7 @@ _disallowed_alignnment_for_labels = [
 # fmt: on
 
 
-def unaligned(
+def _unaligned(
     aligned_items: List,
     alignment: int,
     default_val: Any,
@@ -199,7 +199,7 @@ def _playback_key_changes(
         labels_color = deepcopy(key_changes["t"]).split("\n")
         if labels_color[0] != "":
             key.default_text_color = labels_color[0]
-        for i, color in enumerate(unaligned(labels_color, alignment, "")):
+        for i, color in enumerate(_unaligned(labels_color, alignment, "")):
             current_labels_color[i] = color
     if "x" in key_changes:
         key.x = key.x + key_changes["x"]
@@ -435,7 +435,7 @@ class Keyboard:
                         # create copy of key data
                         new_key: Key = deepcopy(current)
                         for i, text in enumerate(
-                            unaligned(
+                            _unaligned(
                                 labels.split("\n"),
                                 alignment,
                                 "",
@@ -444,7 +444,7 @@ class Keyboard:
                             new_key.labels[i].text = text
 
                         for i, size in enumerate(
-                            unaligned(
+                            _unaligned(
                                 current_labels_size,
                                 alignment,
                                 0,
