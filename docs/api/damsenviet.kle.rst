@@ -11,7 +11,6 @@ damsenviet.kle package
    damsenviet.kle.key
    damsenviet.kle.switch
    damsenviet.kle.label
-   damsenviet.kle.exceptions
    damsenviet.kle.utils
 
 

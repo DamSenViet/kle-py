@@ -21,7 +21,11 @@ st.setup(
     license="MIT",
     namespace_packages=["damsenviet"],
     packages=st.find_packages(),
-    install_requires=[],
+    include_package_data=True,
+    package_data={"damsenviet.kle": ["kle-json/v1/*.schema.json"]},
+    install_requires=[
+        "jsonschema>=3.2.0",
+    ],
     extras_require={
         "dev": [
             # test dependencies
@@ -30,7 +34,7 @@ st.setup(
             # formatting
             "black>=20.8b1",
             # docs
-            "sphinx>=3.3.1",
+            "sphinx>=3.3.1,<4",
             "pydata-sphinx-theme>=0.4.1",
             "sphinx-autodoc-typehints>=1.11.1",
         ],

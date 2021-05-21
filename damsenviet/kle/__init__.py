@@ -4,7 +4,6 @@ from .background import Background
 from .key import Key
 from .switch import Switch
 from .label import Label
-from .exceptions import DeserializeException
 from .utils import json_dump_options
 
 __all__ = [
@@ -14,6 +13,5 @@ __all__ = [
     "Key",
     "Switch",
     "Label",
-    "DeserializeException",
     "json_dump_options",
 ]

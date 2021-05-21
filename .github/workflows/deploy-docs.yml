@@ -15,5 +15,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: master
+          submodules: 'recursive'
       - name: deploy-docs
         run: ./.github/workflows/deploy-docs.sh

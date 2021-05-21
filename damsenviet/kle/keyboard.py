@@ -9,10 +9,12 @@ from typing import (
     Dict,
 )
 from copy import deepcopy
+from os.path import join, dirname
+from json import load
+from jsonschema import validate
 from .metadata import Metadata
 from .background import Background
 from .key import Key
-from .exceptions import DeserializeException
 
 __all__ = ["Keyboard"]
 
@@ -365,6 +367,13 @@ def _aligned_key_properties(
     )
 
 
+_schema = None
+with open(
+    join(dirname(__file__), "kle-json", "v1", "Keyboard.schema.json")
+) as schema_file:
+    _schema = load(schema_file)
+
+
 class Keyboard:
     """Keyboard information."""
 
@@ -401,11 +410,8 @@ class Keyboard:
         :param keyboard_json: the KLE JSON
         :return: a Keyboard
         """
-        if type(keyboard_json) != list:
-            raise DeserializeException(
-                message="Expected an array of objects:",
-                payload=keyboard_json,
-            )
+
+        validate(instance=keyboard_json, schema=_schema)
 
         keyboard: Keyboard = Keyboard()
 
@@ -479,19 +485,6 @@ class Keyboard:
 
                     elif type(item) is dict:
                         key_changes = item
-                        if k != 0 and (
-                            "r" in key_changes
-                            or "rx" in key_changes
-                            or "ry" in key_changes
-                        ):
-                            message = (
-                                "rotataion changes can only be made at the"
-                                + "beginning of the row"
-                            )
-                            raise DeserializeException(
-                                message=message,
-                                payload=keyboard_json[r],
-                            )
                         # rotation changes can only be specified at beginning
                         # at the start of the row
                         (
@@ -509,33 +502,13 @@ class Keyboard:
                             cluster_rotation_x,
                             cluster_rotation_y,
                         )
-                    else:
-                        message = (
-                            "expected an object specifying key changes or"
-                            "text labels for a key"
-                        )
-                        raise DeserializeException(
-                            message=message,
-                            payload=item,
-                        )
                 current.y = current.y + 1.0
             elif type(keyboard_json[r]) is dict:
                 metadata_changes = keyboard_json[r]
-                if r != 0:
-                    raise DeserializeException(
-                        "metadata can only be specified as first item",
-                        keyboard_json[r],
-                    )
                 _playback_metadata_changes(keyboard.metadata, metadata_changes)
                 current.switch.mount = keyboard.metadata.switch.mount
                 current.switch.brand = keyboard.metadata.switch.brand
                 current.switch.type = keyboard.metadata.switch.type
-            else:
-                message = (
-                    "encountered unexpected type of "
-                    f"{type(keyboard_json[r]).__name__}"
-                )
-                raise DeserializeException(message=message, payload=keyboard_json[r])
             current.x = current.rotation_x
         return keyboard
 

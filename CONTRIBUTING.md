@@ -24,6 +24,7 @@ After cloning the repository, run the following at the root of the project to
 install the development version:
 
 ```bash
+git submodule update --init --recursive
 pip3 install -Ue .[dev]
 ```
 
