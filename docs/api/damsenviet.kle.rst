@@ -23,6 +23,7 @@ damsenviet.kle package
 .. explicitly list those not picked up by automodule
 
 .. automodule:: damsenviet.kle.utils
+   :noindex:
    :members: json_dump_options
    :undoc-members:
    :show-inheritance:
