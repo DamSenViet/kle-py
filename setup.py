@@ -24,19 +24,19 @@ st.setup(
     include_package_data=True,
     package_data={"damsenviet.kle": ["kle-json/v1/*.schema.json"]},
     install_requires=[
-        "jsonschema>=3.2.0",
+        "jsonschema>=3.2.0,<4",
     ],
     extras_require={
         "dev": [
             # test dependencies
-            "matplotlib>=3.1.2",
-            "pytest>=6.1.2",
+            "matplotlib>=3.1.2,<4",
+            "pytest>=6.1.2,<7",
             # formatting
-            "black>=20.8b1",
+            "black>=20.8b1,<21",
             # docs
             "sphinx>=3.3.1,<4",
-            "pydata-sphinx-theme>=0.4.1",
-            "sphinx-autodoc-typehints>=1.11.1",
+            "pydata-sphinx-theme>=0.4.1,<1",
+            "sphinx-autodoc-typehints>=1.11.1,<2",
         ],
     },
     python_requires=">=3.7",
