@@ -10,7 +10,7 @@ class Metadata:
     """Metadata information."""
 
     def __init__(self):
-        """Initializes a Label."""
+        """Initializes a Metadata."""
         self.__name: str = ""
         self.__author: str = ""
         self.__notes: str = ""
@@ -26,7 +26,7 @@ class Metadata:
 
     @property
     def name(self) -> str:
-        """Keyboard Name."""
+        """Keyboard name."""
         return self.__name
 
     @name.setter

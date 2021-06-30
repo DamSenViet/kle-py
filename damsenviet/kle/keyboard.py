@@ -13,7 +13,6 @@ from os.path import join, dirname
 from json import load
 from jsonschema import validate
 from .metadata import Metadata
-from .background import Background
 from .key import Key
 
 __all__ = ["Keyboard"]
@@ -63,8 +62,9 @@ def _unaligned(
 ) -> List:
     """Returns the unaligned ordering of aligned items.
 
-    :param items: The aligned_items to be unaligned.
-    :param align: The alignment option. 0-7
+    :param aligned_items: The aligned_items to be unaligned.
+    :param alignment: The alignment option. 0-7
+    :param default_val: The default val to fill the omitted indexes.
     :return: The reordered items.
     """
     unaligned_items = [default_val for i in range(12)]
@@ -116,15 +116,10 @@ def _playback_metadata_changes(
     if "backcolor" in metadata_changes:
         metadata.background_color = metadata_changes["backcolor"]
     if "background" in metadata_changes:
-        name: str = ""
-        style: str = ""
         if "name" in metadata_changes["background"]:
-            name = metadata_changes["background"]["name"]
+            metadata.background.name = metadata_changes["background"]["name"]
         if "style" in metadata_changes["background"]:
-            style = metadata_changes["background"]["style"]
-        metadata.background = Background()
-        metadata.background.name = name
-        metadata.background.style = style
+            metadata.background.style = metadata_changes["background"]["style"]
     if "name" in metadata_changes:
         metadata.name = metadata_changes["name"]
     if "notes" in metadata_changes:
@@ -204,9 +199,9 @@ def _playback_key_changes(
         for i, color in enumerate(_unaligned(labels_color, alignment, "")):
             current_labels_color[i] = color
     if "x" in key_changes:
-        key.x = key.x + key_changes["x"]
+        key.x += key_changes["x"]
     if "y" in key_changes:
-        key.y = key.y + key_changes["y"]
+        key.y += key_changes["y"]
     if "w" in key_changes:
         key.width = key_changes["w"]
         key.width2 = key_changes["w"]
@@ -277,7 +272,7 @@ def _record_change(
     """
     if val != default_val:
         if type(val) is float:
-            # determine if you can use an in there
+            # determine if you can use an int there
             if val % 1.0 == 0.0:
                 changes[name] = int(val)
             else:
@@ -305,9 +300,9 @@ def _aligned_key_properties(
 ) -> Tuple[int, List[str], List[str], List[Union[int, float]]]:
     """More space efficient text labels, text colors, text sizes.
 
-    :param key: the key to compute the reorder of
-    :param current: the current key to compare to
-    :return: a return dict with reordered version of props stored
+    :param key: the key to compute the property reorders of
+    :param current_labels_size: text labels to help compute the aligned sizes
+    :return: a tuple with alignment, reordered version of labels, colors, sizes
     """
     # size and colors if match default changed to base values
     key_labels_size = [label.size for label in key.labels]
@@ -329,14 +324,11 @@ def _aligned_key_properties(
     # remove impossible flag combinations
     for i in range(len(texts)):
         if texts[i] != "":
-            try:
-                for alignment in deepcopy(alignments):
-                    if alignment in _disallowed_alignnment_for_labels[i]:
-                        alignments.remove(alignment)
-            except ValueError:
-                pass
+            for alignment in deepcopy(alignments):
+                if alignment in _disallowed_alignnment_for_labels[i]:
+                    alignments.remove(alignment)
 
-    # generate label arrays in correct order
+    # generate label arrays according to alignment
     alignment = alignments[0]
     aligned_text_labels = ["" for i in range(12)]
     aligned_text_color = ["" for i in range(12)]
@@ -427,10 +419,8 @@ class Keyboard:
         cluster_rotation_x: float = 0.0
         cluster_rotation_y: float = 0.0
 
-        # for object in list
         for r in range(len(keyboard_json)):
             if type(keyboard_json[r]) is list:
-                # for item in list
                 for k in range(len(keyboard_json[r])):
                     item: Union[str, dict] = cast(
                         Union[str, dict],
@@ -439,6 +429,7 @@ class Keyboard:
                     if type(item) is str:
                         labels: str = item
                         # create copy of key data
+                        # clean up data being modified into the copy
                         new_key: Key = deepcopy(current)
                         for i, text in enumerate(
                             _unaligned(
@@ -467,14 +458,11 @@ class Keyboard:
                             else:
                                 new_key.labels[i].color = color
 
-                        # add key
                         keyboard.keys.append(new_key)
-
                         # adjustments for the next key
-                        current.x = current.x + current.width
+                        current.x += current.width
                         current.width = 1.0
                         current.height = 1.0
-                        # width2 and height2 defers to width and height when 0
                         current.x2 = 0.0
                         current.y2 = 0.0
                         current.width2 = current.width
@@ -482,11 +470,8 @@ class Keyboard:
                         current.is_homing = False
                         current.is_stepped = False
                         current.is_decal = False
-
                     elif type(item) is dict:
                         key_changes = item
-                        # rotation changes can only be specified at beginning
-                        # at the start of the row
                         (
                             current_labels_color,
                             current_labels_size,
@@ -502,7 +487,7 @@ class Keyboard:
                             cluster_rotation_x,
                             cluster_rotation_y,
                         )
-                current.y = current.y + 1.0
+                current.y += 1.0
             elif type(keyboard_json[r]) is dict:
                 metadata_changes = keyboard_json[r]
                 _playback_metadata_changes(keyboard.metadata, metadata_changes)
@@ -523,7 +508,7 @@ class Keyboard:
         current.switch.mount = self.metadata.switch.mount
         current.switch.brand = self.metadata.switch.brand
         current.switch.type = self.metadata.switch.type
-        align: int = 4
+        current_alignment: int = 4
         current_labels_color: List[str] = current.default_text_color
         # allows for non-KLE defaults for label initializer, can maintain value invariants
         current_labels_size: List[Union[int, float]] = [0 for label in current.labels]
@@ -557,23 +542,21 @@ class Keyboard:
             self.metadata.notes,
             default_metadata.notes,
         )
-        if self.metadata.background is not None:
-            background_changes: Dict = dict()
-            # force background properties to be included
-            _record_change(
-                background_changes,
-                "name",
-                self.metadata.background.name,
-                "",
-            )
-            _record_change(
-                background_changes,
-                "style",
-                self.__metadata.background.style,
-                "",
-            )
-            if len(background_changes) > 0:
-                _record_change(metadata_changes, "background", background_changes, None)
+        background_changes: Dict = dict()
+        _record_change(
+            background_changes,
+            "name",
+            self.metadata.background.name,
+            "",
+        )
+        _record_change(
+            background_changes,
+            "style",
+            self.metadata.background.style,
+            "",
+        )
+        if len(background_changes) > 0:
+            _record_change(metadata_changes, "background", background_changes, None)
         _record_change(
             metadata_changes,
             "radii",
@@ -629,7 +612,7 @@ class Keyboard:
 
         is_new_row: bool = True
         # will be incremented on first row
-        current.y = current.y - 1.0
+        current.y -= 1.0
 
         sorted_keys: List[Key] = list(sorted(self.__keys, key=_key_sort_criteria))
         for key in sorted_keys:
@@ -656,10 +639,8 @@ class Keyboard:
                 keyboard_json.append(row)
                 row = list()
                 is_new_row = True
-
             if is_new_row:
-                current.y = current.y + 1.0
-
+                current.y += 1.0
                 # set up for the new row
                 # y is reset if either rx or ry are changed
                 if (
@@ -669,14 +650,11 @@ class Keyboard:
                     current.y = key.rotation_y
                 # always reset x to rx (which defaults to zero)
                 current.x = key.rotation_x
-
                 # update current cluster
                 cluster_rotation_angle = key.rotation_angle
                 cluster_rotation_x = key.rotation_x
                 cluster_rotation_y = key.rotation_y
-
                 is_new_row = False
-
             current.rotation_angle = _record_change(
                 key_changes,
                 "r",
@@ -695,15 +673,14 @@ class Keyboard:
                 key.rotation_y,
                 current.rotation_y,
             )
-            current.y = current.y + _record_change(
+            current.y += _record_change(
                 key_changes,
                 "y",
                 key.y - current.y,
                 0.0,
             )
-            current.x = (
-                current.x
-                + _record_change(
+            current.x += (
+                _record_change(
                     key_changes,
                     "x",
                     key.x - current.x,
@@ -717,8 +694,7 @@ class Keyboard:
                 key.color,
                 current.color,
             )
-            # if statement for ordered color
-            if not aligned_text_color[0]:
+            if aligned_text_color[0] == "":
                 aligned_text_color[0] = key.default_text_color
             else:
                 for i in range(2, 12):
@@ -763,11 +739,11 @@ class Keyboard:
                 key.switch.type,
                 current.switch.type,
             )
-            align = _record_change(
+            current_alignment = _record_change(
                 key_changes,
                 "a",
                 alignment,
-                align,
+                current_alignment,
             )
             current.default_text_size = _record_change(
                 key_changes,
@@ -777,27 +753,28 @@ class Keyboard:
             )
             if "f" in key_changes:
                 current_labels_size = [0 for i in range(12)]
-            # if text sizes arent already optimized, optimize it
+            # sizes arent already optimized, optimize it
             if not _compare_text_sizes(
-                current_labels_size, aligned_text_size, aligned_text_labels
+                current_labels_size,
+                aligned_text_size,
+                aligned_text_labels,
             ):
                 if len(_reduced_text_sizes(aligned_text_size)) == 0:
-                    # force f to be written
                     _record_change(
                         key_changes,
                         "f",
                         key.default_text_size,
-                        -1,
+                        None,
                     )
                 else:
-                    optimizeF2: bool = not bool(aligned_text_size[0])
+                    optimizeF2: bool = aligned_text_size[0] == 0
                     for i in range(2, len(_reduced_text_sizes(aligned_text_size))):
                         if not optimizeF2:
                             break
                         optimizeF2 = aligned_text_size[i] == aligned_text_size[1]
                     if optimizeF2:
                         f2: Union[int, float] = aligned_text_size[1]
-                        _record_change(key_changes, "f2", f2, -1)
+                        _record_change(key_changes, "f2", f2, None)
                         current_labels_size = [0] + [f2 for i in range(11)]
                     else:
                         current_labels_size = aligned_text_size
