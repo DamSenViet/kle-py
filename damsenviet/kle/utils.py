@@ -18,7 +18,8 @@ json_dump_options = {
     "default": None,
     "sort_keys": False,
 }
-"""Kwargs to be spread into ``json.dump`` or ``json.dumps`` to match KLE JSON.
+"""
+Kwargs to be spread into ``json.dump`` or ``json.dumps`` to match KLE JSON format.
 
 .. code-block:: python
 

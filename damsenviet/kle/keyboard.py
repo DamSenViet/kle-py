@@ -36,7 +36,10 @@ _label_map = [
     # 7 = center front & x & y
     [4, -1, -1, -1, 10, -1, -1, -1, -1, -1, -1, -1],
 ]
-
+"""
+Alignment to used label indexes.
+-1 indicates not used.
+"""
 
 _disallowed_alignnment_for_labels = [
     [1, 2, 3, 5, 6, 7],  # 0
@@ -52,6 +55,10 @@ _disallowed_alignnment_for_labels = [
     [],  # 10
     [4, 5, 6, 7]  # 11
 ]
+"""
+Label index to disallowed alignment options.
+"""
+
 # fmt: on
 
 
@@ -60,12 +67,12 @@ def _unaligned(
     alignment: int,
     default_val: Any,
 ) -> List:
-    """Returns the unaligned ordering of aligned items.
+    """Generates unaligned ordering of aligned items.
 
-    :param aligned_items: The aligned_items to be unaligned.
-    :param alignment: The alignment option. 0-7
-    :param default_val: The default val to fill the omitted indexes.
-    :return: The reordered items.
+    :param aligned_items: aligned items to be unaligned
+    :param alignment: alignment option (0 - 7)
+    :param default_val: default value to fill the unused indexes
+    :return: copy of the array reordered to be unaligned reoredered
     """
     unaligned_items = [default_val for i in range(12)]
     for i, aligned_item in enumerate(aligned_items):
@@ -80,9 +87,9 @@ def _compare_text_sizes(
 ) -> bool:
     """Determines whether text sizes and ordered version are equal.
 
-    :param text_sizes: the text sizes to compare
-    :param aligned_text_sizes: the ordered text sizes
-    :param aligned_text_labels: the ordered labels
+    :param text_sizes: text sizes to compare
+    :param aligned_text_sizes: ordered text sizes
+    :param aligned_text_labels: ordered text labels
     :return: whether text sizes are equal
     """
     if type(text_sizes) is int or type(text_sizes) is float:
@@ -105,11 +112,10 @@ def _playback_metadata_changes(
     metadata: Metadata,
     metadata_changes: Dict,
 ) -> None:
-    """Playback the changes into the metadata.
+    """Plays back recorded Metadata changes into Metadata.
 
-    :param metadata: metadata
-    :param metadata_changes: the changes
-    :return: the metadata
+    :param metadata: Metadata to alter
+    :param metadata_changes: Metadata changes
     """
     if "author" in metadata_changes:
         metadata.author = metadata_changes["author"]
@@ -151,16 +157,16 @@ def _playback_key_changes(
     cluster_rotation_x: float,
     cluster_rotation_y: float,
 ) -> Tuple[List[str], List[Union[int, float]], int, float, float]:
-    """Playback the changes into the key.
+    """Plays back recorded Key changes into Key.
 
-    :param key: the recording key
-    :param key_changes: the changes
-    :param current_labels_color: key's labels' color, default values set to ""
-    :param current_labels_size: key's labels' size, defaults values set to 0
-    :param alignment: the tracked text alignment
-    :param cluster_rotation_x: the tracked rotation origin x
-    :param cluster_rotation_y: the tracked rotation origin y
-    :return: current_labels_color, current_labels_size, align, cluster_rotation_x, cluster_rotation_y
+    :param key: Key to alter
+    :param key_changes: Key changes
+    :param current_labels_color: Key's labels' color, default values set to ""
+    :param current_labels_size: Key's labels' size, default values set to 0
+    :param alignment: tracked text alignment
+    :param cluster_rotation_x: tracked rotation origin x
+    :param cluster_rotation_y: tracked rotation origin y
+    :return: updated inputs
     """
     if "r" in key_changes:
         key.rotation_angle = key_changes["r"]
@@ -242,10 +248,10 @@ def _playback_key_changes(
 def _key_sort_criteria(
     key: Key,
 ) -> Tuple[float, float, float, float, float]:
-    """A helper to sort keys into the KLE order before serialization.
+    """Helper to sort keys into KLE order before serialization.
 
-    :param key: the key to compare
-    :return: the multidimensional ordering for comparison
+    :param key: Key to compare
+    :return: multidimensional ordering for comparison
     """
     return (
         (key.rotation_angle + 360) % 360,
@@ -262,13 +268,13 @@ def _record_change(
     val: T,
     default_val: S,
 ) -> T:
-    """Registers the change if value is not equal to default.
+    """Records change into changes if a value is not equal to default.
 
-    :param changes: the existing changes
-    :param name: the property name
-    :param val: the value
-    :param default_val: the value to compare against
-    :return: the value
+    :param changes: changes to potentially add to
+    :param name: property name in changes to use if change is recorded
+    :param val: value in changes to use if change is recorded
+    :param default_val: default value to compare to
+    :return: value recorded or default value if not recorded
     """
     if val != default_val:
         if type(val) is float:
@@ -283,10 +289,10 @@ def _record_change(
 
 
 def _reduced_text_sizes(text_sizes: List[Union[int, float]]):
-    """Returns a copy of text sizes with right zeroes stripped.
+    """Returns copy of text sizes with right zeroes stripped.
 
-    :param text_sizes: an array of text sizes
-    :return: text sizes right stripped
+    :param text_sizes: array of text sizes
+    :return: text sizes right stripped of zeroes
     """
     text_sizes: List[Union[int, float]] = deepcopy(text_sizes)
     while len(text_sizes) > 0 and text_sizes[-1] == 0:
@@ -300,8 +306,8 @@ def _aligned_key_properties(
 ) -> Tuple[int, List[str], List[str], List[Union[int, float]]]:
     """More space efficient text labels, text colors, text sizes.
 
-    :param key: the key to compute the property reorders of
-    :param current_labels_size: text labels to help compute the aligned sizes
+    :param key: Key to compute the property reorders of
+    :param current_labels_size: text label sizes to help compute the aligned sizes
     :return: a tuple with alignment, reordered version of labels, colors, sizes
     """
     # size and colors if match default changed to base values
@@ -399,8 +405,8 @@ class Keyboard:
     ) -> Keyboard:
         """Deserializes a KLE JSON into a Keyboard.
 
-        :param keyboard_json: the KLE JSON
-        :return: a Keyboard
+        :param keyboard_json: KLE JSON to parse
+        :return: Keyboard instance
         """
 
         validate(instance=keyboard_json, schema=_schema)
