@@ -3,10 +3,6 @@ from typing import TypeVar
 __all__ = ["json_dump_options"]
 
 
-T = TypeVar("T")
-S = TypeVar("S")
-
-
 json_dump_options = {
     "skipkeys": False,
     "ensure_ascii": True,
