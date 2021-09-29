@@ -11,7 +11,8 @@ from typing import (
 from copy import deepcopy
 from os.path import join, dirname
 from json import load
-from jsonschema import validate
+from jsonschema import RefResolver
+from jsonschema.validators import validator_for
 from .metadata import Metadata
 from .key import Key
 
@@ -22,6 +23,34 @@ Keyboard_JSON = List[Union[Dict, List[Union[str, Dict]]]]
 T = TypeVar("T")
 S = TypeVar("S")
 
+
+def _load_schema(schema_path):
+    with open(schema_path) as schema_file:
+        return load(schema_file)
+
+
+_schema_paths = list(
+    map(
+        lambda filename: join(dirname(__file__), "kle-json", "v1", filename),
+        [
+            "Background.schema.json",
+            "Cluster.schema.json",
+            "Keyboard.schema.json",
+            "KeyChanges.schema.json",
+            "KeyLabels.schema.json",
+            "Metadata.schema.json",
+        ],
+    )
+)
+_schemas: List[Dict] = tuple(map(_load_schema, _schema_paths))
+_, _, _keyboard_schema, _, _, _ = _schemas
+_schema_store = dict(list(map(lambda schema: [schema["$id"], schema], _schemas)))
+_resolver: RefResolver = RefResolver.from_schema(_keyboard_schema, store=_schema_store)
+_validator_cls = validator_for(_keyboard_schema)
+_validator = _validator_cls(_keyboard_schema, resolver=_resolver)
+"""
+Preloaded validator instance for keyboard schemas.
+"""
 
 # fmt: off
 _label_map = [
@@ -365,13 +394,6 @@ def _aligned_key_properties(
     )
 
 
-_schema = None
-with open(
-    join(dirname(__file__), "kle-json", "v1", "Keyboard.schema.json")
-) as schema_file:
-    _schema = load(schema_file)
-
-
 class Keyboard:
     """Keyboard information."""
 
@@ -409,7 +431,7 @@ class Keyboard:
         :return: Keyboard instance
         """
 
-        validate(instance=keyboard_json, schema=_schema)
+        _validator.validate(instance=keyboard_json)
 
         keyboard: Keyboard = Keyboard()
 
