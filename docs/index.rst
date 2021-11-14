@@ -53,3 +53,5 @@ This quick start demonstrates parsing a KLE JSON file.
 
    Documentation <documentation>
    API <api/damsenviet.kle>
+
+The schemas for KLE JSON can be found at `kle-json <https://github.com/DamSenViet/kle-json>`_.

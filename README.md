@@ -52,6 +52,8 @@ for key in keyboard.keys:
         pass
 ```
 
+The schemas for KLE JSON can be found at [kle-json](https://github.com/DamSenViet/kle-json).
+
 ## Contributing
 
 There are many ways to contribute to this project.
