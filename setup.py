@@ -22,7 +22,7 @@ st.setup(
     namespace_packages=["damsenviet"],
     packages=st.find_packages(),
     include_package_data=True,
-    package_data={"damsenviet.kle": ["kle-json/v1/*.schema.json"]},
+    package_data={"": ["kle-json/v1/*"]},
     install_requires=[
         "jsonschema>=3.2.0,<4",
     ],
