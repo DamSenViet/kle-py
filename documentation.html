@@ -1,0 +1,329 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation &#8212; kle-py</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/css/blank.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/style.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="canonical" href="/kle-py/documentation.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="damsenviet.kle package" href="api/damsenviet.kle.html" />
+    <link rel="prev" title="Introduction" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="index.html">
+<p class="title">kle-py</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 current active nav-item">
+ <a class="current reference internal nav-link" href="#">
+  Documentation
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="api/damsenviet.kle.html">
+  API
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/DamSenViet/kle-py" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#precision">
+   Precision
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deterministic">
+   Deterministic
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-kle-format">
+   The KLE Format
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+<p>This library provides comprehensive apis to serialize/deserialize and access
+KLE data. While being a port of KLE’s official code, it provides improvements
+to prevent needing to evaluate redirected values. With this library, no
+re-evaluation on redirected values need to be performed, as the redirected values
+have been unpacked into the data structures.</p>
+<div class="section" id="precision">
+<h2>Precision<a class="headerlink" href="#precision" title="Permalink to this headline">¶</a></h2>
+<p>This library attempts to replicate the calculation precision in the existing
+KLE JavaScript library, choosing to be no more and no less precise. Because KLE
+doesn’t use arbitrary precision and uses JavaScript’s floating point numbers,
+we chose to match the IEEE-754 standard for floating-point arithmetic.This was
+necessary to maintain identical import/export results with KLE’s web application.</p>
+</div>
+<div class="section" id="deterministic">
+<h2>Deterministic<a class="headerlink" href="#deterministic" title="Permalink to this headline">¶</a></h2>
+<p>The primary property this library maintains is that any KLE JSON serialized and
+deserialized by this library can be serialized back into an equivalent json.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">damsenviet.kle</span> <span class="kn">import</span> <span class="n">Keyboard</span>
+
+<span class="c1"># relative to this file</span>
+<span class="n">json_relative_file_path</span> <span class="o">=</span> <span class="s2">&quot;./keyboard.json&quot;</span>
+<span class="n">json_absolute_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span>
+        <span class="n">json_relative_file_path</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">keyboard_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_absolute_file_path</span><span class="p">)</span>
+<span class="n">keyboard</span> <span class="o">=</span> <span class="n">Keyboard</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">keyboard_json</span><span class="p">)</span>
+<span class="k">assert</span><span class="p">(</span><span class="n">keyboard_json</span> <span class="o">==</span> <span class="n">keyboard</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span> <span class="c1"># true</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-kle-format">
+<h2>The KLE Format<a class="headerlink" href="#the-kle-format" title="Permalink to this headline">¶</a></h2>
+<p>KLE’s JSON format was designed to help minimize it’s file size. The JSON
+mainly records the running changes as opposed to individual key property
+objects. This also means that precision errors and invalid/missing values can
+invalidate every subsequent key stored.</p>
+<p>The format is composed as a JSON array with an optional metadata JSON object as
+the first item. Every item after the first metadata object in the JSON must
+be an array. These arrays contain objects that record key property changes
+or strings that represent labels. Some of these key properties changes and labels
+have been reordered to minimize file size and therefore need to be unaligned
+before being put into data structures and re-aligned when exporting.</p>
+<p>Not all objects in the arrays represent key property changes however, some are
+boolean properties that only apply to the following key after it (e.g. ‘d’
+property for decal keys is an example of this).</p>
+<p>An example of the KLE JSON format:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nt">&quot;backcolor&quot;</span><span class="p">:</span> <span class="s2">&quot;#ac6363&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Numpad&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Example&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;background&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Carbon fibre 2&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;background-image: url(&#39;/bg/carbonfibre/carbon_texture1874.png&#39;);&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;radii&quot;</span><span class="p">:</span> <span class="s2">&quot;6px 6px 6px 6px / 6px 6px 6px 6px&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;switchMount&quot;</span><span class="p">:</span> <span class="s2">&quot;cherry&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;switchBrand&quot;</span><span class="p">:</span> <span class="s2">&quot;cherry&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;switchType&quot;</span><span class="p">:</span> <span class="s2">&quot;MX1A-11Nx&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;pcb&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nt">&quot;plate&quot;</span><span class="p">:</span> <span class="kc">false</span>
+  <span class="p">},</span>
+  <span class="p">[</span>
+    <span class="s2">&quot;Num Lock&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;/&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;-&quot;</span>
+  <span class="p">],</span>
+  <span class="p">[</span>
+    <span class="s2">&quot;7\nHome&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;g&quot;</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;8\n↑&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;g&quot;</span><span class="p">:</span> <span class="kc">false</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;9\nPgUp&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;h&quot;</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;+&quot;</span>
+  <span class="p">],</span>
+  <span class="p">[</span>
+    <span class="s2">&quot;4\n←&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;d&quot;</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;6\n→&quot;</span>
+  <span class="p">],</span>
+  <span class="p">[</span>
+    <span class="s2">&quot;1\nEnd&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;2\n↓&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;3\nPgDn&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;sm&quot;</span><span class="p">:</span> <span class="s2">&quot;wow&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;sb&quot;</span><span class="p">:</span> <span class="s2">&quot;oops&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;st&quot;</span><span class="p">:</span> <span class="s2">&quot;PG155B01&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;h&quot;</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;Enter&quot;</span>
+  <span class="p">],</span>
+  <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;w&quot;</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;0\nIns&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;.\nDel&quot;</span>
+  <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2020, damsenviet.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
