@@ -6,13 +6,12 @@ with open(path.join(path.abspath(path.dirname(__file__)), "README.md")) as file:
     long_description = file.read()
 
 st.setup(
-    version="0.0.0",
+    version="1.0.1",
     name="damsenviet.kle",
     description="A Python library for interacting with KLE data structures and files.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/DamSenViet/kle-py",
-    download_url="https://github.com/DamSenViet/kle-py/tarball/0.0.0",
     project_urls={
         "Source": "https://github.com/DamSenViet/kle-py",
         "Documentation": "https://damsenviet.github.io/kle-py/",
