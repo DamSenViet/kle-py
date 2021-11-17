@@ -1,7 +1,7 @@
 Introduction
 ============
 
-A Python library for interacting with KLE data structures and KLE JSON files.
+A Python library for interacting with KLE JSON and KLE data structures.
 
 Originally ported from `keyboard-layout-editor <https://github.com/ijprest/keyboard-layout-editor>`_
 with improvements to make the source code increasingly portable across
